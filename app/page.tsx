@@ -1,69 +1,200 @@
-import Image from "next/image";
+'use client';
+
+import { Box, Button, Container, Typography, Paper, IconButton, Stack } from '@mui/material';
+import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+
+const texts = [
+  'Welcome to Zeta\'s Secret Base',
+  'I\'m a software engineer',
+  'I\'m a web3 and blockchain developer',
+  'I\'m a cryptography enthusiast',
+  'I like to share and connect with other developers',
+  'if you want to know more about me, you can click the social media icons below',
+];
+
+const socialLinks = [
+  { icon: <GitHubIcon />, url: 'https://github.com/yourusername', label: 'GitHub' },
+  { icon: <TwitterIcon />, url: 'https://twitter.com/yourusername', label: 'Twitter' },
+  { icon: <InstagramIcon />, url: 'https://instagram.com/yourusername', label: 'Instagram' },
+  { icon: <LinkedInIcon />, url: 'https://linkedin.com/in/yourusername', label: 'LinkedIn' },
+];
 
 export default function Home() {
+  const [currentText, setCurrentText] = useState('');
+  const [index, setIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [textIndex, setTextIndex] = useState(0);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (isDeleting) {
+        setCurrentText(currentText.slice(0, -1));
+        if (currentText.length === 0) {
+          setIsDeleting(false);
+          setTextIndex((textIndex + 1) % texts.length);
+          setIndex(0);
+        }
+      } else {
+        setCurrentText(texts[textIndex].slice(0, index + 1));
+        if (index + 1 === texts[textIndex].length) {
+          setTimeout(() => {
+            setIsDeleting(true);
+            setCurrentText(texts[textIndex])
+          }, 1000);
+        } else {
+          setIndex(index + 1);
+        }
+      }
+    }, isDeleting ? 25 : 50);
+
+    return () => clearTimeout(timeout);
+  }, [currentText, isDeleting, textIndex, index]);
+
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
-      {/* Header */}
-      <header className="py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Zeta's Blog
-          </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300">
-            Welcome to my personal blog where I share my thoughts and experiences.
-          </p>
-        </div>
-      </header>
+    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
+      <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <Box
+          component={motion.div}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          sx={{ py: 8, textAlign: 'center' }}
+        >
+          <Typography
+            variant="h1"
+            sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold', fontSize: { xs: '2.5rem', md: '3.5rem' } }}
+          >
+            Zeta's Secret Base
+          </Typography>
 
-      {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid gap-8">
-          {/* Featured Post */}
-          <article className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-            <div className="p-6">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                Getting Started with Next.js
-              </h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">
-                A comprehensive guide to building modern web applications with Next.js.
-              </p>
-              <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                <span>April 14, 2024</span>
-                <span className="mx-2">•</span>
-                <span>5 min read</span>
-              </div>
-            </div>
-          </article>
+          <Typography
+            variant="h5"
+            sx={{
+              mb: 4,
+              minHeight: '2.5em',
+              position: 'relative',
+              color: 'primary.main',
+              '&::after': {
+                content: "'|'",
+                marginLeft: '2px',
+                animation: 'blink 1s step-end infinite'
+              }
+            }}
+          >
+            {currentText}
+          </Typography>
+        </Box>
 
-          {/* Recent Posts */}
-          <div className="grid gap-6 md:grid-cols-2">
-            {[1, 2, 3, 4].map((post) => (
-              <article key={post} className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                    Post Title {post}
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">
-                    A brief description of the post content goes here.
-                  </p>
-                  <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                    <span>April {14 - post}, 2024</span>
-                    <span className="mx-2">•</span>
-                    <span>{3 + post} min read</span>
-                  </div>
-                </div>
-              </article>
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          spacing={4}
+          sx={{ mb: 8 }}
+        >
+          <Box flex={1}>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              style={{ height: '100%' }}
+            >
+              <Paper
+                elevation={3}
+                sx={{
+                  p: 4,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <Typography variant="h4" sx={{ mb: 2, color: 'primary.main' }}>
+                  Blog
+                </Typography>
+                <Typography sx={{ mb: 3, textAlign: 'center', color: 'text.primary' }}>
+                  See my latest blogs, and get to know me better
+                </Typography>
+                <Button variant="contained">
+                  Explore Blogs
+                </Button>
+              </Paper>
+            </motion.div>
+          </Box>
+
+          <Box flex={1}>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              style={{ height: '100%' }}
+            >
+              <Paper
+                elevation={3}
+                sx={{
+                  p: 4,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <Typography variant="h4" sx={{ mb: 2, color: 'primary.main' }}>
+                  DApp Playground
+                </Typography>
+                <Typography sx={{ mb: 3, textAlign: 'center', color: 'text.primary' }}>
+                  Experiment with smart contracts and decentralized applications
+                </Typography>
+                <Button variant="contained">
+                  Launch Playground
+                </Button>
+              </Paper>
+            </motion.div>
+          </Box>
+        </Stack>
+
+        <Box
+          sx={{
+            mt: 'auto',
+            py: 4,
+            textAlign: 'center',
+            borderTop: '1px solid',
+            borderColor: 'border.light'
+          }}
+        >
+          <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
+            Connect With Me
+          </Typography>
+          <Stack
+            direction="row"
+            spacing={2}
+            justifyContent="center"
+            sx={{ mb: 2 }}
+          >
+            {socialLinks.map((link, index) => (
+              <motion.div
+                key={index}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <IconButton
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {link.icon}
+                </IconButton>
+              </motion.div>
             ))}
-          </div>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="py-8 px-4 sm:px-6 lg:px-8 border-t border-gray-200 dark:border-gray-700">
-        <div className="max-w-4xl mx-auto text-center text-gray-600 dark:text-gray-400">
-          <p>© 2024 Zeta's Blog. All rights reserved.</p>
-        </div>
-      </footer>
-    </div>
+          </Stack>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            © 2025 Zeta's Secret Base. All rights reserved.
+          </Typography>
+        </Box>
+      </Container>
+    </Box>
   );
 }

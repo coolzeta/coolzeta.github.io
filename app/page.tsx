@@ -2,29 +2,31 @@
 
 import { Box, Button, Container, Typography, Paper, IconButton, Stack } from '@mui/material';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-
+import { useRouter } from 'next/navigation';
 const texts = [
   'Welcome to Zeta\'s Secret Base',
   'I\'m a software engineer',
-  'I\'m a web3 and blockchain developer',
-  'I\'m a cryptography enthusiast',
-  'I like to share and connect with other developers',
-  'if you want to know more about me, you can click the social media icons below',
+  'Web3 and blockchain developer',
+  'Cryptography enthusiast',
+  'INTJ',
+  'I like to share and connect with other people',
+  'Let\'s be friends, you can find me on the social media icons below',
 ];
 
 const socialLinks = [
-  { icon: <GitHubIcon />, url: 'https://github.com/yourusername', label: 'GitHub' },
-  { icon: <TwitterIcon />, url: 'https://twitter.com/yourusername', label: 'Twitter' },
-  { icon: <InstagramIcon />, url: 'https://instagram.com/yourusername', label: 'Instagram' },
-  { icon: <LinkedInIcon />, url: 'https://linkedin.com/in/yourusername', label: 'LinkedIn' },
+  { icon: <GitHubIcon />, url: 'https://github.com/coolzeta', label: 'GitHub' },
+  // { icon: <TwitterIcon />, url: 'https://twitter.com/yourusername', label: 'Twitter' },
+  // { icon: <InstagramIcon />, url: 'https://instagram.com/yourusername', label: 'Instagram' },
+  // { icon: <LinkedInIcon />, url: 'https://linkedin.com/in/yourusername', label: 'LinkedIn' },
 ];
 
 export default function Home() {
+  const router = useRouter();
   const [currentText, setCurrentText] = useState('');
   const [index, setIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -50,10 +52,18 @@ export default function Home() {
           setIndex(index + 1);
         }
       }
-    }, isDeleting ? 25 : 50);
+    }, isDeleting ? 20 : 40);
 
     return () => clearTimeout(timeout);
   }, [currentText, isDeleting, textIndex, index]);
+  const checkHaveMetaMask = useCallback(() => {
+    return !!window.ethereum;
+  }, [])
+
+  const connectMetaMask = useCallback(() => {
+    window?.ethereum?.request({ method: 'eth_requestAccounts' });
+  }, [])
+
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
@@ -148,7 +158,7 @@ export default function Home() {
                 <Typography sx={{ mb: 3, textAlign: 'center', color: 'text.primary' }}>
                   Experiment with smart contracts and decentralized applications
                 </Typography>
-                <Button variant="contained">
+                <Button variant="contained" onClick={() => router.push("/apps/web3")}>
                   Launch Playground
                 </Button>
               </Paper>

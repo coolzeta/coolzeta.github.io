@@ -1,13 +1,18 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { Providers } from "./contexts/providers";
+import { ThemeProvider } from "./contexts/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Zeta's Crypto Hub",
-  description: "A place to explore blockchain, cryptography, and web3 development",
+  title: "Zeta's Secret Base",
+  description: "Welcome to Zeta's Secret Base.",
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -17,10 +22,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <Providers>
+      <body className={inter.className} style={{ minHeight: '100vh', minWidth: '100vw' }}>
+        <ThemeProvider>
           {children}
-        </Providers>
+        </ThemeProvider>
       </body>
     </html>
   );

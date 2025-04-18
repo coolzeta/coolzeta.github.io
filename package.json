@@ -15,7 +15,6 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.13",
     "@mui/material": "^5.15.13",
-    "@tailwindcss/postcss": "^4.1.4",
     "formik": "^2.4.6",
     "framer-motion": "^12.7.4",
     "next": "15.3.0",

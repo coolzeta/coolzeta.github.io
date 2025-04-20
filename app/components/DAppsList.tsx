@@ -2,6 +2,7 @@
 
 import { Box, Card, CardContent, CardMedia, Chip, Grid, Typography } from '@mui/material';
 import { DApp, dapps } from '../config/dapps';
+import Image from 'next/image';
 
 const statusColors = {
     live: 'success',
@@ -13,7 +14,7 @@ export default function DAppsList() {
     return (
         <Box sx={{ py: 4, px: 4 }}>
             <Grid container spacing={3} justifyContent="center">
-                {dapps.map((dapp: DApp) => (
+                {dapps.map((dapp: DApp, index: number) => (
                     <Grid item xs={12} sm={6} md={4} key={dapp.id}>
                         <Card
                             sx={{
@@ -28,12 +29,14 @@ export default function DAppsList() {
                             }}
                             onClick={() => window.open(dapp.url, '_blank')}
                         >
-                            <CardMedia
-                                component="img"
-                                height="200"
-                                image={dapp.imageUrl}
+                            <Image
+                                src={dapp.imageUrl}
                                 alt={dapp.name}
-                                sx={{ objectFit: 'cover' }}
+                                width={800}
+                                height={600}
+                                layout='responsive'
+                                priority={index <= 5}
+                                style={{ objectFit: 'cover' }}
                             />
                             <CardContent sx={{ flexGrow: 1 }}>
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "es5",
     "lib": [
       "dom",
       "dom.iterable",
@@ -29,12 +29,10 @@
     }
   },
   "include": [
+    "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    "next-env.d.ts",
-    "out/types/**/*.ts",
-    "tailwind.config.js"
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

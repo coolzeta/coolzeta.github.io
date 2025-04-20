@@ -12,7 +12,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       <Box sx={{
         bgcolor: 'background.default',
         minHeight: '100vh',
-        minWidth: '100vw',
+        minWidth: '100%',
         m: 0,
         p: 0,
         border: 0

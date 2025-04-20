@@ -56,13 +56,7 @@ export default function Home() {
 
     return () => clearTimeout(timeout);
   }, [currentText, isDeleting, textIndex, index]);
-  const checkHaveMetaMask = useCallback(() => {
-    return !!window.ethereum;
-  }, [])
 
-  const connectMetaMask = useCallback(() => {
-    window?.ethereum?.request({ method: 'eth_requestAccounts' });
-  }, [])
 
 
   return (
@@ -103,8 +97,9 @@ export default function Home() {
         <Stack
           direction={{ xs: 'column', md: 'row' }}
           spacing={4}
-          sx={{ mb: 8 }}
+          sx={{ mb: { xs: 4, md: 8 } }}
         >
+
           <Box flex={1}>
             <motion.div
               whileHover={{ scale: 1.02 }}
@@ -128,7 +123,7 @@ export default function Home() {
                 <Typography sx={{ mb: 3, textAlign: 'center', color: 'text.primary' }}>
                   See my latest blogs, and get to know me better
                 </Typography>
-                <Button variant="contained">
+                <Button variant="contained" onClick={() => router.push("/apps/blog")}>
                   Explore Blogs
                 </Button>
               </Paper>
@@ -165,7 +160,24 @@ export default function Home() {
             </motion.div>
           </Box>
         </Stack>
-
+        <Paper
+          sx={{
+            p: 4,
+            mt: { xs: 0, md: 4 },
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Typography variant="h4" alignSelf='flex-start' sx={{ mb: 2, color: 'primary.main' }}>
+            About Me
+          </Typography>
+          <Typography sx={{ mb: 3, textAlign: 'center', color: 'text.primary' }}>
+            I'm a web3 newbie  trying to learn and share my knowledge about web3, an INTJ, currently working in an exchange at Hong Kong. I work as a Frontend Engineer, but I also have a passion in smart contract development, and I'm interested in the intersection of cryptography and web3.
+          </Typography>
+        </Paper>
         <Box
           sx={{
             mt: 'auto',
@@ -205,6 +217,6 @@ export default function Home() {
           </Typography>
         </Box>
       </Container>
-    </Box>
+    </Box >
   );
 }

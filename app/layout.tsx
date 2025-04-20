@@ -22,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className} style={{ minHeight: '100vh', minWidth: '100vw' }}>
+      <body className={inter.className} style={{ minHeight: '100vh', minWidth: '100%' }}>
         <ThemeProvider>
           {children}
         </ThemeProvider>

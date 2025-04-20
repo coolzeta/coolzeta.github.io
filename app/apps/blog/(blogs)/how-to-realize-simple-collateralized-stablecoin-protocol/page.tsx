@@ -259,9 +259,10 @@ export default function BlogPostPage() {
                         </CodeBlock.LineContent>
                     </CodeBlock.Code>
                 </CodeBlock>
+                <p>You can get full code from <a target="_blank" href='https://github.com/coolzeta/coolzeta.github.io/tree/master/app/apps/web3/(dapps)/dapp-1/ZetaCoin'>here</a></p>
+                <p>I will also provide a simple dapp for this contract, you can play it <a target="_blank" href='https://zeta.lol/apps/web3/dapp-1'>here (still developing)</a></p>
             </BlogPost>
-            <p>You can get full code from <a target="_blank" href='https://github.com/coolzeta/coolzeta.github.io/tree/master/app/apps/web3/(dapps)/dapp-1/ZetaCoin'>here</a></p>
-            <p>I will also provide a simple dapp for this contract, you can play it <a target="_blank" href='https://zeta.lol/apps/web3/dapp-1'>here (still developing)</a></p>
+
         </>
     );
 }

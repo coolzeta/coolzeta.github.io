@@ -116,14 +116,14 @@ export const liquidateCode = `function liquidate(address vaultOwner) external no
         require(isLiquidatable(vaultOwner), "Vault is not liquidatable");
 
         uint256 ethPrice = oracle.getEthUsdPrice();
-        uint256 collateralValue = (vault.collateralAmount * ethPrice) / DECIMAL_PRECISION;
+        uint256 collateralValue = vault.collateralAmount * ethPrice / PRICE_PRECISION;
         uint256 debtValue = vault.debtAmount;
 
         // Calculate the maximum amount of debt that can be repaid,
         // If collateral value is too low, this maybe lower than current debt value
         // So it will become a bad debt after liquidation (still have debt but no collateral assects in this account)
         uint256 maxRepayableDebt = (collateralValue * PRECISION) / (LIQUIDATION_PENALTY + PRECISION);
-        uint256 actualRepayDebt = debtValue > maxRepayableDebt ? maxRepayableDebt : debtValue;
+        uint256 actualRepayDebt = debtValue  > maxRepayableDebt ? maxRepayableDebt : debtValue;
         if (actualRepayDebt < debtValue) {
             vault.isBadDebt = true;
         }
@@ -131,24 +131,22 @@ export const liquidateCode = `function liquidate(address vaultOwner) external no
         // Add penalty to the debt, so that the liquidator can get a reward
         // This will encourage more liquidator to liquidate the possible debts
         uint256 penalty = (maxRepayableDebt * LIQUIDATION_PENALTY) / PRECISION;
-        uint256 collateralToLiquidator = ((maxRepayableDebt + penalty) * DECIMAL_PRECISION) / ethPrice;
+        uint256 collateralToLiquidator = (maxRepayableDebt + penalty) * PRICE_PRECISION / ethPrice;
 
         // Transfer Zeta Coin from liquidator to this contract,
         // And burn the debt
         require(zetaCoin.transferFrom(msg.sender, address(this), actualRepayDebt), "Zeta Coin transfer failed");
-        zetaCoin.burn(debtValue);
+        zetaCoin.burn(actualRepayDebt);
 
         // Transfer collateral to liquidator
         (bool success, ) = msg.sender.call{ value: collateralToLiquidator }("");
         require(success, "ETH transfer failed");
         vault.collateralAmount -= collateralToLiquidator;
-
-        totalDebt -= debtValue;
+        totalDebt -= actualRepayDebt;
         vault.debtAmount = 0;
-
-        emit VaultLiquidated(vaultOwner, msg.sender, collateralToLiquidator, debtValue);
-    }
-`;
+ 
+        emit Liquidate(vaultOwner, collateralToLiquidator);
+    }`;
 
 export const oracleCode = `contract PriceOracle is Ownable {
     AggregatorV3Interface internal ethUsdPriceFeed;
@@ -186,58 +184,63 @@ truffle migrate --network dashboard
 `
 export const deployOutput = `=====================
 
-                    Deploying 'ZetaCoin'
-                    --------------------
-> transaction hash:    0x67b299995417a9c17534fc1471483dc9e61bdac76668e703b4891279e635afc8sage.
-> Blocks: 0            Seconds: 12
-> contract address:    0xD2bBd412B73514a117f15A0Ce51C7b5e76Bb7E2c
-> block number:        8159029
-> block timestamp:     1745160564
-> account:             0x129299c747eb17c28530A8DaE4A77fB4fFec4806
-> balance:             1.195453885157434058
-> gas used:            759347 (0xb9633)
-> gas price:           3.516639798 gwei
-> value sent:          0 ETH
-> total cost:          0.002670349880691906 ETH
+   Replacing 'ZetaCoin'
+   --------------------
+   > transaction hash:    0xb1fa8b93b3fb18df1094b79cf89562c7ef0b41d4b13e43a298d98ccfba2b2ebfsage.
+   > Blocks: 2            Seconds: 36
+   > contract address:    0xd8C7bA6Ae4A6a49090bcABbC0c65E885bF0Dd358
+   > block number:        8220351
+   > block timestamp:     1745939940
+   > account:             0x129299c747eb17c28530A8DaE4A77fB4fFec4806
+   > balance:             7.569612760676319724
+   > gas used:            759347 (0xb9633)
+   > gas price:           86.565440918 gwei
+   > value sent:          0 ETH
+   > total cost:          0.065733207864760546 ETH
 
-                    ZetaCoin deployed at: 0xD2bBd412B73514a117f15A0Ce51C7b5e76Bb7E2c
+ZetaCoin deployed at: 0xd8C7bA6Ae4A6a49090bcABbC0c65E885bF0Dd358
 
-                    Deploying 'PriceOracle'
-                    -----------------------
-> transaction hash:    0x80ffc0500695401ce4879437022e2ba505aebfb34ba456ad2f9b1a48b15fc4e2sage.
-> Blocks: 0            Seconds: 0
-> contract address:    0x5542E2e85153e9D1F07E9d817E847ccf35Ea2Bba
-> block number:        8159030
-> block timestamp:     1745160576
-> account:             0x129299c747eb17c28530A8DaE4A77fB4fFec4806
-> balance:             1.194126393703197376
-> gas used:            378142 (0x5c51e)
-> gas price:           4.533279596 gwei
-> value sent:          0 ETH
-> total cost:          0.001714223412990632 ETH
+   Replacing 'PriceOracle'
+   -----------------------
+   > transaction hash:    0x14cbbe78f4cf468182c43ad7ff43622b8eb13ad1626bdb052d3c82d957e2f5b8sage.
+   > Blocks: 0            Seconds: 32
+   > contract address:    0xb7fCeaC6Fd7B7C80BB92d42da6939C20f92d6678
+   > block number:        8220353
+   > block timestamp:     1745939976
+   > account:             0x129299c747eb17c28530A8DaE4A77fB4fFec4806
+   > balance:             7.54820663639792754
+   > gas used:            398282 (0x613ca)
+   > gas price:           93.103406304 gwei
+   > value sent:          0 ETH
+   > total cost:          0.037081410869569728 ETH
 
-                    PriceOracle deployed at: 0x5542E2e85153e9D1F07E9d817E847ccf35Ea2Bba
+PriceOracle deployed at: 0xb7fCeaC6Fd7B7C80BB92d42da6939C20f92d6678
 
-                    Deploying 'Vault'
-                    -----------------
-> transaction hash:    0xecb42d5430d824bf118362040c61dfa8b4a03199b032a55901354b13c8e5d00csage.
-> Blocks: 1            Seconds: 16
-> contract address:    0x59660908660F54D79e6ea165F89909e463207255
-> block number:        8159032
-> block timestamp:     1745160600
-> account:             0x129299c747eb17c28530A8DaE4A77fB4fFec4806
-> balance:             1.189242205707456976
-> gas used:            1409325 (0x15812d)
-> gas price:           4.521126742 gwei
-> value sent:          0 ETH
-> total cost:          0.00637173694566915 ETH
+   Replacing 'Vault'
+   -----------------
+   > transaction hash:    0xb583ace1d8ebea4bf8e9cd1c41836a7ef2832b5fc780368bfed24b64b17e6b6csage.
+   > Blocks: 1            Seconds: 32
+   > contract address:    0x33c07F22B38c33362f3E1C6EF7275729ceF252FA
+   > block number:        8220355
+   > block timestamp:     1745940012
+   > account:             0x129299c747eb17c28530A8DaE4A77fB4fFec4806
+   > balance:             7.47046205669040201
+   > gas used:            1417530 (0x15a13a)
+   > gas price:           104.992300824 gwei
+   > value sent:          0 ETH
+   > total cost:          0.14882973618704472 ETH
 
-                    Vault deployed at: 0x59660908660F54D79e6ea165F89909e463207255
-                    Contract relationships established
-                    Deployment completed successfully
-> Saving artifacts
-                    -------------------------------------
-> Total cost:     0.010756310239351688 ETH`
+Vault deployed at: 0x33c07F22B38c33362f3E1C6EF7275729ceF252FA
+Contract relationships established
+Deployment completed successfully
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:     0.251644354921374994 ETH
+
+Summary
+=======
+> Total deployments:   3
+> Final cost:          0.251644354921374994 ETH`
 
 export const testCode = `truffle develop
 truffle migrate

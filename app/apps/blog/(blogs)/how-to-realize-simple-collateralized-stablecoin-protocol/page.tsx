@@ -36,7 +36,27 @@ export default function BlogPostPage() {
 
                 <h2>1. Introduction</h2>
                 <p>Collateralized stablecoins are a fundamental building block of DeFi, providing price stability through overcollateralization. This article will guide you through creating a simple yet robust collateralized stablecoin protocol on Ethereum.</p>
-
+                <h2>2. What is collateralized stablecoin? and why is it stable?</h2>
+                <p>
+                    Collateralized stablecoins are a type of stablecoin that are collateralized by a specific asset. The most common collateral asset is USDC, USDT, ETH, etc.
+                    The price of the stablecoin is pegged to the price of the collateral asset, so that the stablecoin is stable. To make it stable, we should design a incentives mechanism to make it most
+                    profitable to keep the price stable.
+                </p>
+                <p>
+                    For example, if we want to make the stablecoin price stable at 1 USD, we should let the borrowable amount of stablecoin is less than the collateral's total price in USD,
+                    . And if the price of the stablecoin is too high and you want to repay the debt to withdraw the collateral, you will not do this,
+                    because you need to pay the premium of stablecoin to repay the debt, that's not profitable, since this kind of requirement is few,
+                    so the price of the stablecoin will less likely to be higher than 1 USD.
+                </p>
+                <p>Conversely, when the price drops below the peg, the Liquidation mechanism comes into play.
+                    If a user's collateral value falls below a pre - set threshold due to price fluctuations,
+                    their collateral will be able to be liquidated by the liquidation mechanism.
+                    To further enhance the effectiveness of the stability - maintaining mechanism,
+                    we will add a panelty to who are lack of collateral and cause the price drop,
+                    individuals who take the initiative to liquidate their debts can be rewarded with a portion of the penalties
+                    . This not only encourages debtors to act promptly to avoid more serious consequences
+                    but also distributes the burden of maintaining market stability more fairly among participants.
+                </p>
                 <h2>2. Prerequisites</h2>
                 <h3>Development Environment Setup</h3>
                 <ul>
@@ -58,7 +78,7 @@ export default function BlogPostPage() {
                     we need to choose which protocol to be used by our stablecoin, here I choose ERC20 as the protocol of the stablecoin, because it is the most common protocol with mature tools and libraries.
                     And as which coin to be used as the collateral, common collaterals are USDC, USDT, ETH, NFTs, etc., since we want to make it simple and it's on the ethereum network, so I choose ETH as the collateral.
                     So that we need a vault contract to manage the collateral, and we need to get the price of the collateral, so we also need an orable contract and for the price feed,
-                    I choose ChainLink, because it's wild used and relatively relaible.
+                    I choose ChainLink, because it's widely used and relatively reliable.
                     And the most important part, there should be a liquidatation mechanism, which can deal the debt when price changes and maintain the token price stable.
                 </p>
 

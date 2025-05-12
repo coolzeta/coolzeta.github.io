@@ -17,7 +17,7 @@ export const dapps: DApp[] = [
         imageUrl: '/covers/cover1.png',
         url: '/apps/web3/dapp-1',
         tags: ['Stablecoin', 'DeFi', 'CDP', 'Liquidation', 'Oracle'],
-        status: 'development'
+        status: 'live'
     },
     {
         id: 'dapp-2',

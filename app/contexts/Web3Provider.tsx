@@ -1,5 +1,5 @@
 "use client"
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useWeb3Store } from "../store/web3Store";
 import Web3 from "web3";
 import { Button } from "@mui/material";
@@ -7,26 +7,42 @@ import { Button } from "@mui/material";
 export default function Web3Provider({ children }: { children: React.ReactNode }) {
     const setWeb3 = useWeb3Store(state => state.setWeb3);
     const setError = useWeb3Store(state => state.setError);
-    const error = useWeb3Store(state => state.error)
+    const error = useWeb3Store(state => state.error);
+    const setNetwork = useWeb3Store(state => state.setNetwork);
+    const setAccount = useWeb3Store(state => state.setAccount);
+    const listenersAddedRef = useRef(false);
+
     async function requestAccounts() {
         if (window.ethereum) {
-            setError("Please allow the request to explore all contents");
-            console.log("requesting accounts")
             const web3 = new Web3(window.ethereum);
             try {
                 const accounts = await window.ethereum.request({
                     method: 'eth_requestAccounts'
                 });
+                setAccount(web3.utils.toChecksumAddress(accounts[0]));
                 if (!accounts || !accounts.length) {
                     setError("No accounts found. Please connect your wallet.");
                     return;
                 }
-                window.ethereum.on("accountsChanged", (newAccounts: string[]) => {
-                    if (!newAccounts.length) {
-                        setError("Wallet disconnected. Please reconnect to continue.");
-                        setWeb3(null);
-                    }
-                });
+                const currentNetwork = await web3.eth.getChainId();
+                setNetwork(Number(currentNetwork));
+
+                if (!listenersAddedRef.current) {
+                    window.ethereum.on("accountsChanged", (newAccounts: string[]) => {
+                        setAccount(web3.utils.toChecksumAddress(newAccounts[0]));
+                        if (!newAccounts.length) {
+                            setError("Wallet disconnected. Please reconnect to continue.");
+                            setWeb3(null);
+                        }
+                    });
+
+                    window.ethereum.on('chainChanged', (chainId: BigInt) => {
+                        setNetwork(Number(chainId));
+                    });
+
+                    listenersAddedRef.current = true;
+                }
+
                 setError("");
                 setWeb3(web3);
             } catch (err) {

@@ -1,54 +1,86 @@
-'use client';
+import { promises as fs } from 'fs';
+import path from 'path';
+import Link from 'next/link';
+import matter from 'gray-matter';
 
-import { Container, Grid, Typography } from '@mui/material';
-import BlogPostCard from '@/app/components/BlogPostCard';
-import metainfos from '@/app/apps/blog/metainfos.json';
-interface Post {
-    title: string;
-    date: string;
-    description: string;
-    tags: string[];
+interface BlogPost {
     slug: string;
+    title: string;
+    description: string;
+    date: string;
+    tags: string[];
 }
 
-export default function BlogHome() {
-    const posts: Post[] = Object.entries(metainfos).map(([slug, meta]) => {
-        console.log(slug, meta);
-        return {
-            title: meta.title,
-            date: meta.date,
-            description: meta.description,
-            tags: meta.tags,
-            slug: slug,
-        };
-    });
-    return (
-        <Container maxWidth="lg" sx={{ py: 8 }}>
-            <Typography
-                variant="h2"
-                component="h1"
-                align="center"
-                gutterBottom
-                sx={{
-                    fontWeight: 700,
-                    mb: 6,
-                    background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-                    backgroundClip: 'text',
-                    WebkitBackgroundClip: 'text',
-                    color: 'transparent',
-                    textShadow: '0 2px 4px rgba(33, 150, 243, 0.1)',
-                }}
-            >
-                博客文章
-            </Typography>
+async function getBlogPosts(): Promise<BlogPost[]> {
+    const postsDirectory = path.join(process.cwd(), 'content/blog');
+    const filenames = await fs.readdir(postsDirectory);
 
-            <Grid container spacing={4}>
-                {posts.map((post) => (
-                    <Grid item xs={12} md={6} key={post.slug}>
-                        <BlogPostCard post={post} />
-                    </Grid>
+    const posts = await Promise.all(
+        filenames
+            .filter(filename => filename.endsWith('.mdx'))
+            .map(async filename => {
+                const filePath = path.join(postsDirectory, filename);
+                const fileContents = await fs.readFile(filePath, 'utf8');
+                const { data } = matter(fileContents);
+
+                return {
+                    slug: filename.replace(/\.mdx$/, ''),
+                    title: data.title,
+                    description: data.description,
+                    date: data.date,
+                    tags: data.tags,
+                };
+            })
+    );
+
+    return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
+export default async function BlogPage() {
+    const posts = await getBlogPosts();
+
+    return (
+        <div className="max-w-4xl mx-auto px-4 py-8">
+            <h1 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+                Blog Posts
+            </h1>
+            <div className="grid gap-8">
+                {posts.map(post => (
+                    <article
+                        key={post.slug}
+                        className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow duration-200"
+                    >
+                        <Link
+                            href={`/blog/${post.slug}`}
+                            className="block hover:no-underline"
+                        >
+                            <h2 className="text-2xl font-bold mb-2 text-gray-900 hover:text-blue-600 transition-colors">
+                                {post.title}
+                            </h2>
+                        </Link>
+                        <p className="text-gray-600 mb-4 leading-relaxed">
+                            {post.description}
+                        </p>
+                        <div className="flex flex-wrap gap-2 mb-4">
+                            {post.tags.map(tag => (
+                                <span
+                                    key={tag}
+                                    className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium"
+                                >
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+                        <time className="text-gray-500 text-sm">
+                            {new Date(post.date).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            })}
+                        </time>
+                    </article>
                 ))}
-            </Grid>
-        </Container>
+            </div>
+        </div>
     );
 }

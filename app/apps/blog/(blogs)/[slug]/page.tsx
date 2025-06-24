@@ -2,11 +2,12 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import MDXContent from '@/app/components/MDXContent';
 import { notFound } from 'next/navigation';
+import { Box } from '@mui/material';
 
 interface BlogPostPageProps {
-    params: {
+    params: Promise<{
         slug: string;
-    };
+    }>;
 }
 
 export async function generateStaticParams() {
@@ -21,16 +22,15 @@ export async function generateStaticParams() {
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-    // Ensure params is properly awaited
-    const slug = await Promise.resolve(params.slug);
+    const { slug } = await params;
     const filePath = path.join(process.cwd(), 'content/blog', `${slug}.mdx`);
 
     try {
         const source = await fs.readFile(filePath, 'utf8');
         return (
-            <div className="prose prose-lg max-w-none">
+            <Box>
                 <MDXContent source={source} />
-            </div>
+            </Box>
         );
     } catch (error) {
         notFound();

@@ -72,12 +72,13 @@ export default function ShareButtons({ title, url }: ShareButtonsProps) {
             <Box
                 sx={{
                     position: 'fixed',
-                    right: 32,
-                    top: '50%',
-                    transform: 'translateY(-50%)',
+                    right: { xs: 8, sm: 16, md: 32 },
+                    top: { xs: 'auto', sm: '50%' },
+                    bottom: { xs: 80, sm: 'auto' },
+                    transform: { xs: 'none', sm: 'translateY(-50%)' },
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 1,
+                    gap: { xs: 0.5, sm: 1 },
                     zIndex: 1000,
                 }}
             >

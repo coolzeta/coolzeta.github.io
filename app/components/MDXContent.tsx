@@ -76,6 +76,9 @@ const components = {
                 boxShadow: 1,
                 mb: 2,
                 alignSelf: 'center',
+                maxWidth: '100%',
+                height: 'auto',
+                width: 'auto',
                 '&:hover': {
                     transform: 'translateY(-4px)',
                     transition: 'transform 0.2s ease-in-out',
@@ -88,14 +91,15 @@ const components = {
         <Typography
             variant="h1"
             sx={{
-                fontSize: '2.5rem',
+                fontSize: { xs: '1.75rem', sm: '2rem', md: '2.5rem' },
                 fontWeight: 700,
-                mt: 4,
+                mt: { xs: 2, sm: 3, md: 4 },
                 mb: 2,
                 color: 'success.main',
                 borderBottom: 1,
                 borderColor: 'success.light',
                 pb: 1,
+                wordBreak: 'break-word',
             }}
             {...props}
         />
@@ -104,11 +108,12 @@ const components = {
         <Typography
             variant="h2"
             sx={{
-                fontSize: '2rem',
+                fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' },
                 fontWeight: 600,
-                mt: 4,
+                mt: { xs: 3, sm: 3, md: 4 },
                 mb: 2,
                 color: 'success.light',
+                wordBreak: 'break-word',
             }}
             {...props}
         />
@@ -117,11 +122,12 @@ const components = {
         <Typography
             variant="h3"
             sx={{
-                fontSize: '1.5rem',
+                fontSize: { xs: '1.25rem', sm: '1.375rem', md: '1.5rem' },
                 fontWeight: 600,
-                mt: 3,
+                mt: { xs: 2, sm: 2.5, md: 3 },
                 mb: 2,
                 color: 'info.main',
+                wordBreak: 'break-word',
             }}
             {...props}
         />
@@ -134,6 +140,8 @@ const components = {
                 my: 2,
                 color: 'text.primary',
                 lineHeight: 1.8,
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word',
             }}
             {...props}
         />
@@ -142,9 +150,11 @@ const components = {
         <Box
             component="ul"
             sx={{
-                pl: 4,
+                pl: { xs: 3, sm: 3.5, md: 4 },
                 my: 2,
                 color: 'text.primary',
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word',
                 '& li': {
                     mb: 1,
                     '&::marker': {
@@ -159,9 +169,11 @@ const components = {
         <Box
             component="ol"
             sx={{
-                pl: 4,
+                pl: { xs: 3, sm: 3.5, md: 4 },
                 my: 2,
                 color: 'text.primary',
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word',
                 '& li': {
                     mb: 1,
                     '&::marker': {
@@ -215,20 +227,26 @@ const components = {
             component="pre"
             sx={{
                 bgcolor: 'background.paper',
-                p: 2,
+                p: { xs: 1.5, sm: 2 },
                 borderRadius: 1,
                 overflowX: 'auto',
+                overflowY: 'hidden',
                 my: 2,
                 color: '#fff',
-                fontSize: '0.95rem',
+                fontSize: { xs: '0.85rem', sm: '0.9rem', md: '0.95rem' },
                 lineHeight: 1.6,
+                width: '100%',
+                maxWidth: '100%',
                 '& code': {
                     color: '#fff',
-                    fontSize: '0.95rem',
+                    fontSize: 'inherit',
                     lineHeight: 1.6,
                     display: 'block',
                     minHeight: '2.5rem',
                     padding: '0.25rem 0',
+                    whiteSpace: 'pre',
+                    overflowWrap: 'normal',
+                    wordBreak: 'normal',
                 },
                 '& .token.comment': {
                     color: '#a8b2c1',
@@ -288,26 +306,39 @@ const components = {
     ),
     table: (props: any) => (
         <Box
-            component="table"
             sx={{
+                overflowX: 'auto',
+                overflowY: 'hidden',
                 width: '100%',
-                borderCollapse: 'collapse',
+                maxWidth: '100%',
                 my: 2,
-                '& th, & td': {
-                    border: 1,
-                    borderColor: 'divider',
-                    p: 1,
-                },
-                '& th': {
-                    bgcolor: 'background.paper',
-                    color: 'success.light',
-                },
-                '& tr:nth-of-type(even)': {
-                    bgcolor: 'background.paper',
-                },
+                display: 'block',
             }}
-            {...props}
-        />
+        >
+            <Box
+                component="table"
+                sx={{
+                    width: '100%',
+                    borderCollapse: 'collapse',
+                    minWidth: '100%',
+                    '& th, & td': {
+                        border: 1,
+                        borderColor: 'divider',
+                        p: { xs: 0.75, sm: 1 },
+                        fontSize: { xs: '0.875rem', sm: '0.9375rem', md: '1rem' },
+                        wordBreak: 'break-word',
+                    },
+                    '& th': {
+                        bgcolor: 'background.paper',
+                        color: 'success.light',
+                    },
+                    '& tr:nth-of-type(even)': {
+                        bgcolor: 'background.paper',
+                    },
+                }}
+                {...props}
+            />
+        </Box>
     ),
 };
 
@@ -338,7 +369,14 @@ export default function MDXContent({ source }: MDXContentProps) {
     }
 
     return (
-        <Box sx={{ color: 'text.primary' }}>
+        <Box
+            sx={{
+                color: 'text.primary',
+                width: '100%',
+                maxWidth: '100%',
+                overflow: 'hidden',
+            }}
+        >
             <MDXRemote {...mdxSource} components={{ ...components, ...customComponents }} />
         </Box>
     );

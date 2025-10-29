@@ -2,7 +2,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import MDXContent from '@/app/components/MDXContent';
 import { notFound } from 'next/navigation';
-import { Box } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import type { Metadata } from 'next';
 import { generateBlogMetadata } from '@/app/components/BlogSEO';
 import ShareButtons from '@/app/components/ShareButtons';
@@ -118,10 +118,27 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         const { source, frontMatter } = extractFrontMatter(content);
 
         return (
-            <Box>
-                <MDXContent source={source} />
-                <ShareButtons title={frontMatter.title} url={`/apps/blog/${slug}`} />
-            </Box>
+            <Container
+                maxWidth="md"
+                sx={{
+                    px: { xs: 2, sm: 3, md: 4 },
+                    py: { xs: 3, sm: 4 },
+                    width: '100%',
+                    maxWidth: { xs: '100%', sm: '100%', md: '900px' },
+                    margin: '0 auto',
+                }}
+            >
+                <Box
+                    sx={{
+                        width: '100%',
+                        maxWidth: '100%',
+                        overflow: 'hidden',
+                    }}
+                >
+                    <MDXContent source={source} />
+                    <ShareButtons title={frontMatter.title} url={`/apps/blog/${slug}`} />
+                </Box>
+            </Container>
         );
     } catch (error) {
         notFound();

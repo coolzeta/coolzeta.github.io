@@ -1,0 +1,75 @@
+---
+title: 'What Is a Dust Attack and How It Works'
+description: 'This article explains what a dust attack is, how it works, and how to protect yourself.'
+date: '2025-10-26'
+tags: ['Dust Attack', 'DeFi', 'Ethereum', 'blockchain security']
+image: '/images/blog/what-is-dust-attack-and-how-it-works/cover.png'
+slug: 'what-is-dust-attack-and-how-it-works'
+---
+
+# What Is a Dust Attack and How It Works
+
+Last week, I received a **weird** transaction in my wallet: someone sent me just **0.00001 USDC**. The gas fee alone was more expensive than the amount of USDC transferred.
+
+![0.00001 USDC](/images/blog/what-is-dust-attack-and-how-it-works/0.00001-usdc.png)
+
+Naturally, I wondered why anyone would bother sending such a tiny sum.
+
+After checking the [transaction details](https://arbiscan.io/tx/0xf338530ba8ba904d88a9a6a1c90cd8cdb7952bb79fd1e68d5b06ca9ad1a5d437) on the blockchain explorer, I discovered that the **“from” address** was funded by a wallet tagged as **“Phishing Scam”**.
+
+![from address](/images/blog/what-is-dust-attack-and-how-it-works/from-address.png)
+
+I then did some research on similar cases online and concluded that this was likely a **dust attack**.
+
+So what _is_ a dust attack?
+
+## 1. What Is a Dust Attack
+
+A **dust attack** (also called a dusting attack) consists of sending tiny amounts of cryptocurrency—known as **dust**—to a target wallet in order to **de-anonymize** its owner. The gathered information can then be used for **targeted phishing attacks**.
+
+> _Source_: Common definition from blockchain security reports (e.g., Chainalysis, CipherTrace).
+
+You might, like me, still be confused about the actual risk. After all, **all transactions are public on the blockchain**—why does a few satoshis or wei make any difference?
+
+The answer lies in the **scale and complexity** of on-chain graphs. A single address can interact with thousands of others, forming a massive web. Manually identifying ownership clusters is time-consuming and often impractical. Dust provides a **low-effort hook** that can dramatically simplify the attacker’s analysis.
+
+## 2. How It Works
+
+### Bitcoin (UTXO model)
+
+The technique originated on the **Bitcoin** chain, initially for legitimate AML purposes. Bitcoin encourages the use of a **fresh address** for each transaction. When you spend coins, any leftover change is sent to a **new change address** you control.
+
+If an attacker sends dust to one of your addresses and you later **spend a transaction that includes that dust UTXO**, the dust will be combined with your other funds and sent to a **new address**. This reveals that the new address belongs to the same entity—greatly reducing the need for exhaustive graph analysis.
+
+### Ethereum & L2s (account model)
+
+On **account-based** chains like Ethereum and Arbitrum, dust works differently. Attackers cannot rely on UTXO merging, but they still exploit dust to:
+
+1. **Bait interaction** with malicious contracts.
+2. **Create address-poisoning** opportunities (see below).
+
+Because L2 gas fees are low, attackers can dust **millions** of addresses cheaply, leading to many attack variants.
+
+---
+
+**Address Poisoning**
+
+Once attackers confirm two addresses belong to the same user, they generate a **look-alike address** sharing the same prefix _and_ suffix.
+Example:
+
+- Real: `0x1234...6789`
+- Fake: `0x1234...678A`
+
+Wallets typically display only the first/last 4 characters (`0x1234…6789`). Users copying from history may paste the **fake** address and unintentionally send funds to the attacker.
+
+**Fake Airdrop**
+
+Attackers impersonate popular DeFi/NFT projects, announce a fake airdrop on social media, and direct victims to a phishing site. Users are asked to **sign an approval transaction with unlimited allowance** (which means attacker can operate your tokens as they want). They may receive worthless “airdrop” tokens first, lowering suspicion. Once enough approvals are collected, attackers drain the real assets.
+
+## 3. How to Prevent It
+
+- **Enable “Hide small balances”** (or equivalent) in your wallet settings.
+- **Never move dust** to another address—leave it untouched.
+- **Double-check website domains** and avoid suspicious links.
+- **Never sign an approval transaction with unlimited amount**, even for seemingly legitimate projects.
+- Use a **dedicated address** for high-value operations and keep dust-containing addresses isolated.

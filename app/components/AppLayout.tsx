@@ -1,9 +1,9 @@
 'use client';
 
 import { Box, IconButton, Toolbar, AppBar, Typography } from '@mui/material';
-import { ArrowBack } from '@mui/icons-material';
+import { Home as HomeIcon } from '@mui/icons-material';
 import { useRouter, usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface AppLayoutProps {
     children: React.ReactNode;
@@ -12,18 +12,26 @@ interface AppLayoutProps {
 export default function AppLayout({ children }: AppLayoutProps) {
     const router = useRouter();
     const pathname = usePathname();
-    const [canGoBack, setCanGoBack] = useState(false);
-
-    // Check if we're on the home page
     const isHomePage = pathname === '/';
+    const [isFirstPage, setIsFirstPage] = useState(false);
 
-    useEffect(() => {
-        // Check if there's history to go back to
-        setCanGoBack(window.history.length > 1);
-    }, [pathname]);
+
+    const getDomain = (url: string): string => {
+        try {
+            const urlObj = new URL(url);
+            return urlObj.origin;
+        } catch {
+            return '';
+        }
+    };
+
+    const isSameDomain = (url: string, currentOrigin: string): boolean => {
+        const referrerDomain = getDomain(url);
+        return referrerDomain !== '' && referrerDomain === currentOrigin;
+    };
 
     const handleBack = () => {
-        if (canGoBack) {
+        if (isFirstPage && window.history.length > 1) {
             router.back();
         } else {
             router.push('/');
@@ -42,10 +50,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
                             sx={{ mr: 2 }}
                             aria-label="go back"
                         >
-                            <ArrowBack />
+                            <HomeIcon />
                         </IconButton>
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            Back
+                            Home
                         </Typography>
                     </Toolbar>
                 </AppBar>

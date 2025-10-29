@@ -148,10 +148,10 @@ export default function Home() {
                 }}
               >
                 <Typography variant="h4" sx={{ mb: 2, color: 'primary.main' }}>
-                  DApp Playground
+                  App Playground
                 </Typography>
                 <Typography sx={{ mb: 3, textAlign: 'center', color: 'text.primary' }}>
-                  Experiment with smart contracts and decentralized applications
+                  Experiment with smart contracts, decentralized applications, and more
                 </Typography>
                 <Button variant="contained" onClick={() => router.push("/apps/web3")}>
                   Launch Playground

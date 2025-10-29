@@ -10,6 +10,7 @@ import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
+import { BASE_URI } from '@/app/consts/const';
 
 interface BlogPost {
     slug: string;
@@ -55,49 +56,69 @@ export default async function BlogPage() {
                 gutterBottom
                 sx={{
                     fontWeight: 'bold',
-                    background: 'linear-gradient(to right, #2563eb, #60a5fa)',
+                    background: 'linear-gradient(to right, #25eb28, #60a5fa)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                 }}
             >
                 Blog Posts
             </Typography>
-            <Grid container spacing={4}>
+            <Grid sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                width: '100%',
+                height: '100%',
+            }}>
                 {posts.map(post => (
-                    <Grid item xs={12} sm={6} md={4} key={post.slug}>
+                    <Grid key={post.slug} sx={{
+                        width: { xs: '100%', sm: '50%', md: '33.33%' },
+                        '&:hover': { transform: 'translateY(-4px)', transition: 'transform 0.2s ease-in-out' }
+                    }}>
                         <Card elevation={3} sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                            <CardContent sx={{ flexGrow: 1 }}>
-                                <Link
-                                    component={NextLink}
-                                    href={`/apps/blog/${post.slug}`}
-                                    underline="none"
-                                    color="inherit"
-                                    sx={{ '&:hover': { color: 'primary.main' } }}
-                                >
+                            <Link
+                                component={NextLink}
+                                href={`/apps/blog/${post.slug}`}
+                                underline="none"
+                                color="inherit"
+
+                            >
+                                <CardContent sx={{ flexGrow: 1, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                                    <img
+                                        src={`/images/blog/${post.slug}/cover.png`}
+                                        alt={post.title}
+                                        width={'100%'}
+                                        height={'auto'}
+                                        style={{ borderRadius: 8, marginBottom: 16 }}
+                                    />
+
                                     <Typography variant="h5" component="div" fontWeight="bold" gutterBottom>
                                         {post.title}
                                     </Typography>
-                                </Link>
-                                <Typography variant="body2" color="text.secondary" paragraph>
-                                    {post.description}
-                                </Typography>
-                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
-                                    {post.tags.map(tag => (
-                                        <Chip key={tag} label={tag} size="small" />
-                                    ))}
-                                </Box>
-                                <Typography variant="caption" color="text.secondary">
-                                    {new Date(post.date).toLocaleDateString('en-US', {
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric',
-                                    })}
-                                </Typography>
-                            </CardContent>
+
+                                    <Typography variant="body2" color="text.secondary" paragraph>
+                                        {post.description}
+                                    </Typography>
+                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+                                        {post.tags.map(tag => (
+                                            <Chip key={tag} label={tag} size="small" />
+                                        ))}
+                                    </Box>
+                                    <Typography variant="caption" color="text.secondary">
+                                        {new Date(post.date).toLocaleDateString('en-US', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                        })}
+                                    </Typography>
+                                </CardContent>
+                            </Link>
                         </Card>
                     </Grid>
+
                 ))}
             </Grid>
-        </Container>
+        </Container >
     );
 }

@@ -66,6 +66,24 @@ const components = {
 
         return <CodeBlock className={language === 'solidity' ? 'language-javascript' : language}>{codeString}</CodeBlock>;
     },
+    img: (props: any) => (
+        <Box
+            component="img"
+            sx={{
+                display: 'block',
+                margin: '0 auto',
+                borderRadius: 2,
+                boxShadow: 1,
+                mb: 2,
+                alignSelf: 'center',
+                '&:hover': {
+                    transform: 'translateY(-4px)',
+                    transition: 'transform 0.2s ease-in-out',
+                },
+            }}
+            {...props}
+        />
+    ),
     h1: (props: any) => (
         <Typography
             variant="h1"

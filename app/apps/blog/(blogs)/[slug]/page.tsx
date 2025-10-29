@@ -98,7 +98,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
             tags: frontMatter.tags || [],
             slug: frontMatter.slug || slug,
             author: frontMatter.author || 'Zeta',
-            image: BASE_URI + frontMatter.image,
+            image: frontMatter.image,
             keywords: frontMatter.keywords,
         });
     } catch (error) {

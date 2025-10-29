@@ -21,7 +21,7 @@ export function generateBlogMetadata({
     image,
     keywords,
 }: BlogSEOProps): Metadata {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://coolzeta.github.io';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://zeta.lol';
     const imageUrl = image ? `${siteUrl}${image}` : `${siteUrl}/og-image.png`;
     const finalKeywords = keywords || tags.join(', ');
 

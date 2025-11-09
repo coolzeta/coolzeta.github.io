@@ -11,6 +11,7 @@ import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import { BASE_URI } from '@/app/consts/const';
+import { t } from '@/app/utils/i18n';
 
 interface BlogPost {
     slug: string;
@@ -20,33 +21,47 @@ interface BlogPost {
     tags: string[];
 }
 
-async function getBlogPosts(): Promise<BlogPost[]> {
-    const postsDirectory = path.join(process.cwd(), 'content/blog');
-    const filenames = await fs.readdir(postsDirectory);
-
-    const posts = await Promise.all(
-        filenames
-            .filter(filename => filename.endsWith('.mdx'))
-            .map(async filename => {
-                const filePath = path.join(postsDirectory, filename);
-                const fileContents = await fs.readFile(filePath, 'utf8');
-                const { data } = matter(fileContents);
-
-                return {
-                    slug: filename.replace(/\.mdx$/, ''),
-                    title: data.title,
-                    description: data.description,
-                    date: data.date,
-                    tags: data.tags,
-                };
-            })
-    );
-
-    return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+interface BlogPageProps {
+    params: Promise<{
+        locale: string;
+    }>;
 }
 
-export default async function BlogPage() {
-    const posts = await getBlogPosts();
+async function getBlogPosts(locale: string): Promise<BlogPost[]> {
+    const postsDirectory = path.join(process.cwd(), 'content/blog', locale);
+
+    try {
+        const filenames = await fs.readdir(postsDirectory);
+
+        const posts = await Promise.all(
+            filenames
+                .filter(filename => filename.endsWith('.mdx'))
+                .map(async filename => {
+                    const filePath = path.join(postsDirectory, filename);
+                    const fileContents = await fs.readFile(filePath, 'utf8');
+                    const { data } = matter(fileContents);
+
+                    return {
+                        slug: filename.replace(/\.mdx$/, ''),
+                        title: data.title,
+                        description: data.description,
+                        date: data.date,
+                        tags: data.tags,
+                    };
+                })
+        );
+
+        return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    } catch (error) {
+        console.error(`Error reading blog posts for locale ${locale}:`, error);
+        return [];
+    }
+}
+
+export default async function BlogPage({ params }: BlogPageProps) {
+    const { locale } = await params;
+    const posts = await getBlogPosts(locale);
+    const blogTitle = await t('blog.title', locale);
 
     return (
         <Container maxWidth="md" sx={{ py: 8 }}>
@@ -61,25 +76,23 @@ export default async function BlogPage() {
                     WebkitTextFillColor: 'transparent',
                 }}
             >
-                Blog Posts
+                {blogTitle}
             </Typography>
             <Grid sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
+                display: 'grid',
                 width: '100%',
                 height: '100%',
+                gap: 2,
+                gridTemplateColumns: { xs: 'repeat(1 ,1fr)', sm: 'repeat(2 ,1fr)', lg: 'repeat(3 ,1fr)' },
             }}>
                 {posts.map(post => (
                     <Grid key={post.slug} sx={{
-                        width: { xs: '100%', sm: '50%', md: '33.33%' },
                         '&:hover': { transform: 'translateY(-4px)', transition: 'transform 0.2s ease-in-out' }
                     }}>
                         <Card elevation={3} sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                             <Link
                                 component={NextLink}
-                                href={`/apps/blog/${post.slug}`}
+                                href={`/${locale}/apps/blog/${post.slug}`}
                                 underline="none"
                                 color="inherit"
 
@@ -106,7 +119,7 @@ export default async function BlogPage() {
                                         ))}
                                     </Box>
                                     <Typography variant="caption" color="text.secondary">
-                                        {new Date(post.date).toLocaleDateString('en-US', {
+                                        {new Date(post.date).toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US', {
                                             year: 'numeric',
                                             month: 'long',
                                             day: 'numeric',

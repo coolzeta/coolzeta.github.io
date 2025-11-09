@@ -1,0 +1,66 @@
+{
+  "app": {
+    "title": "Zeta的秘密基地",
+    "description": "欢迎来到Zeta的秘密基地。"
+  },
+  "nav": {
+    "home": "首页"
+  },
+  "blog": {
+    "title": "博客文章",
+    "notFound": {
+      "title": "博客文章未找到",
+      "description": "您要查找的博客文章不存在。"
+    }
+  },
+  "web3": {
+    "title": "Web3应用"
+  },
+  "dapps": {
+    "title": "去中心化应用"
+  },
+  "back": "返回",
+  "language": "语言",
+  "locale": {
+    "en": "英语",
+    "zh": "中文"
+  },
+  "loading": "加载中...",
+  "error": "错误",
+  "share": "分享",
+  "readMore": "阅读更多",
+  "tags": "标签",
+  "author": "作者",
+  "publishedOn": "发布于",
+  "home": {
+    "typewriter": {
+      "welcome": "欢迎来到Zeta的秘密基地",
+      "engineer": "我是一名软件工程师",
+      "web3Dev": "Web3和区块链开发者",
+      "crypto": "密码学爱好者",
+      "intj": "INTJ型人格",
+      "share": "我喜欢分享知识和结识朋友",
+      "friends": "让我们成为朋友吧，你可以通过下面的社交媒体图标找到我"
+    },
+    "blog": {
+      "title": "博客",
+      "description": "查看我的最新博客，更好地了解我",
+      "button": "探索博客"
+    },
+    "playground": {
+      "title": "应用游乐场",
+      "description": "体验智能合约、去中心化应用等更多功能",
+      "button": "启动游乐场"
+    },
+    "about": {
+      "title": "关于我",
+      "description": "我是一个Web3新手，试图学习并分享我对Web3的知识。我是INTJ型人格，目前在香港的一家交易所工作。我是一名前端工程师，但我对智能合约开发也有热情，并且对密码学和Web3的交叉领域很感兴趣。"
+    },
+    "connect": {
+      "title": "与我联系"
+    },
+    "footer": {
+      "copyright": "© 2025 Zeta的秘密基地。保留所有权利。"
+    }
+  }
+}

@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "./contexts/ThemeProvider";
+import { LocaleProvider } from "./contexts/LocaleProvider";
 import AppLayout from "./components/AppLayout";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -25,9 +26,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className} style={{ minHeight: '100vh', minWidth: '100%' }}>
         <ThemeProvider>
-          <AppLayout>
-            {children}
-          </AppLayout>
+          <LocaleProvider>
+            <AppLayout>
+              {children}
+            </AppLayout>
+          </LocaleProvider>
         </ThemeProvider>
       </body>
     </html>

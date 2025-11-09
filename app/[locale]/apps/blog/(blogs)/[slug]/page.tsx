@@ -10,6 +10,7 @@ import { BASE_URI } from '@/app/consts/const';
 
 interface BlogPostPageProps {
     params: Promise<{
+        locale: string;
         slug: string;
     }>;
 }
@@ -73,19 +74,31 @@ function extractFrontMatter(content: string): { frontMatter: BlogPost; source: s
 }
 
 export async function generateStaticParams() {
-    const postsDirectory = path.join(process.cwd(), 'content/blog');
-    const filenames = await fs.readdir(postsDirectory);
+    const locales = ['en', 'zh'];
+    const params: { locale: string; slug: string }[] = [];
 
-    return filenames
-        .filter(filename => filename.endsWith('.mdx'))
-        .map(filename => ({
-            slug: filename.replace(/\.mdx$/, ''),
-        }));
+    for (const locale of locales) {
+        const postsDirectory = path.join(process.cwd(), 'content/blog', locale);
+        try {
+            const filenames = await fs.readdir(postsDirectory);
+            const localeParams = filenames
+                .filter(filename => filename.endsWith('.mdx'))
+                .map(filename => ({
+                    locale,
+                    slug: filename.replace(/\.mdx$/, ''),
+                }));
+            params.push(...localeParams);
+        } catch (error) {
+            console.error(`Error reading blog posts for locale ${locale}:`, error);
+        }
+    }
+
+    return params;
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-    const { slug } = await params;
-    const filePath = path.join(process.cwd(), 'content/blog', `${slug}.mdx`);
+    const { locale, slug } = await params;
+    const filePath = path.join(process.cwd(), 'content/blog', locale, `${slug}.mdx`);
 
     try {
         const content = await fs.readFile(filePath, 'utf8');
@@ -103,15 +116,15 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
         });
     } catch (error) {
         return {
-            title: 'Blog Post Not Found',
-            description: 'The blog post you are looking for does not exist.',
+            title: locale === 'zh' ? '博客文章未找到' : 'Blog Post Not Found',
+            description: locale === 'zh' ? '您要查找的博客文章不存在。' : 'The blog post you are looking for does not exist.',
         };
     }
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-    const { slug } = await params;
-    const filePath = path.join(process.cwd(), 'content/blog', `${slug}.mdx`);
+    const { locale, slug } = await params;
+    const filePath = path.join(process.cwd(), 'content/blog', locale, `${slug}.mdx`);
 
     try {
         const content = await fs.readFile(filePath, 'utf8');
@@ -136,11 +149,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     }}
                 >
                     <MDXContent source={source} />
-                    <ShareButtons title={frontMatter.title} url={`/apps/blog/${slug}`} />
+                    <ShareButtons title={frontMatter.title} url={`/${locale}/apps/blog/${slug}`} />
                 </Box>
             </Container>
         );
     } catch (error) {
         notFound();
     }
-} 
+}

@@ -1,0 +1,66 @@
+{
+  "app": {
+    "title": "Zeta's Secret Base",
+    "description": "Welcome to Zeta's Secret Base."
+  },
+  "nav": {
+    "home": "Home"
+  },
+  "blog": {
+    "title": "Blog Posts",
+    "notFound": {
+      "title": "Blog Post Not Found",
+      "description": "The blog post you are looking for does not exist."
+    }
+  },
+  "web3": {
+    "title": "Web3 Applications"
+  },
+  "dapps": {
+    "title": "DApps"
+  },
+  "back": "Back",
+  "language": "Language",
+  "locale": {
+    "en": "English",
+    "zh": "中文"
+  },
+  "loading": "Loading...",
+  "error": "Error",
+  "share": "Share",
+  "readMore": "Read More",
+  "tags": "Tags",
+  "author": "Author",
+  "publishedOn": "Published on",
+  "home": {
+    "typewriter": {
+      "welcome": "Welcome to Zeta's Secret Base",
+      "engineer": "I'm a software engineer",
+      "web3Dev": "Web3 and blockchain developer",
+      "crypto": "Cryptography enthusiast",
+      "intj": "INTJ",
+      "share": "I like to share and connect with other people",
+      "friends": "Let's be friends, you can find me on the social media icons below"
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "See my latest blogs, and get to know me better",
+      "button": "Explore Blogs"
+    },
+    "playground": {
+      "title": "App Playground",
+      "description": "Experiment with smart contracts, decentralized applications, and more",
+      "button": "Launch Playground"
+    },
+    "about": {
+      "title": "About Me",
+      "description": "I'm a web3 newbie trying to learn and share my knowledge about web3, an INTJ, currently working in an exchange at Hong Kong. I work as a Frontend Engineer, but I also have a passion in smart contract development, and I'm interested in the intersection of cryptography and web3."
+    },
+    "connect": {
+      "title": "Connect With Me"
+    },
+    "footer": {
+      "copyright": "© 2025 Zeta's Secret Base. All rights reserved."
+    }
+  }
+}

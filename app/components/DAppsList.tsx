@@ -1,8 +1,10 @@
 'use client';
 
-import { Box, Card, CardContent, CardMedia, Chip, Grid, Typography } from '@mui/material';
+import { Box, Card, CardContent, Chip, Grid, Typography } from '@mui/material';
 import { DApp, dapps } from '../config/dapps';
 import Image from 'next/image';
+import { useLocale } from '../contexts/LocaleProvider';
+import { useRouter } from 'next/navigation';
 
 const statusColors = {
     live: 'success',
@@ -11,6 +13,13 @@ const statusColors = {
 } as const;
 
 export default function DAppsList() {
+    const { locale, t } = useLocale();
+    const router = useRouter();
+
+    const handleCardClick = (dapp: DApp) => {
+        router.push(`/${locale}${dapp.url}`);
+    };
+
     return (
         <Box sx={{ py: 4, px: 4 }}>
             <Grid container spacing={3} justifyContent="center">
@@ -27,11 +36,11 @@ export default function DAppsList() {
                                     boxShadow: 3
                                 }
                             }}
-                            onClick={() => window.open(dapp.url, '_blank')}
+                            onClick={() => handleCardClick(dapp)}
                         >
                             <Image
                                 src={dapp.imageUrl}
-                                alt={dapp.name}
+                                alt={t(dapp.nameKey)}
                                 width={800}
                                 height={600}
                                 layout='responsive'
@@ -41,7 +50,7 @@ export default function DAppsList() {
                             <CardContent sx={{ flexGrow: 1 }}>
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                                     <Typography variant="h6" component="h2">
-                                        {dapp.name}
+                                        {t(dapp.nameKey)}
                                     </Typography>
                                     <Chip
                                         label={dapp.status}
@@ -50,7 +59,7 @@ export default function DAppsList() {
                                     />
                                 </Box>
                                 <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                                    {dapp.description}
+                                    {t(dapp.descriptionKey)}
                                 </Typography>
                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                                     {dapp.tags.map((tag) => (

@@ -4,12 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run i18n:compile && next build && node addons/collectMetaInfo.js",
+    "build": "npm run i18n:compile && next build",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "collect-meta": "node addons/collectMetaInfo.js",
     "i18n:compile": "node addons/i18nCompiler.js"
   },
   "dependencies": {

@@ -6,7 +6,6 @@ import { Box, Container } from '@mui/material';
 import type { Metadata } from 'next';
 import { generateBlogMetadata } from '@/app/components/BlogSEO';
 import ShareButtons from '@/app/components/ShareButtons';
-import { BASE_URI } from '@/app/consts/const';
 
 interface BlogPostPageProps {
     params: Promise<{

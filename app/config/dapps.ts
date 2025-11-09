@@ -1,7 +1,7 @@
 export interface DApp {
     id: string;
-    name: string;
-    description: string;
+    nameKey: string;
+    descriptionKey: string;
     imageUrl: string;
     url: string;
     tags: string[];
@@ -12,8 +12,8 @@ export interface DApp {
 export const dapps: DApp[] = [
     {
         id: 'dapp-1',
-        name: 'Collateralized Stablecoin Protocol',
-        description: 'A decentralized stablecoin platform where users can mint stablecoins by depositing collateral assets. Experience core DeFi mechanisms including collateralization, redemption, and liquidation triggered by oracle price feeds. Explore the fundamentals of over-collateralized debt positions.',
+        nameKey: 'dapp.collateralizedStablecoin.name',
+        descriptionKey: 'dapp.collateralizedStablecoin.description',
         imageUrl: '/covers/cover1.png',
         url: '/apps/web3/dapp-1',
         tags: ['Stablecoin', 'DeFi', 'CDP', 'Liquidation', 'Oracle'],
@@ -21,12 +21,12 @@ export const dapps: DApp[] = [
     },
     {
         id: 'dapp-2',
-        name: 'Crypto Plants vs. Zombies',
-        description: 'A blockchain-based tower defense game inspired by Plants vs. Zombies where players collect and upgrade NFT plants to defend against zombie invasions. Earn tokens through gameplay and trade your NFT plants in the marketplace. Features strategic gameplay, unique NFT characters, and play-to-earn mechanics.',
+        nameKey: 'dapp.cryptoPlantsVsZombies.name',
+        descriptionKey: 'dapp.cryptoPlantsVsZombies.description',
         imageUrl: '/covers/cover2.png',
         url: '/apps/web3/dapp-2',
         tags: ['GameFi', 'NFT', 'Battle', 'P2E'],
         status: 'development'
     }
     // 您可以继续添加更多 DApp 配置
-]; 
+];

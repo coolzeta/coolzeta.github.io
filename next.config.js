@@ -9,6 +9,11 @@ const withMDX = require('@next/mdx')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
+    experimental: {
+        mdxRs: true,
+    },
+    transpilePackages: ['@mui/material', '@mui/system', '@mui/icons-material', '@mui/lab'],
+    output: 'standalone',
 }
 
 module.exports = withMDX(nextConfig) 

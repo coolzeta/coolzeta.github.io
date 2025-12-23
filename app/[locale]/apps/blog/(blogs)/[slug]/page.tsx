@@ -1,11 +1,14 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import MDXContent from '@/app/components/MDXContent';
+
 import { notFound } from 'next/navigation';
 import { Box, Container } from '@mui/material';
+
 import type { Metadata } from 'next';
 import { generateBlogMetadata } from '@/app/components/BlogSEO';
 import ShareButtons from '@/app/components/ShareButtons';
+
 
 interface BlogPostPageProps {
     params: Promise<{
@@ -148,7 +151,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     }}
                 >
                     <MDXContent source={source} />
-                    <ShareButtons title={frontMatter.title} url={`/${locale}/apps/blog/${slug}`} />
+
+                    <ShareButtons title={frontMatter.title} url={`/apps/blog/${slug}`} />
+
                 </Box>
             </Container>
         );

@@ -3,7 +3,7 @@ name: CI/CD Pipeline - Build & Deploy
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build-and-deploy:
@@ -29,27 +29,26 @@ jobs:
           file: ./Dockerfile              
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}zeta-blog:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}zeta-blog:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/zeta-blog:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/zeta-blog:${{ github.sha }}
 
       - name: Deploy to Server via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.SERVER_HOST }}          
-          username: ${{ secrets.SERVER_USERNAME }} 
-          key: ${{ secrets.SERVER_SSH_KEY }}  
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
-            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-            
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}zeta-blog:latest
-            
-            docker stop your-app || true
-            docker rm your-app || true
-            
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/zeta-blog:latest
+
+            docker stop zeta-blog || true
+            docker rm zeta-blog || true
 
             docker run -d \
-              --name your-app \
+              --name zeta-blog \
               --restart unless-stopped \
-              -p 80:3000 \                
-              ${{ secrets.DOCKERHUB_USERNAME }}zeta-blog:latest
+              -p 30001:3000 \
+              ${{ secrets.DOCKERHUB_USERNAME }}/zeta-blog:latest

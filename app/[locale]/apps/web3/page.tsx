@@ -1,3 +1,5 @@
+'use client';
+
 import DAppsList from '@/app/components/DAppsList';
 import { Box, Typography } from '@mui/material';
 

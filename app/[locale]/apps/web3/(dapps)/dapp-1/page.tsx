@@ -1,11 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
 import web3, { Contract } from "web3";
-import { abi as ZetaCoinABI } from "./ZetaCoin/build/contracts/ZetaCoin.json";
-import { abi as VaultABI } from "./ZetaCoin/build/contracts/Vault.json";
-import { abi as PriceOracleABI } from "./ZetaCoin/build/contracts/PriceOracle.json";
+import ZetaCoinArtifact from "./ZetaCoin/build/contracts/ZetaCoin.json";
+import VaultArtifact from "./ZetaCoin/build/contracts/Vault.json";
+import PriceOracleArtifact from "./ZetaCoin/build/contracts/PriceOracle.json";
 import { useWeb3Store } from "@/app/store/web3Store";
 import { Box, Typography, TextField, InputLabel, Button, InputAdornment, Tabs, Tab, CircularProgress } from "@mui/material";
+
+const ZetaCoinABI = ZetaCoinArtifact.abi;
+const VaultABI = VaultArtifact.abi;
+const PriceOracleABI = PriceOracleArtifact.abi;
 
 const ZetaCoinContractAddress = "0x4e705542B002A178c2e198786D3aA83459ec003e";
 const VaultContractAddress = "0x24836b77E0db470bae70816Ed673D0896D83d48B";

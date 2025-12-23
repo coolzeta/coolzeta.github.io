@@ -24,7 +24,7 @@ export default function DAppsList() {
         <Box sx={{ py: 4, px: 4 }}>
             <Grid container spacing={3} justifyContent="center">
                 {dapps.map((dapp: DApp, index: number) => (
-                    <Grid item xs={12} sm={6} md={4} key={dapp.id}>
+                    <Grid size={{ xs: 12, sm: 6, md: 4 }} key={dapp.id}>
                         <Card
                             sx={{
                                 height: '100%',

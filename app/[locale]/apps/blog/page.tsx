@@ -9,7 +9,6 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import { t } from '@/app/utils/i18n';
 
 interface BlogPost {
@@ -89,12 +88,9 @@ export default async function BlogPage({ params }: BlogPageProps) {
                         '&:hover': { transform: 'translateY(-4px)', transition: 'transform 0.2s ease-in-out' }
                     }}>
                         <Card elevation={3} sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                            <Link
-                                component={NextLink}
+                            <NextLink
                                 href={`/${locale}/apps/blog/${post.slug}`}
-                                underline="none"
-                                color="inherit"
-
+                                style={{ textDecoration: 'none', color: 'inherit' }}
                             >
                                 <CardContent sx={{ flexGrow: 1, height: '100%', display: 'flex', flexDirection: 'column' }}>
                                     <img
@@ -125,7 +121,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
                                         })}
                                     </Typography>
                                 </CardContent>
-                            </Link>
+                            </NextLink>
                         </Card>
                     </Grid>
 

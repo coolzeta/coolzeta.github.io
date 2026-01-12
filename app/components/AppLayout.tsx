@@ -39,7 +39,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
         if (isFirstPage && window.history.length > 1) {
             router.back();
         } else {
-            router.push('/');
+            router.push(`/${locale}`);
         }
     };
 

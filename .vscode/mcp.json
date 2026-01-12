@@ -1,0 +1,9 @@
+{
+	"servers": {
+		"com.figma.mcp/mcp": {
+			"url": "https://mcp.figma.com/mcp",
+			"type": "http"
+		}
+	},
+	"inputs": []
+}

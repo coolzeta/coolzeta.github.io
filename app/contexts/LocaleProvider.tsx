@@ -51,7 +51,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
         if (newLocale !== locale) {
             setLocaleState(newLocale);
         }
-    }, [pathname, locale]);
+    }, [pathname]);
 
     const setLocale = (newLocale: string) => {
         setLocaleState(newLocale);

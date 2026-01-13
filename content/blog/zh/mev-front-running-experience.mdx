@@ -1,0 +1,114 @@
+---
+title: '一次真实的 MEV 前跑攻击经历'
+description: '分享一次亲身经历的链上 MEV 前跑攻击（口令红包被秒抢），复盘攻击原理。'
+date: '2026-01-13'
+tags: ['MEV', 'Front-running', 'Ethereum', 'DeFi Security', 'Flashbots']
+image: '/images/blog/mev-front-running-experience/cover.png'
+slug: 'mev-front-running-experience'
+---
+
+
+# 链上口令红包：为什么刚发出去就被“秒抢”？——一次真实的 MEV 前跑攻击经历
+
+前几天我突发奇想：要做一个**纯链上的口令红包**，听起来浪漫又安全。
+
+设计思路如下：
+
+- 发送者：在链下对口令做 keccak256 哈希，得到 hash
+- 把 hash + 红包金额 一起存进智能合约（创建红包）
+- 领取者：输入口令 → 合约再 keccak256 一次
+- 如果两个 hash 匹配 → 转出对应金额
+
+理论上，破解 keccak256 的难度和暴力破解一个以太坊私钥差不多，安全性看起来很硬。
+
+我在本地、测试网反复测了 N 遍，一切丝滑。于是信心爆棚，把合约甩上了 [**Mainnet**](https://etherscan.io/address/0xf1a1257b195ab892a1b4f10dee8bee92c845d2c2)。
+
+![contract](/images/blog/mev-front-running-experience/contract.png)
+
+然后我创建了第一个测试红包：
+
+- 金额：0.001 ETH
+- 口令：随便打的一串
+- 点发送 → 交易 Pending
+
+然后我创建领取交易，盯着 Etherscan 等了大概 5–10 秒……
+
+页面刷新：
+
+**“Error: Red packet already claimed”**
+
+？？？？？？？？？
+
+我懵了三秒钟。
+
+红包是我刚创建的，hash 是我自己算的，私钥在我本地，怎么可能有人瞬间破解 keccak256？
+
+![交易详情](/images/blog/mev-front-running-experience/error.png) 
+
+冷静下来翻交易记录后，我才发现真相：
+
+在我“创建红包”的交易前面几毫秒，有一笔几乎一模一样的**领取交易**，calldata 完全一样（包含了我刚刚存进去的 hash），只是 gas price 高出一大截……
+
+**这是 MEV searcher 的 bot 干的。**
+
+## 到底发生了什么？MEV 前跑攻击的原理科普
+
+以太坊（以及大部分公链）的交易处理流程大致是这样的：
+
+1. 你签名发出一笔交易 → 进入公共 **mempool**（内存池）
+2. 全网节点都能看到 mempool 里的交易内容（包括 calldata、to、value 等）
+3. **Searcher（搜索者）** 运行 bot，24 小时监控 mempool
+4. 一旦发现有利可图的机会，bot 立刻复制/构造新交易，用**更高 gas price**（或通过 bundle）插队
+5. 验证者（以前是矿工，现在是提议者）优先打包 gas 出价高的交易
+
+在我的案例里：
+
+- 创建红包的交易把 hash 公开在了 mempool
+- bot 瞬间看到这个 hash
+- bot 立刻构造一笔**领取**交易（调用合约的 claim 函数，传入相同的 hash 对应的口令其实不需要——因为它直接用我传的 hash）
+- bot 把 gas price 拉高 → 抢先打包 → 红包被领走
+- 我的领取交易到达时，余额已为 0，只能 revert
+
+**这不是破解了 keccak256，而是利用了“信息公开 + 交易排序拍卖”的机制，直接抄了我的作业。**
+
+这种攻击最经典的名字叫 **Front-running（抢先/前跑）**，属于 **MEV（Maximal Extractable Value，最大可提取价值）** 的一种常见形式。
+
+类似场景在 DeFi 里更普遍：
+
+- 三明治攻击（Sandwich）：在你大额 swap 前买、后卖，赚滑点差价
+- 清算抢跑：看到你要被清算，抢先自己清算赚奖金
+- ……
+
+只要交易内容在 mempool 公开，且执行结果能产生可量化的利润，就可能被 bot 盯上。
+
+## 如何避免这种“明抢”？常见的几种思路
+
+1. **Commit-Reveal 两阶段方案**（更安全但复杂）
+   - 第一阶段：只提交 hash 的 hash（commit）
+   - 第二阶段：尝试根据提交的hash领取（reveal）
+
+2. **对消息进行签名**
+   - 链下对哈希值通过 ERC-712 进行签名，领取时提交签名，合约验证签名有效性，因为签名由领取者私钥生成，bot 无法伪造
+
+最现实的结论：**纯公开 mempool + 纯链上口令红包，在当前以太坊环境下几乎是送给 bot 的。**
+
+## 结语：0.001 ETH 的学费，换来的清醒
+
+这次丢的钱不多，但痛得很真实。
+
+它让我彻底明白一句话：
+
+**在以太坊上，你不是在和合约交互，你是在和全网最快的 searcher 抢速度。**
+
+任何设计如果满足下面两条，几乎必被抢跑：
+
+- 关键信息（hash、参数）在 mempool 公开
+- 执行后有即时、可量化的经济利润
+
+以后再做类似的东西，我会先问自己：
+
+**“如果一个 bot 看到这笔交易，它能不能立刻复制并用更高 gas 抢先赚走？”**
+
+如果答案是“Yes”，那就得换思路了。
+
+链上世界，永远是黑暗森林。

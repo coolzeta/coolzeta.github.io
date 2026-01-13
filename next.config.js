@@ -13,6 +13,7 @@ const nextConfig = {
         mdxRs: true,
     },
     transpilePackages: ['@mui/material', '@mui/system', '@mui/icons-material', '@mui/lab'],
+    // Use standalone for better SSR/SSG hybrid support
     output: 'standalone',
 }
 

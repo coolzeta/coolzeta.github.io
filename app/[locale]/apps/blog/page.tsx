@@ -10,6 +10,12 @@ import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
 import { t } from '@/app/utils/i18n';
+import type { Metadata } from 'next';
+
+// Force static generation at build time
+export const dynamic = 'force-static';
+export const dynamicParams = false;
+export const revalidate = 86400;
 
 interface BlogPost {
     slug: string;
@@ -54,6 +60,36 @@ async function getBlogPosts(locale: string): Promise<BlogPost[]> {
         console.error(`Error reading blog posts for locale ${locale}:`, error);
         return [];
     }
+}
+
+export async function generateStaticParams() {
+    return [
+        { locale: 'en' },
+        { locale: 'zh' },
+    ];
+}
+
+export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
+    const { locale } = await params;
+    const title = locale === 'zh' ? '博客' : 'Blog';
+    const description = locale === 'zh'
+        ? 'Zeta的技术博客，分享区块链、Web3、DeFi等技术文章'
+        : 'Zeta\'s tech blog, sharing articles about blockchain, Web3, DeFi and more';
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            type: 'website',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title,
+            description,
+        },
+    };
 }
 
 export default async function BlogPage({ params }: BlogPageProps) {

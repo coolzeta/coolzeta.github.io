@@ -8,6 +8,7 @@ import { Box, Container } from '@mui/material';
 import type { Metadata } from 'next';
 import { generateBlogMetadata } from '@/app/components/BlogSEO';
 import ShareButtons from '@/app/components/ShareButtons';
+import { setRequestLocale } from 'next-intl/server';
 
 // Force static generation at build time
 export const dynamic = 'force-static';
@@ -146,6 +147,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
     const { locale, slug } = await params;
+    setRequestLocale(locale);
 
     const blogPost = await getBlogPost(locale, slug);
 

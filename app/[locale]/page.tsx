@@ -8,7 +8,7 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import { useRouter } from 'next/navigation';
-import { useLocale } from '@/app/contexts/LocaleProvider';
+import { useTranslations } from 'next-intl';
 
 const typewriterTextKeys = [
     'home.typewriter.welcome',
@@ -35,7 +35,7 @@ interface HomePageProps {
 
 export default function Home({ params }: HomePageProps) {
     const router = useRouter();
-    const { locale, setLocale, t, loading } = useLocale();
+    const t = useTranslations();
     const [currentText, setCurrentText] = useState('');
     const [index, setIndex] = useState(0);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -43,8 +43,6 @@ export default function Home({ params }: HomePageProps) {
 
 
     useEffect(() => {
-        if (loading) return; // 等待翻译加载完成
-
         const timeout = setTimeout(() => {
             if (isDeleting) {
                 setCurrentText(currentText.slice(0, -1));
@@ -68,7 +66,7 @@ export default function Home({ params }: HomePageProps) {
         }, isDeleting ? 20 : 40);
 
         return () => clearTimeout(timeout);
-    }, [currentText, isDeleting, textIndex, index, locale, loading, t]);
+    }, [currentText, isDeleting, textIndex, index, t]);
 
 
 
@@ -86,7 +84,7 @@ export default function Home({ params }: HomePageProps) {
                         variant="h1"
                         sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold', fontSize: { xs: '2.5rem', md: '3.5rem' } }}
                     >
-                        {loading ? "Zeta's Secret Base" : t('app.title')}
+                        {t('app.title')}
                     </Typography>
 
                     <Typography
@@ -131,13 +129,16 @@ export default function Home({ params }: HomePageProps) {
                                 }}
                             >
                                 <Typography variant="h4" sx={{ mb: 2, color: 'primary.main' }}>
-                                    {loading ? 'Blog' : t('home.blog.title')}
+                                    {t('home.blog.title')}
                                 </Typography>
                                 <Typography sx={{ mb: 3, textAlign: 'center', color: 'text.primary' }}>
-                                    {loading ? 'See my latest blogs, and get to know me better' : t('home.blog.description')}
+                                    {t('home.blog.description')}
                                 </Typography>
-                                <Button variant="contained" onClick={() => router.push(`/${locale}/apps/blog`)}>
-                                    {loading ? 'Explore Blogs' : t('home.blog.button')}
+                                <Button variant="contained" onClick={async () => {
+                                    const resolvedParams = await params;
+                                    router.push(`/${resolvedParams.locale}/apps/blog`);
+                                }}>
+                                    {t('home.blog.button')}
                                 </Button>
                             </Paper>
                         </motion.div>
@@ -161,13 +162,16 @@ export default function Home({ params }: HomePageProps) {
                                 }}
                             >
                                 <Typography variant="h4" sx={{ mb: 2, color: 'primary.main' }}>
-                                    {loading ? 'App Playground' : t('home.playground.title')}
+                                    {t('home.playground.title')}
                                 </Typography>
                                 <Typography sx={{ mb: 3, textAlign: 'center', color: 'text.primary' }}>
-                                    {loading ? 'Experiment with smart contracts, decentralized applications, and more' : t('home.playground.description')}
+                                    {t('home.playground.description')}
                                 </Typography>
-                                <Button variant="contained" onClick={() => router.push(`/${locale}/apps/web3`)}>
-                                    {loading ? 'Launch Playground' : t('home.playground.button')}
+                                <Button variant="contained" onClick={async () => {
+                                    const resolvedParams = await params;
+                                    router.push(`/${resolvedParams.locale}/apps/web3`);
+                                }}>
+                                    {t('home.playground.button')}
                                 </Button>
                             </Paper>
                         </motion.div>
@@ -185,10 +189,10 @@ export default function Home({ params }: HomePageProps) {
                     }}
                 >
                     <Typography variant="h4" alignSelf='flex-start' sx={{ mb: 2, color: 'primary.main' }}>
-                        {loading ? 'About Me' : t('home.about.title')}
+                        {t('home.about.title')}
                     </Typography>
                     <Typography sx={{ mb: 3, textAlign: 'center', color: 'text.primary' }}>
-                        {loading ? 'I\'m a web3 newbie trying to learn and share my knowledge about web3, an INTJ, currently working in an exchange at Hong Kong. I work as a Frontend Engineer, but I also have a passion in smart contract development, and I\'m interested in the intersection of cryptography and web3.' : t('home.about.description')}
+                        {t('home.about.description')}
                     </Typography>
                 </Paper>
                 <Box
@@ -201,7 +205,7 @@ export default function Home({ params }: HomePageProps) {
                     }}
                 >
                     <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
-                        {loading ? 'Connect With Me' : t('home.connect.title')}
+                        {t('home.connect.title')}
                     </Typography>
                     <Stack
                         direction="row"
@@ -226,7 +230,7 @@ export default function Home({ params }: HomePageProps) {
                         ))}
                     </Stack>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        {loading ? '© 2025 Zeta\'s Secret Base. All rights reserved.' : t('home.footer.copyright')}
+                        {t('home.footer.copyright')}
                     </Typography>
                 </Box>
             </Container>

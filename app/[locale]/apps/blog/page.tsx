@@ -9,7 +9,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
-import { t } from '@/app/utils/i18n';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { Metadata } from 'next';
 
 // Force static generation at build time
@@ -94,8 +94,10 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
 
 export default async function BlogPage({ params }: BlogPageProps) {
     const { locale } = await params;
+    setRequestLocale(locale);
     const posts = await getBlogPosts(locale);
-    const blogTitle = await t('blog.title', locale);
+    const t = await getTranslations();
+    const blogTitle = t('blog.title');
 
     return (
         <Container maxWidth="md" sx={{ py: 8 }}>

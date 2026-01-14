@@ -4,39 +4,23 @@ import { Box, IconButton, Toolbar, AppBar, Typography, Button, Menu, MenuItem } 
 import { Home as HomeIcon, Language as LanguageIcon } from '@mui/icons-material';
 import { useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { useLocale } from '@/app/contexts/LocaleProvider';
+import { useTranslations } from 'next-intl';
 
 interface AppLayoutProps {
     children: React.ReactNode;
+    locale: string;
 }
 
-export default function AppLayout({ children }: AppLayoutProps) {
+export default function AppLayout({ children, locale }: AppLayoutProps) {
     const router = useRouter();
     const pathname = usePathname();
-    const { locale, setLocale, t, loading } = useLocale();
+    const t = useTranslations();
 
-    // 检查是否为首页 - 现在首页是 /{locale} 而不是 /
-    const isHomePage = pathname === `/${locale}` || pathname === '/';
-    const [isFirstPage, setIsFirstPage] = useState(false);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-
-    const getDomain = (url: string): string => {
-        try {
-            const urlObj = new URL(url);
-            return urlObj.origin;
-        } catch {
-            return '';
-        }
-    };
-
-    const isSameDomain = (url: string, currentOrigin: string): boolean => {
-        const referrerDomain = getDomain(url);
-        return referrerDomain !== '' && referrerDomain === currentOrigin;
-    };
+    const isHomePage = pathname === `/${locale}` || pathname === '/' || pathname === `/en` || pathname === `/zh`;
 
     const handleBack = () => {
-        if (isFirstPage && window.history.length > 1) {
+        if (window.history.length > 1) {
             router.back();
         } else {
             router.push(`/${locale}`);
@@ -52,14 +36,32 @@ export default function AppLayout({ children }: AppLayoutProps) {
     };
 
     const handleLanguageSwitch = (newLocale: string) => {
-        setLocale(newLocale);
+        const currentPath = pathname;
+        let newPath;
+
+        if (currentPath === '/') {
+            newPath = `/${newLocale}`;
+        } else if (currentPath.startsWith('/en') || currentPath.startsWith('/zh')) {
+            newPath = currentPath.replace(/^\/(en|zh)/, `/${newLocale}`);
+        } else {
+            newPath = `/${newLocale}`;
+        }
+
+        router.replace(newPath);
         handleLanguageClose();
     };
 
     return (
         <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-
-            <AppBar position="static" color="default" elevation={1}>
+            <AppBar
+                position="static"
+                color="default"
+                elevation={1}
+                sx={{
+                    bgcolor: 'background.paper',
+                    borderRadius: 2,
+                }}
+            >
                 <Toolbar>
                     {!isHomePage && (
                         <>
@@ -67,17 +69,21 @@ export default function AppLayout({ children }: AppLayoutProps) {
                                 edge="start"
                                 color="inherit"
                                 onClick={handleBack}
-                                sx={{ mr: 2 }}
+                                sx={{ mr: 2, color: 'primary.main' }}
                                 aria-label="go back"
                             >
                                 <HomeIcon />
                             </IconButton>
                             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                                {loading ? 'Home' : t('nav.home')}
+                                {t('nav.home')}
                             </Typography>
                         </>
                     )}
-                    {/* Language Switcher */}
+                    {isHomePage && (
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                            {t('nav.home')}
+                        </Typography>
+                    )}
 
                     <Button
                         color="primary"
@@ -95,13 +101,13 @@ export default function AppLayout({ children }: AppLayoutProps) {
                             onClick={() => handleLanguageSwitch('en')}
                             selected={locale === 'en'}
                         >
-                            {loading ? 'English' : t('locale.en')}
+                            {t('locale.en')}
                         </MenuItem>
                         <MenuItem
                             onClick={() => handleLanguageSwitch('zh')}
                             selected={locale === 'zh'}
                         >
-                            {loading ? '中文' : t('locale.zh')}
+                            {t('locale.zh')}
                         </MenuItem>
                     </Menu>
                 </Toolbar>

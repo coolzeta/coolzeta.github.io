@@ -1,51 +1,55 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// export function middleware(request: NextRequest) {
-//     const { pathname } = request.nextUrl;
+const locales = ['en', 'zh'] as const;
+type Locale = typeof locales[number];
+const defaultLocale: Locale = 'en';
 
-//     // 检查是否访问根路径
-//     if (pathname === '/') {
-//         // 从请求头中获取用户首选语言，如果没有则默认为英文
-//         const acceptLanguage = request.headers.get('accept-language');
-//         let defaultLocale = 'en';
+function getLocaleFromHeader(acceptLanguage: string | null): Locale {
+  if (!acceptLanguage) return defaultLocale;
 
-//         // 简单的语言检测，检查是否包含中文
-//         if (acceptLanguage && acceptLanguage.includes('zh')) {
-//             defaultLocale = 'zh';
-//         }
+  // Very simple detection (you can make it more sophisticated)
+  if (acceptLanguage.toLowerCase().includes('zh')) {
+    return 'zh';
+  }
+  return defaultLocale;
+}
 
-//         // 重定向到包含语言的路径
-//         return NextResponse.redirect(new URL(`/${defaultLocale}`, request.url));
-//     }
+export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
 
-//     // 检查路径是否已经包含locale（以/en或/zh开头）
-//     if (pathname.startsWith('/en') || pathname.startsWith('/zh')) {
-//         return NextResponse.next();
-//     }
+  // 1. Skip all internal Next.js paths, API routes, static files, etc.
+  if (
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/api') ||
+    pathname.includes('.') || // most static files have extension
+    pathname.startsWith('/favicon.ico')
+  ) {
+    return NextResponse.next();
+  }
 
-//     // 对于没有locale的路径，重定向到带默认locale的路径
-//     const acceptLanguage = request.headers.get('accept-language');
-//     let defaultLocale = 'en';
+  // 2. Check if path already has valid locale prefix
+  const pathnameHasLocale = locales.some((locale) =>
+    pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
+  );
 
-//     // 简单的语言检测，检查是否包含中文
-//     if (acceptLanguage && acceptLanguage.includes('zh')) {
-//         defaultLocale = 'zh';
-//     }
+  if (pathnameHasLocale) {
+    return NextResponse.next();
+  }
 
-//     // 重定向到包含语言的路径
-//     return NextResponse.redirect(new URL(`/${defaultLocale}${pathname}`, request.url));
-// }
+  // 3. At this point → path has NO locale → we should add one
+  const acceptLanguage = request.headers.get('accept-language');
+  const locale = getLocaleFromHeader(acceptLanguage);
 
-// export const config = {
-//     // 匹配所有路径，但排除静态文件
-//     matcher: [
-//         /*
-//          * Match all request paths except for the ones starting with:
-//          * - _next/static (static files)
-//          * - _next/image (image optimization files)
-//          * - favicon.ico (favicon file)
-//          * - public folder
-//          */
-//         '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-//     ],
-// };
+  // Build new URL with locale prefix
+  const newUrl = new URL(`/${locale}${pathname === '/' ? '' : pathname}`, request.url);
+
+  return NextResponse.redirect(newUrl, 307); // 307 = Temporary Redirect (safer during dev/testing)
+  // Use 301 only when you're 100% sure the logic is stable (SEO benefit)
+}
+
+export const config = {
+  matcher: [
+    // Run on almost everything, but skip static & internal
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|woff2?)$).*)',
+  ],
+};

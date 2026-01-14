@@ -3,7 +3,7 @@
 import { Box, Card, CardContent, Chip, Grid, Typography } from '@mui/material';
 import { DApp, dapps } from '../config/dapps';
 import Image from 'next/image';
-import { useLocale } from '../contexts/LocaleProvider';
+import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 
 const statusColors = {
@@ -13,7 +13,8 @@ const statusColors = {
 } as const;
 
 export default function DAppsList() {
-    const { locale, t } = useLocale();
+    const locale = useLocale();
+    const t = useTranslations();
     const router = useRouter();
 
     const handleCardClick = (dapp: DApp) => {

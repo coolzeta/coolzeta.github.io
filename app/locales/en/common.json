@@ -56,6 +56,41 @@
       "title": "About Me",
       "description": "I'm a web3 newbie trying to learn and share my knowledge about web3, an INTJ, currently working in an exchange at Hong Kong. I work as a Frontend Engineer, but I also have a passion in smart contract development, and I'm interested in the intersection of cryptography and web3."
     },
+    "tech": {
+      "title": "Tech Stack",
+      "description": "Explore the technologies I'm passionate about - Web3 blockchain, artificial intelligence, and modern frontend development",
+      "web3": {
+        "title": "Web3 & Blockchain"
+      },
+      "ai": {
+        "title": "Artificial Intelligence"
+      },
+      "frontend": {
+        "title": "Frontend Technologies"
+      }
+    },
+    "journey": {
+      "title": "My Tech Journey",
+      "description": "From traditional software engineering to exploring Web3 and AI"
+    },
+    "timeline": {
+      "2019": {
+        "title": "Entering Software Engineering",
+        "description": "Studied Software Engineering at Harbin Institute of Technology, building systematic knowledge in computer science. From algorithms and data structures to modern frontend technologies, gradually developing a comprehensive understanding of software development."
+      },
+      "2021": {
+        "title": "Exploring Data Visualization",
+        "description": "Interned at ByteDance, focusing on frontend engineering and data visualization. Deepened understanding of React ecosystem and explored how visualization makes complex data intuitive and accessible."
+      },
+      "2023": {
+        "title": "Diving into AIGC Wave",
+        "description": "Founded Wisemind AI to explore the possibilities of AI-generated content. Researched Stable Diffusion, ComfyUI for AI art generation, learned LangChain and AI Agent development, understanding how AIGC reshapes content creation."
+      },
+      "2025": {
+        "title": "Embracing Web3 World",
+        "description": "Joined a licensed cryptocurrency exchange in Hong Kong, combining frontend expertise with blockchain technology. Learning Web3.js, smart contract interactions, and understanding the technical architecture of decentralized finance."
+      }
+    },
     "connect": {
       "title": "Connect With Me"
     },
@@ -64,6 +99,22 @@
     }
   },
   "dapp": {
+    "status": {
+      "live": "Live",
+      "beta": "Beta",
+      "development": "In Development"
+    },
+    "tags": {
+      "Stablecoin": "Stablecoin",
+      "DeFi": "DeFi",
+      "CDP": "CDP",
+      "Liquidation": "Liquidation",
+      "Oracle": "Oracle",
+      "GameFi": "GameFi",
+      "NFT": "NFT",
+      "Battle": "Battle",
+      "P2E": "Play to Earn"
+    },
     "collateralizedStablecoin": {
       "name": "Collateralized Stablecoin Protocol",
       "description": "A decentralized stablecoin platform where users can mint stablecoins by depositing collateral assets. Experience core DeFi mechanisms including collateralization, redemption, and liquidation triggered by oracle price feeds. Explore the fundamentals of over-collateralized debt positions."

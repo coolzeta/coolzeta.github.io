@@ -98,7 +98,48 @@ export default function AppLayout({ children, locale }: AppLayoutProps) {
             </IconButton>
           )}
 
+          {isHomePage && (
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 'bold',
+                background: 'linear-gradient(135deg, #4caf50 0%, #81c784 100%)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              Zeta
+            </Typography>
+          )}
+
           <Box sx={{ flexGrow: 1 }} />
+
+          <Button
+            color="primary"
+            onClick={() => router.push(`/${locale}/apps/blog`)}
+            sx={{
+              mx: 1,
+              '&:hover': {
+                bgcolor: 'rgba(76, 175, 80, 0.1)',
+              },
+            }}
+          >
+            {t('nav.blog')}
+          </Button>
+
+          <Button
+            color="primary"
+            onClick={() => router.push(`/${locale}/apps/web3`)}
+            sx={{
+              mx: 1,
+              '&:hover': {
+                bgcolor: 'rgba(76, 175, 80, 0.1)',
+              },
+            }}
+          >
+            {t('nav.playground')}
+          </Button>
 
           <Button color="primary" startIcon={<LanguageIcon />} onClick={handleLanguageClick}>
             {t(`locale.${locale}`)}

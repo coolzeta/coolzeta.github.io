@@ -136,6 +136,7 @@
     "resume": {
       "title": "下载我的简历",
       "description": "想一起合作？下载我的简历，了解更多关于我的工作经验和技能。",
+      "languageHint": "如需下载不同语言的简历，请在右上角切换网站语言。",
       "button": "下载简历",
       "notAvailable": "简历暂不可用。",
       "comingSoon": "即将推出"

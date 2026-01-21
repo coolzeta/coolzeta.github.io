@@ -256,8 +256,20 @@ export default function Timeline() {
                 <Typography variant="h5" sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold' }}>
                   {t('home.resume.title')}
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3 }}>
+                <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
                   {t('home.resume.description')}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    display: 'block',
+                    mb: 3,
+                    color: 'text.secondary',
+                    opacity: 0.7,
+                    fontStyle: 'italic',
+                  }}
+                >
+                  {t('home.resume.languageHint')}
                 </Typography>
 
                 {/* Download Button */}

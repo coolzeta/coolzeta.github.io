@@ -136,6 +136,7 @@
     "resume": {
       "title": "Download My Resume",
       "description": "Interested in working together? Download my resume to learn more about my professional experience and skills.",
+      "languageHint": "To download resume in different language, please switch site language in the top right corner.",
       "button": "Download Resume",
       "notAvailable": "Resume is not available yet.",
       "comingSoon": "Coming Soon"

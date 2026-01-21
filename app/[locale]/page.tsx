@@ -1,15 +1,6 @@
 'use client';
 
-import {
-  Box,
-  Button,
-  Container,
-  Typography,
-  Paper,
-  IconButton,
-  Stack,
-  Divider,
-} from '@mui/material';
+import { Box, Button, Container, Typography, IconButton, Stack, Divider } from '@mui/material';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
 import GitHubIcon from '@mui/icons-material/GitHub';
@@ -19,9 +10,9 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import ParallaxSection from '../components/ParallaxSection';
-import Card3D from '../components/Card3D';
 import Timeline from '../components/Timeline';
 import TechShowcase from '../components/TechShowcase';
+import AboutSection from '../components/AboutSection';
 
 const typewriterTextKeys = [
   'home.typewriter.welcome',
@@ -37,7 +28,11 @@ const socialLinks = [
   { icon: <GitHubIcon />, url: 'https://github.com/coolzeta', label: 'GitHub' },
   // { icon: <TwitterIcon />, url: 'https://twitter.com/yourusername', label: 'Twitter' },
   // { icon: <InstagramIcon />, url: 'https://instagram.com/yourusername', label: 'Instagram' },
-  { icon: <LinkedInIcon />, url: 'https://www.linkedin.com/in/zeta-zhang-98065334b/', label: 'LinkedIn' },
+  {
+    icon: <LinkedInIcon />,
+    url: 'https://www.linkedin.com/in/zeta-zhang-98065334b/',
+    label: 'LinkedIn',
+  },
 ];
 
 interface HomePageProps {
@@ -304,89 +299,9 @@ export default function Home({ params }: HomePageProps) {
 
         <Divider sx={{ my: 8, opacity: 0.3 }} />
 
-        {/* Feature Cards Section */}
+        {/* About Me Section */}
         <ParallaxSection speed={0.5}>
-          <Stack direction={{ xs: 'column', md: 'row' }} spacing={4} sx={{ py: { xs: 6, md: 10 } }}>
-            <Box flex={1}>
-              <Card3D>
-                <Box sx={{ textAlign: 'center', p: 2 }}>
-                  <Box
-                    sx={{
-                      fontSize: '3rem',
-                      mb: 2,
-                      filter: 'drop-shadow(0 0 10px rgba(76, 175, 80, 0.5))',
-                    }}
-                  >
-                    📝
-                  </Box>
-                  <Typography
-                    variant="h4"
-                    sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold' }}
-                  >
-                    {t('home.blog.title')}
-                  </Typography>
-                  <Typography sx={{ mb: 3, color: 'text.secondary', lineHeight: 1.7 }}>
-                    {t('home.blog.description')}
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    onClick={async () => {
-                      const resolvedParams = await params;
-                      router.push(`/${resolvedParams.locale}/apps/blog`);
-                    }}
-                    sx={{
-                      background: 'linear-gradient(135deg, #4caf50 0%, #81c784 100%)',
-                      '&:hover': {
-                        boxShadow: '0 4px 20px rgba(76, 175, 80, 0.5)',
-                      },
-                    }}
-                  >
-                    {t('home.blog.button')}
-                  </Button>
-                </Box>
-              </Card3D>
-            </Box>
-
-            <Box flex={1}>
-              <Card3D>
-                <Box sx={{ textAlign: 'center', p: 2 }}>
-                  <Box
-                    sx={{
-                      fontSize: '3rem',
-                      mb: 2,
-                      filter: 'drop-shadow(0 0 10px rgba(76, 175, 80, 0.5))',
-                    }}
-                  >
-                    🎮
-                  </Box>
-                  <Typography
-                    variant="h4"
-                    sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold' }}
-                  >
-                    {t('home.playground.title')}
-                  </Typography>
-                  <Typography sx={{ mb: 3, color: 'text.secondary', lineHeight: 1.7 }}>
-                    {t('home.playground.description')}
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    onClick={async () => {
-                      const resolvedParams = await params;
-                      router.push(`/${resolvedParams.locale}/apps/web3`);
-                    }}
-                    sx={{
-                      background: 'linear-gradient(135deg, #4caf50 0%, #81c784 100%)',
-                      '&:hover': {
-                        boxShadow: '0 4px 20px rgba(76, 175, 80, 0.5)',
-                      },
-                    }}
-                  >
-                    {t('home.playground.button')}
-                  </Button>
-                </Box>
-              </Card3D>
-            </Box>
-          </Stack>
+          <AboutSection />
         </ParallaxSection>
 
         {/* Footer */}

@@ -12,7 +12,8 @@ import { useTranslations } from 'next-intl';
 import ParallaxSection from '../components/ParallaxSection';
 import Timeline from '../components/Timeline';
 import TechShowcase from '../components/TechShowcase';
-import AboutSection from '../components/AboutSection';
+import CodeEditor from '../components/CodeEditor';
+import SponsorSection from '../components/SponsorSection';
 
 const typewriterTextKeys = [
   'home.typewriter.welcome',
@@ -164,7 +165,12 @@ export default function Home({ params }: HomePageProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <Stack direction="row" spacing={2} justifyContent="center" sx={{ mb: 4 }}>
+            <Stack
+              direction="row"
+              spacing={{ xs: 1.5, sm: 2 }}
+              justifyContent="center"
+              sx={{ mb: 4 }}
+            >
               <Button
                 variant="contained"
                 size="large"
@@ -173,9 +179,9 @@ export default function Home({ params }: HomePageProps) {
                   router.push(`/${resolvedParams.locale}/apps/blog`);
                 }}
                 sx={{
-                  px: 4,
-                  py: 1.5,
-                  fontSize: '1.1rem',
+                  px: { xs: 2.5, sm: 4 },
+                  py: { xs: 1, sm: 1.5 },
+                  fontSize: { xs: '0.9rem', sm: '1.1rem' },
                   background: 'linear-gradient(135deg, #4caf50 0%, #81c784 100%)',
                   boxShadow: '0 4px 20px rgba(76, 175, 80, 0.4)',
                   '&:hover': {
@@ -194,9 +200,9 @@ export default function Home({ params }: HomePageProps) {
                   router.push(`/${resolvedParams.locale}/apps/web3`);
                 }}
                 sx={{
-                  px: 4,
-                  py: 1.5,
-                  fontSize: '1.1rem',
+                  px: { xs: 2.5, sm: 4 },
+                  py: { xs: 1, sm: 1.5 },
+                  fontSize: { xs: '0.9rem', sm: '1.1rem' },
                   borderWidth: 2,
                   borderColor: 'primary.main',
                   color: 'primary.main',
@@ -299,9 +305,16 @@ export default function Home({ params }: HomePageProps) {
 
         <Divider sx={{ my: 8, opacity: 0.3 }} />
 
-        {/* About Me Section */}
+        {/* AI Code Editor Section */}
+        <ParallaxSection speed={0.45}>
+          <CodeEditor />
+        </ParallaxSection>
+
+        <Divider sx={{ my: 8, opacity: 0.3 }} />
+
+        {/* Sponsor Section */}
         <ParallaxSection speed={0.5}>
-          <AboutSection />
+          <SponsorSection />
         </ParallaxSection>
 
         {/* Footer */}

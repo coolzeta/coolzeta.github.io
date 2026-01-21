@@ -102,6 +102,7 @@ export default function AppLayout({ children, locale }: AppLayoutProps) {
             <Typography
               variant="h6"
               sx={{
+                mr: 3,
                 fontWeight: 'bold',
                 background: 'linear-gradient(135deg, #4caf50 0%, #81c784 100%)',
                 backgroundClip: 'text',
@@ -112,8 +113,6 @@ export default function AppLayout({ children, locale }: AppLayoutProps) {
               Zeta
             </Typography>
           )}
-
-          <Box sx={{ flexGrow: 1 }} />
 
           <Button
             color="primary"
@@ -140,6 +139,8 @@ export default function AppLayout({ children, locale }: AppLayoutProps) {
           >
             {t('nav.playground')}
           </Button>
+
+          <Box sx={{ flexGrow: 1 }} />
 
           <Button color="primary" startIcon={<LanguageIcon />} onClick={handleLanguageClick}>
             {t(`locale.${locale}`)}

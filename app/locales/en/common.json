@@ -59,7 +59,7 @@
       "description": "I'm a web3 newbie trying to learn and share my knowledge about web3, an INTJ, currently working in an exchange at Hong Kong. I work as a Frontend Engineer, but I also have a passion in smart contract development, and I'm interested in the intersection of cryptography and web3.",
       "stats": {
         "experience": {
-          "value": "5+",
+          "value": "3+",
           "label": "Years Experience"
         },
         "projects": {
@@ -78,6 +78,21 @@
         "frontend": "Frontend Dev",
         "design": "UI/UX Design",
         "learning": "Continuous Learning"
+      }
+    },
+    "codeEditor": {
+      "sectionTitle": "A Few Lines of Code to Know Me",
+      "aboutMe": {
+        "title": "developer.ts"
+      },
+      "chat": {
+        "aiName": "Zeta AI Assistant",
+        "status": "Online",
+        "aiGreeting": "Hey there! 👋 Want to know more about me? I can show you in a way developers love - through code!",
+        "userMessage": "Absolutely! Show me what you've got 💻",
+        "aiResponse": "Here you go! Let me introduce myself with a TypeScript class:",
+        "inputPlaceholder": "Absolutely! Show me what you've got 💻",
+        "inputPlaceholderSent": "Message sent"
       }
     },
     "tech": {
@@ -117,6 +132,18 @@
     },
     "connect": {
       "title": "Connect With Me"
+    },
+    "resume": {
+      "title": "Download My Resume",
+      "description": "Interested in working together? Download my resume to learn more about my professional experience and skills.",
+      "button": "Download Resume",
+      "notAvailable": "Resume is not available yet.",
+      "comingSoon": "Coming Soon"
+    },
+    "sponsor": {
+      "title": "Support My Work",
+      "description": "If my content helps you, feel free to support via ETH. Thanks! ❤️",
+      "copied": "Address copied!"
     },
     "footer": {
       "copyright": "© 2025 Zeta's Secret Base. All rights reserved."

@@ -36,13 +36,13 @@
   "publishedOn": "发布于",
   "home": {
     "typewriter": {
-      "welcome": "欢迎来到Zeta的秘密基地",
-      "engineer": "我是一名软件工程师",
-      "web3Dev": "Web3和区块链开发者",
-      "crypto": "密码学爱好者",
-      "intj": "INTJ型人格",
-      "share": "我喜欢分享知识和结识朋友",
-      "friends": "让我们成为朋友吧，你可以通过下面的社交媒体图标找到我"
+      "welcome": "欢迎来到我的秘密基地",
+      "engineer": "我是一个程序员",
+      "web3Dev": "玩Web3和区块链",
+      "crypto": "密码学发烧友",
+      "intj": "INTJ人格（理性但社恐）",
+      "share": "喜欢分享，也喜欢交朋友",
+      "friends": "来做朋友吧，下面可以找到我"
     },
     "blog": {
       "title": "博客",
@@ -59,7 +59,7 @@
       "description": "我是一个Web3新手，试图学习并分享我对Web3的知识。我是INTJ型人格，目前在香港的一家交易所工作。我是一名前端工程师，但我对智能合约开发也有热情，并且对密码学和Web3的交叉领域很感兴趣。",
       "stats": {
         "experience": {
-          "value": "5+",
+          "value": "3+",
           "label": "年经验"
         },
         "projects": {
@@ -78,6 +78,21 @@
         "frontend": "前端开发",
         "design": "界面设计",
         "learning": "持续学习"
+      }
+    },
+    "codeEditor": {
+      "sectionTitle": "一段代码了解我",
+      "aboutMe": {
+        "title": "developer.ts"
+      },
+      "chat": {
+        "aiName": "Zeta AI 助手",
+        "status": "在线",
+        "aiGreeting": "嘿！👋 想了解更多关于我的信息吗？我可以用开发者喜欢的方式展示给你 - 用代码！",
+        "userMessage": "当然！展示给我看看 💻",
+        "aiResponse": "来了！让我用一个 TypeScript 类来介绍自己：",
+        "inputPlaceholder": "当然！展示给我看看 💻",
+        "inputPlaceholderSent": "消息已发送"
       }
     },
     "tech": {
@@ -117,6 +132,18 @@
     },
     "connect": {
       "title": "与我联系"
+    },
+    "resume": {
+      "title": "下载我的简历",
+      "description": "想一起合作？下载我的简历，了解更多关于我的工作经验和技能。",
+      "button": "下载简历",
+      "notAvailable": "简历暂不可用。",
+      "comingSoon": "即将推出"
+    },
+    "sponsor": {
+      "title": "支持我的工作",
+      "description": "如果我的内容对你有帮助，欢迎通过ETH赞助。感谢！❤️",
+      "copied": "地址已复制！"
     },
     "footer": {
       "copyright": "© 2025 Zeta的秘密基地。保留所有权利。"

@@ -4,7 +4,9 @@
     "description": "Welcome to Zeta's Secret Base."
   },
   "nav": {
-    "home": "Home"
+    "home": "Home",
+    "blog": "Blog",
+    "playground": "Playground"
   },
   "blog": {
     "title": "Blog Posts",
@@ -54,7 +56,29 @@
     },
     "about": {
       "title": "About Me",
-      "description": "I'm a web3 newbie trying to learn and share my knowledge about web3, an INTJ, currently working in an exchange at Hong Kong. I work as a Frontend Engineer, but I also have a passion in smart contract development, and I'm interested in the intersection of cryptography and web3."
+      "description": "I'm a web3 newbie trying to learn and share my knowledge about web3, an INTJ, currently working in an exchange at Hong Kong. I work as a Frontend Engineer, but I also have a passion in smart contract development, and I'm interested in the intersection of cryptography and web3.",
+      "stats": {
+        "experience": {
+          "value": "5+",
+          "label": "Years Experience"
+        },
+        "projects": {
+          "value": "20+",
+          "label": "Projects Built"
+        },
+        "technologies": {
+          "value": "30+",
+          "label": "Technologies"
+        }
+      },
+      "interests": {
+        "title": "What I'm Passionate About",
+        "blockchain": "Blockchain",
+        "ai": "AI & AIGC",
+        "frontend": "Frontend Dev",
+        "design": "UI/UX Design",
+        "learning": "Continuous Learning"
+      }
     },
     "tech": {
       "title": "Tech Stack",

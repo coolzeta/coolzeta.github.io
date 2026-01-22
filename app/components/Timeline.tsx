@@ -179,185 +179,191 @@ export default function Timeline() {
         </motion.div>
       ))}
 
-      {/* Resume Download Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 0.6, delay: 0.8 }}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: { xs: 'row', md: 'row' },
-            alignItems: 'flex-start',
-            mb: 8,
-            position: 'relative',
-            pt: 2,
-          }}
+      {/* Resume Download Card - Temporarily Hidden */}
+      {false && (
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6, delay: 0.8 }}
         >
-          {/* Content */}
           <Box
             sx={{
-              flex: 1,
-              pl: { xs: 6, md: 6 },
-              pr: { xs: 0, md: 0 },
-              textAlign: 'left',
-              mt: 3,
+              display: 'flex',
+              flexDirection: { xs: 'row', md: 'row' },
+              alignItems: 'flex-start',
+              mb: 8,
+              position: 'relative',
+              pt: 2,
             }}
           >
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: 'spring', stiffness: 300 }}
+            {/* Content */}
+            <Box
+              sx={{
+                flex: 1,
+                pl: { xs: 6, md: 6 },
+                pr: { xs: 0, md: 0 },
+                textAlign: 'left',
+                mt: 3,
+              }}
             >
-              <Box
-                sx={{
-                  p: 4,
-                  borderRadius: 2,
-                  background:
-                    'linear-gradient(135deg, rgba(76, 175, 80, 0.2) 0%, rgba(76, 175, 80, 0.1) 100%)',
-                  backdropFilter: 'blur(10px)',
-                  border: '2px solid rgba(76, 175, 80, 0.4)',
-                  position: 'relative',
-                  textAlign: 'center',
-                  '&::before': {
-                    content: '""',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    borderRadius: 2,
-                    padding: '2px',
-                    background: 'linear-gradient(135deg, rgba(76, 175, 80, 0.6), transparent)',
-                    WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                    WebkitMaskComposite: 'xor',
-                    maskComposite: 'exclude',
-                  },
-                }}
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: 'spring', stiffness: 300 }}
               >
-                {/* Icon */}
                 <Box
                   sx={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: 60,
-                    height: 60,
+                    p: 4,
                     borderRadius: 2,
-                    background: 'linear-gradient(135deg, #4caf50 0%, #66bb6a 100%)',
-                    mb: 2,
-                    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.4)',
-                  }}
-                >
-                  <DescriptionIcon sx={{ fontSize: 32, color: '#fff' }} />
-                </Box>
-
-                <Typography variant="h5" sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold' }}>
-                  {t('home.resume.title')}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
-                  {t('home.resume.description')}
-                </Typography>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    display: 'block',
-                    mb: 3,
-                    color: 'text.secondary',
-                    opacity: 0.7,
-                    fontStyle: 'italic',
-                  }}
-                >
-                  {t('home.resume.languageHint')}
-                </Typography>
-
-                {/* Download Button */}
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Button
-                    variant="contained"
-                    size="large"
-                    onClick={handleDownload}
-                    disabled={!resumeUrl}
-                    startIcon={<DownloadIcon />}
-                    sx={{
-                      px: 4,
-                      py: 1.5,
-                      fontSize: '1rem',
-                      background: resumeUrl
-                        ? 'linear-gradient(135deg, #4caf50 0%, #66bb6a 100%)'
-                        : 'rgba(128, 128, 128, 0.3)',
-                      boxShadow: resumeUrl ? '0 4px 20px rgba(76, 175, 80, 0.4)' : 'none',
-                      color: '#fff',
-                      fontWeight: 600,
+                    background:
+                      'linear-gradient(135deg, rgba(76, 175, 80, 0.2) 0%, rgba(76, 175, 80, 0.1) 100%)',
+                    backdropFilter: 'blur(10px)',
+                    border: '2px solid rgba(76, 175, 80, 0.4)',
+                    position: 'relative',
+                    textAlign: 'center',
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
                       borderRadius: 2,
-                      '&:hover': {
-                        background: resumeUrl
-                          ? 'linear-gradient(135deg, #66bb6a 0%, #4caf50 100%)'
-                          : 'rgba(128, 128, 128, 0.3)',
-                        boxShadow: resumeUrl ? '0 6px 30px rgba(76, 175, 80, 0.6)' : 'none',
-                      },
-                      '&.Mui-disabled': {
-                        color: '#888',
-                      },
+                      padding: '2px',
+                      background: 'linear-gradient(135deg, rgba(76, 175, 80, 0.6), transparent)',
+                      WebkitMask:
+                        'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                      WebkitMaskComposite: 'xor',
+                      maskComposite: 'exclude',
+                    },
+                  }}
+                >
+                  {/* Icon */}
+                  <Box
+                    sx={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 60,
+                      height: 60,
+                      borderRadius: 2,
+                      background: 'linear-gradient(135deg, #4caf50 0%, #66bb6a 100%)',
+                      mb: 2,
+                      boxShadow: '0 4px 15px rgba(76, 175, 80, 0.4)',
                     }}
                   >
-                    {t('home.resume.button')}
-                  </Button>
-                </motion.div>
+                    <DescriptionIcon sx={{ fontSize: 32, color: '#fff' }} />
+                  </Box>
 
-                {!resumeUrl && (
+                  <Typography
+                    variant="h5"
+                    sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold' }}
+                  >
+                    {t('home.resume.title')}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
+                    {t('home.resume.description')}
+                  </Typography>
                   <Typography
                     variant="caption"
                     sx={{
                       display: 'block',
-                      mt: 2,
+                      mb: 3,
                       color: 'text.secondary',
-                      opacity: 0.6,
+                      opacity: 0.7,
                       fontStyle: 'italic',
                     }}
                   >
-                    {t('home.resume.comingSoon')}
+                    {t('home.resume.languageHint')}
                   </Typography>
-                )}
-              </Box>
-            </motion.div>
-          </Box>
 
-          {/* Center point with icon */}
-          <Box
-            sx={{
-              position: 'absolute',
-              left: { xs: '11px', md: '50%' },
-              transform: { xs: 'translateX(0)', md: 'translateX(-50%)' },
-              top: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 1,
-              zIndex: 2,
-            }}
-          >
-            {/* Icon badge */}
+                  {/* Download Button */}
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={handleDownload}
+                      disabled={!resumeUrl}
+                      startIcon={<DownloadIcon />}
+                      sx={{
+                        px: 4,
+                        py: 1.5,
+                        fontSize: '1rem',
+                        background: resumeUrl
+                          ? 'linear-gradient(135deg, #4caf50 0%, #66bb6a 100%)'
+                          : 'rgba(128, 128, 128, 0.3)',
+                        boxShadow: resumeUrl ? '0 4px 20px rgba(76, 175, 80, 0.4)' : 'none',
+                        color: '#fff',
+                        fontWeight: 600,
+                        borderRadius: 2,
+                        '&:hover': {
+                          background: resumeUrl
+                            ? 'linear-gradient(135deg, #66bb6a 0%, #4caf50 100%)'
+                            : 'rgba(128, 128, 128, 0.3)',
+                          boxShadow: resumeUrl ? '0 6px 30px rgba(76, 175, 80, 0.6)' : 'none',
+                        },
+                        '&.Mui-disabled': {
+                          color: '#888',
+                        },
+                      }}
+                    >
+                      {t('home.resume.button')}
+                    </Button>
+                  </motion.div>
+
+                  {!resumeUrl && (
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        display: 'block',
+                        mt: 2,
+                        color: 'text.secondary',
+                        opacity: 0.6,
+                        fontStyle: 'italic',
+                      }}
+                    >
+                      {t('home.resume.comingSoon')}
+                    </Typography>
+                  )}
+                </Box>
+              </motion.div>
+            </Box>
+
+            {/* Center point with icon */}
             <Box
               sx={{
-                width: 40,
-                height: 40,
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, #4caf50 0%, #66bb6a 100%)',
+                position: 'absolute',
+                left: { xs: '11px', md: '50%' },
+                transform: { xs: 'translateX(0)', md: 'translateX(-50%)' },
+                top: 0,
                 display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 4px 15px rgba(76, 175, 80, 0.6)',
-                border: '3px solid',
-                borderColor: 'background.default',
+                gap: 1,
+                zIndex: 2,
               }}
             >
-              <DownloadIcon sx={{ fontSize: 20, color: '#fff' }} />
+              {/* Icon badge */}
+              <Box
+                sx={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #4caf50 0%, #66bb6a 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 4px 15px rgba(76, 175, 80, 0.6)',
+                  border: '3px solid',
+                  borderColor: 'background.default',
+                }}
+              >
+                <DownloadIcon sx={{ fontSize: 20, color: '#fff' }} />
+              </Box>
             </Box>
           </Box>
-        </Box>
-      </motion.div>
+        </motion.div>
+      )}
     </Box>
   );
 }

@@ -91,7 +91,10 @@ export default async function BlogPage({ params }: BlogPageProps) {
   setRequestLocale(locale);
   const posts = await getBlogPosts(locale);
   const t = await getTranslations();
-  const blogTitle = t('blog.title');
+  const blogTitle = t('blog.title'); // 这应该会fallback到英文
+
+  // 临时解决方案：直接根据locale选择
+  const actualTitle = locale === 'zh' ? '博客文章' : 'Blog Posts';
 
   return (
     <Box
@@ -126,7 +129,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
               mb: 2,
             }}
           >
-            {blogTitle}
+            {actualTitle}
           </Typography>
           <Typography
             variant="body1"

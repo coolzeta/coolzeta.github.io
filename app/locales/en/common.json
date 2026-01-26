@@ -1,7 +1,8 @@
 {
   "app": {
-    "title": "Zeta's Secret Base",
-    "description": "Welcome to Zeta's Secret Base."
+    "title": "Zeta's Neural Nexus",
+    "subtitle": "Sparking thoughts across the void",
+    "description": "Welcome to Zeta's Neural Nexus."
   },
   "nav": {
     "home": "Home",
@@ -36,7 +37,7 @@
   "publishedOn": "Published on",
   "home": {
     "typewriter": {
-      "welcome": "Welcome to Zeta's Secret Base",
+      "welcome": "Welcome to Zeta's Neural Nexus",
       "engineer": "I'm a software engineer",
       "web3Dev": "Web3 and blockchain developer",
       "crypto": "Cryptography enthusiast",
@@ -147,7 +148,7 @@
       "copied": "Address copied!"
     },
     "footer": {
-      "copyright": "© 2025 Zeta's Secret Base. All rights reserved."
+      "copyright": "© 2025 Zeta's Neural Nexus. All rights reserved."
     }
   },
   "dapp": {

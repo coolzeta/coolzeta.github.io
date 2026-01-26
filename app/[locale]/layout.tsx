@@ -12,8 +12,8 @@ const inter = Inter({ subsets: ["latin"] });
 const locales = ['en', 'zh'];
 
 export const metadata: Metadata = {
-  title: "Zeta's Secret Base",
-  description: "Welcome to Zeta's Secret Base.",
+  title: "Zeta's Neural Nexus - Sparking thoughts across the void",
+  description: "Welcome to Zeta's Neural Nexus - where thoughts spark and connect like synapses firing across neurons.",
   icons: {
     icon: [
       { url: '/favicon.ico' },

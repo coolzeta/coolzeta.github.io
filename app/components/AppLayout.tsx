@@ -76,13 +76,15 @@ export default function AppLayout({ children, locale }: AppLayoutProps) {
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <AppBar
         position="fixed"
-        color="default"
+        color="transparent"
         elevation={scrolled ? 4 : 0}
         sx={{
-          bgcolor: scrolled ? 'rgba(18, 18, 18, 0.9)' : 'transparent',
+          bgcolor: scrolled ? 'rgba(18, 18, 18, 0.6)' : 'transparent', // More transparent (was 0.9, now 0.6)
           backdropFilter: scrolled ? 'blur(10px)' : 'none',
           transition: 'all 0.3s ease-in-out',
           borderBottom: scrolled ? '1px solid rgba(76, 175, 80, 0.2)' : 'none',
+          zIndex: (theme) => theme.zIndex.appBar,
+          boxShadow: 'none', // Remove default shadow
         }}
       >
         <Toolbar>

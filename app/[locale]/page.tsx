@@ -14,6 +14,7 @@ import Timeline from '../components/Timeline';
 import TechShowcase from '../components/TechShowcase';
 import CodeEditor from '../components/CodeEditor';
 import SponsorSection from '../components/SponsorSection';
+import LightningCloudsWebGL from '../components/LightningCloudsWebGL';
 
 const typewriterTextKeys = [
   'home.typewriter.welcome',
@@ -48,7 +49,9 @@ export default function Home({ params }: HomePageProps) {
   const [currentText, setCurrentText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [textIndex, setTextIndex] = useState(0);
+  const [particlesVisible, setParticlesVisible] = useState(true);
 
+  // Typewriter effect
   useEffect(() => {
     const currentTextContent = t(typewriterTextKeys[textIndex]);
 
@@ -81,6 +84,26 @@ export default function Home({ params }: HomePageProps) {
     return () => clearTimeout(timeout);
   }, [currentText, isDeleting, textIndex, t]);
 
+  // Hide particles when scrolled past first screen
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      // Start fading out at 80% of viewport height
+      const fadeStart = viewportHeight * 0.8;
+      const opacity = Math.max(0, 1 - (scrollY - fadeStart) / (viewportHeight * 0.2));
+      setParticlesVisible(opacity > 0);
+      
+      const container = document.querySelector('.particles-container') as HTMLElement;
+      if (container) {
+        container.style.opacity = opacity.toString();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <Box
       sx={{
@@ -88,20 +111,39 @@ export default function Home({ params }: HomePageProps) {
         bgcolor: 'background.default',
         overflow: 'hidden',
         position: 'relative',
-        '&::before': {
-          content: '""',
+      }}
+    >
+      {/* First screen background effect only - fixed to viewport */}
+      <Box
+        sx={{
           position: 'fixed',
           top: 0,
           left: 0,
-          right: 0,
-          bottom: 0,
-          background:
-            'radial-gradient(circle at 20% 50%, rgba(76, 175, 80, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(129, 199, 132, 0.15) 0%, transparent 50%)',
-          pointerEvents: 'none',
+          width: '100vw',
+          height: '100vh',
           zIndex: 0,
-        },
-      }}
-    >
+          pointerEvents: 'auto',
+          // Clip to only show in first screen
+          clipPath: 'inset(0 0 0 0)',
+        }}
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            // Hide when scrolled past first screen
+            opacity: 1,
+            transition: 'opacity 0.3s ease-out',
+          }}
+          className="particles-container"
+        >
+          <LightningCloudsWebGL />
+        </Box>
+      </Box>
+
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
         {/* Hero Section */}
         <Box
@@ -112,10 +154,11 @@ export default function Home({ params }: HomePageProps) {
           sx={{
             py: { xs: 6, md: 10 },
             textAlign: 'center',
-            minHeight: '80vh',
+            minHeight: '100vh',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
+            position: 'relative',
           }}
         >
           <motion.div
@@ -126,7 +169,7 @@ export default function Home({ params }: HomePageProps) {
             <Typography
               variant="h1"
               sx={{
-                mb: 3,
+                mb: 1,
                 fontWeight: 'bold',
                 fontSize: { xs: '2.5rem', md: '4rem' },
                 background: 'linear-gradient(135deg, #4caf50 0%, #81c784 50%, #a5d6a7 100%)',
@@ -137,6 +180,20 @@ export default function Home({ params }: HomePageProps) {
               }}
             >
               {t('app.title')}
+            </Typography>
+            
+            <Typography
+              variant="h6"
+              sx={{
+                mb: 5,
+                color: 'text.secondary',
+                fontSize: { xs: '0.9rem', md: '1.1rem' },
+                fontWeight: 400,
+                fontStyle: 'italic',
+                opacity: 0.8,
+              }}
+            >
+              {t('app.subtitle')}
             </Typography>
           </motion.div>
 

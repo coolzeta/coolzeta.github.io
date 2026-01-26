@@ -1,7 +1,8 @@
 {
   "app": {
-    "title": "Zeta的秘密基地",
-    "description": "欢迎来到Zeta的秘密基地。"
+    "title": "Zeta的博客",
+    "subtitle": "思维在虚空中迸发火花",
+    "description": "欢迎来到Zeta的博客。"
   },
   "nav": {
     "home": "首页",
@@ -36,7 +37,7 @@
   "publishedOn": "发布于",
   "home": {
     "typewriter": {
-      "welcome": "欢迎来到我的秘密基地",
+      "welcome": "欢迎来到Zeta的博客",
       "engineer": "我是一个程序员",
       "web3Dev": "玩Web3和区块链",
       "crypto": "密码学发烧友",
@@ -147,7 +148,7 @@
       "copied": "地址已复制！"
     },
     "footer": {
-      "copyright": "© 2025 Zeta的秘密基地。保留所有权利。"
+      "copyright": "© 2025 Zeta的博客。保留所有权利。"
     }
   },
   "dapp": {

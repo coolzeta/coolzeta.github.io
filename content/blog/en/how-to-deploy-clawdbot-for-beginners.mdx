@@ -1,0 +1,190 @@
+---
+title: 'ClawdBot Beginner Guide: Secure Deployment with Docker + OpenRouter'
+description: 'Deploy ClawdBot securely using Docker isolation, supporting Telegram and WhatsApp platforms, with Brave search integration and scheduled tasks. Safe, efficient, and powerful.'
+date: '2026-01-27'
+tags: ['ClawdBot', 'Docker', 'AI', 'Telegram', 'WhatsApp', 'OpenRouter', 'Tutorial']
+image: '/images/blog/how-to-deploy-clawdbot-for-beginners/cover.png'
+slug: 'how-to-deploy-clawdbot-for-beginners'
+---
+
+# ClawdBot Beginner Guide: Secure Deployment with Docker + OpenRouter
+
+> This tutorial is based on minimum privilege and environment isolation principles to fully protect host security. Build a trustworthy personal AI assistant through Docker isolation, API configuration, platform integration, and scheduled tasks.
+
+## Preface
+
+ClawdBot is a powerful AI automation agent with capabilities to access systems, networks, and messages. **Installing directly on the host poses security risks** — if compromised, attackers could gain complete control.
+
+This tutorial adopts a **triple protection strategy of Docker isolation + minimal privileges + external API management** to ensure that even if ClawdBot is breached, it won't compromise host security.
+
+---
+
+## Step 1: Docker Isolation Environment ✅
+
+### Why Use Docker?
+
+- **Permission Isolation**: ClawdBot cannot directly access host file system
+- **Controllable Environment**: Independent Node.js environment, avoiding global dependency pollution
+- **Quick Destruction**: Delete container with one command if issues arise, leaving no backdoors
+- **Cross-Platform Compatibility**: Linux/macOS/Windows all unified to Linux containers
+
+### Install Docker (All Platforms)
+
+#### Linux (Ubuntu/Debian)
+```bash
+sudo apt update && sudo apt install -y docker.io docker-compose
+sudo usermod -aG docker $USER
+```
+
+#### macOS
+1. Download Docker Desktop: [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
+2. Install and start, ensure "Start Docker Desktop when you log in" is enabled
+3. Log in
+
+#### Windows
+1. Install Docker Desktop for Windows [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
+2. Log in
+![Docker Desktop](/images/blog/how-to-deploy-clawdbot-for-beginners/docker-desktop.png)
+
+### Create Isolated Ubuntu Container
+
+Windows and macOS users, please use Docker Desktop terminal:
+
+![Docker Terminal](/images/blog/how-to-deploy-clawdbot-for-beginners/docker-terminal.png)
+
+Click "Start new terminal", copy and execute the following commands to create and start the container:
+
+macOS/Linux terminal users execute directly:
+```bash
+docker rm -f clawdbot 2>/dev/null || true
+mkdir -p ~/clawdbot/data
+docker run -d --name clawdbot \
+  -p 18789:18789 \
+  -p 18791:18791 \
+  -v ~/clawdbot/data:/root/clawd \
+  --restart unless-stopped \
+  ubuntu:22.04 tail -f /dev/null
+docker exec -it clawdbot bash
+```
+
+Windows:
+```powershell
+docker rm -f clawdbot 2>$null
+mkdir -Force ~/clawdbot/data
+docker run -d --name clawdbot `
+  -p 18789:18789 `
+  -p 18791:18791 `
+  -v ~/clawdbot/data:/root/clawd `
+  --restart unless-stopped `
+  ubuntu:22.04 tail -f /dev/null
+docker exec -it clawdbot bash
+```
+
+> 📌 Tip: Point `/path/to/clawdbot/data` to a dedicated directory for persistent configuration and logs.
+
+At this point, you've entered a clean Ubuntu container environment terminal, and you can see a command prompt `root@<container_id>:/#`.
+Enter commands to execute operations within the container, completely isolated from the host system.
+
+![Docker Container Terminal](/images/blog/how-to-deploy-clawdbot-for-beginners/docker-container-terminal.png)
+
+### Install Base Environment in Container
+
+Copy and execute the following commands sequentially to install Node.js 22+ and Git, don't copy comment lines:
+```bash
+# Replace with Aliyun mirror (for 22.04 only, skip if outside China)
+sed -i 's#http://archive.ubuntu.com/ubuntu#http://mirrors.aliyun.com/ubuntu#g' /etc/apt/sources.list
+sed -i 's#http://security.ubuntu.com/ubuntu#http://mirrors.aliyun.com/ubuntu#g' /etc/apt/sources.list
+
+# Update package manager
+apt update && apt install -y curl git wget sudo
+
+# Install Node.js 22+
+curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+sudo apt-get install -y nodejs
+
+# Verify
+node -v
+git --version
+```
+
+After entering the commands sequentially, you'll see the version numbers of Node.js and Git, indicating successful installation.
+
+![Node and Git Installed](/images/blog/how-to-deploy-clawdbot-for-beginners/node-git-installed.png)
+---
+
+## Step 2: One-Command ClawdBot Installation ✅
+
+```bash
+curl -fsSL https://molt.bot/install.sh | bash
+```
+
+The installation script will automatically download ClawdBot.
+
+![ClawdBot Installing](/images/blog/how-to-deploy-clawdbot-for-beginners/clawdbot-installing.png)
+
+After downloading, enter the configuration directory:
+
+The first question must be answered Yes!
+
+![ClawdBot Installed](/images/blog/how-to-deploy-clawdbot-for-beginners/setting1.png)
+
+For the second, choose quick start; for the third, choose openrouter
+![ClawdBot Configuring](/images/blog/how-to-deploy-clawdbot-for-beginners/setting2.png)
+
+Then it will ask you to fill in the API Key. Here you need to register an [OpenRouter](https://openrouter.ai/) account, then click settings
+
+![ClawdBot OpenRouter Key](/images/blog/how-to-deploy-clawdbot-for-beginners/setting3.png)
+
+Select API Keys on the left side, then create a new Key. Leave options as default, copy the generated Key and paste it into ClawdBot's dialog box.
+
+You can choose deepseek model, which is relatively much cheaper.
+
+![ClawdBot OpenRouter Key Input](/images/blog/how-to-deploy-clawdbot-for-beginners/setting4.png)
+
+This next step is very important, choose Telegram
+
+Then go to Telegram and find @BotFather, send /newbot in the dialog, then enter a name and username (must end with _bot). It will give you a Token (the masked part at the end), copy and paste it into ClawdBot's dialog box.
+
+![ClawdBot Telegram Bot Token Input](/images/blog/how-to-deploy-clawdbot-for-beginners/setting5.jpg)
+
+Leave all remaining options as default, and ClawdBot installation and configuration is complete. But manually run the following command:
+
+```bash
+nohup clawdbot gateway --port 18789 --bind lan > gateway.log 2>&1 &
+```
+
+To persistently run ClawdBot's gateway service.
+
+Then send a /start message to your Telegram Bot (search by the username you set) to see if you get a reply.
+
+You should receive a pairing code, indicating ClawdBot is running successfully.
+![ClawdBot Running](/images/blog/how-to-deploy-clawdbot-for-beginners/setting6.jpg)
+
+In the terminal, enter the command:
+```bash
+clawdbot pairing approve telegram pairing_code
+```
+
+Approve the pairing code, and you can start using ClawdBot. Try sending messages in Telegram!
+
+Next, enter:
+```bash
+clawdbot dashboard
+```
+It will print a link, open it in your browser, with an address like http://localhost:18789/?token=xxxxxx
+
+Then after entering, it will show not yet paired.
+
+Enter command:
+```bash
+clawdbot devices list
+```
+
+Under "pending", find the device ID waiting to be paired (the string in the first cell), then enter command:
+
+![ClawdBot Approve Device](/images/blog/how-to-deploy-clawdbot-for-beginners/setting7.png)
+```bash
+clawdbot devices approve device_id
+```
+
+Then refresh the webpage, and you'll see pairing is successful. You can now manage ClawdBot and chat on the webpage.

@@ -1,0 +1,191 @@
+---
+title: 'ClawdBot 小白教程：Docker + OpenRouter 安全部署TG AI 机器人'
+description: '使用 Docker 隔离环境部署 ClawdBot，支持 Telegram、WhatsApp 多平台接入，集成 Brave 搜索和定时任务功能。安全、高效、功能强大。'
+date: '2026-01-27'
+tags: ['ClawdBot', 'Docker', 'AI', 'Telegram', 'WhatsApp', 'OpenRouter', '教程']
+image: '/images/blog/how-to-deploy-clawdbot-for-beginners/cover.png'
+slug: 'how-to-deploy-clawdbot-for-beginners'
+---
+
+# ClawdBot 小白教程：Docker + OpenRouter 安全部署TG AI 机器人
+
+> 本教程基于最小权限与环境隔离原则，全面保护主机安全。通过 Docker 隔离、API 配置、频道对接和定时任务，构建可信赖的个人 AI 助手。
+
+## 前言
+
+ClawdBot 是一个功能强大的 AI 自动化代理，拥有访问系统、网络和消息的能力。**直接在主机安装存在安全风险** —— 一旦被攻击，攻击者可获取完整控制权。
+
+本教程采用 **Docker 隔离 + 最小化权限 + 外部 API 管理** 的三重防护策略，确保即使 ClawdBot 被攻破，也不会危及主机安全。
+
+---
+
+## 第一步：Docker 隔离环境 ✅
+
+### 为什么要用 Docker？
+
+- **权限隔离**：ClawdBot 无法直接访问主机文件系统
+- **环境可控**：独立 Node.js 环境，避免污染全局依赖
+- **快速销毁**：出现问题可一键删除容器，不留后门
+- **跨平台兼容**：Linux/macOS/Windows 均归一到linux容器
+
+### 安装 Docker（所有平台）
+
+#### Linux (Ubuntu/Debian)
+```bash
+sudo apt update && sudo apt install -y docker.io docker-compose
+sudo usermod -aG docker $USER
+```
+
+#### macOS
+1. 下载 Docker Desktop：[https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
+2. 安装并启动，确保“Start Docker Desktop when you log in”开启
+3. 登录
+
+#### Windows
+1. 安装 Docker Desktop for Windows [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
+2. 登录
+![Docker Desktop](/images/blog/how-to-deploy-clawdbot-for-beginners/docker-desktop.png)
+
+### 创建隔离的 Ubuntu 容器
+
+Windows 和 macOS 用户请使用 Docker Desktop 的终端：
+
+![Docker Terminal](/images/blog/how-to-deploy-clawdbot-for-beginners/docker-terminal.png)
+
+点击Start new terminal, 复制执行以下命令创建并启动容器：
+
+
+macOS/Linux 终端用户直接执行以下命令：
+```bash
+docker rm -f clawdbot 2>/dev/null || true
+mkdir -p ~/clawdbot/data
+docker run -d --name clawdbot \
+  -p 18789:18789 \
+  -p 18791:18791 \
+  -v ~/clawdbot/data:/root/clawd \
+  --restart unless-stopped \
+  ubuntu:22.04 tail -f /dev/null
+docker exec -it clawdbot bash
+```
+Windows
+```powershell
+docker rm -f clawdbot 2>$null
+mkdir -Force ~/clawdbot/data
+docker run -d --name clawdbot `
+  -p 18789:18789 `
+  -p 18791:18791 `
+  -v ~/clawdbot/data:/root/clawd `
+  --restart unless-stopped `
+  ubuntu:22.04 tail -f /dev/null
+docker exec -it clawdbot bash
+```
+
+> 📌 秘诀：将 `/path/to/clawdbot/data` 指向一个专用目录，用于持久化配置和日志。
+
+到此为止，你已经进入了一个干净的 Ubuntu 容器环境的终端，可以看到一个引导输入命令的提示符 `root@<container_id>:/#`。
+输入命令即可在容器内执行操作，主机系统完全隔离。
+
+![Docker Container Terminal](/images/blog/how-to-deploy-clawdbot-for-beginners/docker-container-terminal.png)
+
+### 容器内安装基础环境
+
+依次复制执行以下命令安装 Node.js 22+ 和 Git, 不要复制注释行：
+```bash
+# 替换为阿里云镜像（22.04 专用， 非大陆用户请跳过）
+sed -i 's#http://archive.ubuntu.com/ubuntu#http://mirrors.aliyun.com/ubuntu#g' /etc/apt/sources.list
+sed -i 's#http://security.ubuntu.com/ubuntu#http://mirrors.aliyun.com/ubuntu#g' /etc/apt/sources.list
+
+# 更新包管理器
+apt update && apt install -y curl git wget sudo
+
+# 安装 Node.js 22+
+curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+sudo apt-get install -y nodejs
+
+# 验证
+node -v
+git --version
+```
+
+依次输入完命令后，你会看到 Node.js 和 Git 的版本号，表示安装成功。
+
+![Node and Git Installed](/images/blog/how-to-deploy-clawdbot-for-beginners/node-git-installed.png)
+---
+
+## 第二步：一键安装 ClawdBot ✅
+
+```bash
+curl -fsSL https://molt.bot/install.sh | bash
+```
+
+安装脚本会自动下载 ClawdBot。
+
+![ClawdBot Installing](/images/blog/how-to-deploy-clawdbot-for-beginners/clawdbot-installing.png)
+
+
+下载完以后, 进入配置目录：
+
+第一个必须回答Yes!
+
+![ClawdBot Installed](/images/blog/how-to-deploy-clawdbot-for-beginners/setting1.png)
+
+第二个选quick start, 第三个选openrouter
+![ClawdBot Configuring](/images/blog/how-to-deploy-clawdbot-for-beginners/setting2.png)
+
+然后会让你填API Key, 这里要去注册 [OpenRouter](https://openrouter.ai/) 账号，然后点击setting
+
+![ClawdBot OpenRouter Key](/images/blog/how-to-deploy-clawdbot-for-beginners/setting3.png)
+
+在左侧选择API Keys, 然后创建一个新的Key, 选项选默认就行，把生成的Key复制粘贴到ClawdBot的对话框里
+
+模型可以选deepseek， 相对来说便宜很多
+
+![ClawdBot OpenRouter Key Input](/images/blog/how-to-deploy-clawdbot-for-beginners/setting4.png)
+
+下面这一步很重要，选择Telegram
+
+然后去Telegram找@BotFather, 在对话框里发送/newbot, 然后输入名称和用户名（要以_bot结尾），会给你一串Token（最后打码的位置）, 把它复制粘贴到ClawdBot的对话框里
+
+![ClawdBot Telegram Bot Token Input](/images/blog/how-to-deploy-clawdbot-for-beginners/setting5.jpg)
+
+剩下的全部默认选项，ClawdBot就安装配置完成了，但是手动跑一下如下命令：
+
+```bash
+nohup clawdbot gateway --port 18789 --bind lan > gateway.log 2>&1 &
+```
+
+来持久化运行ClawdBot的网关服务。
+
+然后发给你的Telegram Bot（通过你设置的用户名搜索）发送/start消息，看看能不能收到回复。
+
+应该会发给你一个配对码，说明ClawdBot已经成功运行起来了。
+![ClawdBot Running](/images/blog/how-to-deploy-clawdbot-for-beginners/setting6.jpg)
+
+在终端输入命令：
+```bash
+clawdbot pairing approve telegram 配对码
+```
+
+批准配对码，就可以开始使用ClawdBot了，在Telegram里发送消息试试吧！
+
+接着输入
+```bash
+clawdbot dashboard
+```
+会打印出一个链接，打开浏览器访问，地址类似于 http://localhost:18789/?token=xxxxxx
+
+然后进入以后会显示还没有配对，
+
+输入命令：
+```bash
+clawdbot devices list
+```
+
+在pending下面找到正在等待配对的设备ID(第一个格子里面的字符串就是)，然后输入命令：
+
+![ClawdBot Approve Device](/images/blog/how-to-deploy-clawdbot-for-beginners/setting7.png)
+```bash
+clawdbot devices approve 设备ID
+```
+
+然后在网页刷新一下，就可以看到已经配对成功了，在网页也可以管理ClawdBot以及聊天了。

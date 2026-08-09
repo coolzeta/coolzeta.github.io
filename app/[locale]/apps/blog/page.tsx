@@ -5,6 +5,7 @@ import { setRequestLocale } from 'next-intl/server';
 import type { Metadata } from 'next';
 import BlogGrid from '@/app/components/BlogGrid';
 import matter from 'gray-matter';
+import { SITE_NAME, localePath } from '@/app/seo';
 
 export const dynamic = 'force-static';
 export const dynamicParams = false;
@@ -54,12 +55,31 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
   const { locale } = await params;
+  const validLocale = locale === 'zh' ? 'zh' : 'en';
+  const title = validLocale === 'zh' ? 'Zeta Zhang 的笔记' : 'Notes by Zeta Zhang';
+  const description =
+    validLocale === 'zh'
+      ? 'Zeta Zhang 关于 AI Agent、链上系统、创作工具与独立开发的个人笔记。'
+      : 'Personal notes by Zeta Zhang on AI agents, onchain systems, creative tools, and independent making.';
   return {
-    title: locale === 'zh' ? '笔记 / Zeta' : 'Notes / Zeta',
-    description:
-      locale === 'zh'
-        ? '关于 AI、链上世界、创作工具和正在发生的事。'
-        : 'Notes on AI, onchain systems, creative tools, and things in progress.',
+    title,
+    description,
+    alternates: {
+      canonical: localePath(validLocale, '/apps/blog'),
+      languages: {
+        en: localePath('en', '/apps/blog'),
+        zh: localePath('zh', '/apps/blog'),
+        'x-default': localePath('en', '/apps/blog'),
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: localePath(validLocale, '/apps/blog'),
+      siteName: SITE_NAME,
+      locale: validLocale === 'zh' ? 'zh_CN' : 'en_US',
+      images: [{ url: '/og.png', width: 1200, height: 630, alt: title }],
+    },
   };
 }
 

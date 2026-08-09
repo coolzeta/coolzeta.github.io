@@ -10,6 +10,7 @@ import { generateBlogMetadata } from '@/app/components/BlogSEO';
 import ShareButtons from '@/app/components/ShareButtons';
 import { setRequestLocale } from 'next-intl/server';
 import matter from 'gray-matter';
+import { AUTHOR_ID, AUTHOR_NAME, SITE_URL, localePath, safeJsonLd } from '@/app/seo';
 
 // Force static generation at build time
 export const dynamic = 'force-static';
@@ -100,9 +101,10 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     date: blogPost.frontMatter.date,
     tags: blogPost.frontMatter.tags || [],
     slug: blogPost.frontMatter.slug || slug,
-    author: blogPost.frontMatter.author || 'Zeta',
+    author: blogPost.frontMatter.author || AUTHOR_NAME,
     image: blogPost.frontMatter.image,
     keywords: blogPost.frontMatter.keywords,
+    locale,
   });
 }
 
@@ -117,9 +119,37 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   const { source, frontMatter } = blogPost;
+  const articleUrl = localePath(locale, `/apps/blog/${slug}`);
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    '@id': `${articleUrl}#article`,
+    url: articleUrl,
+    mainEntityOfPage: articleUrl,
+    headline: frontMatter.title,
+    description: frontMatter.description,
+    datePublished: frontMatter.date,
+    dateModified: frontMatter.date,
+    inLanguage: locale,
+    image: frontMatter.image ? `${SITE_URL}${frontMatter.image}` : `${SITE_URL}/og.png`,
+    author: {
+      '@type': 'Person',
+      '@id': AUTHOR_ID,
+      name: AUTHOR_NAME,
+      url: SITE_URL,
+    },
+    publisher: { '@id': AUTHOR_ID },
+    keywords: Array.isArray(frontMatter.tags) ? frontMatter.tags.join(', ') : undefined,
+    articleSection: Array.isArray(frontMatter.tags) ? frontMatter.tags : undefined,
+    isPartOf: { '@id': `${SITE_URL}/#website` },
+  };
 
   return (
     <Box className="article-shell">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(articleJsonLd) }}
+      />
       <Container maxWidth="lg">
         <Box className="article-hero">
           <Box className="article-meta">

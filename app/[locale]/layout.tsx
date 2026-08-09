@@ -1,28 +1,26 @@
-import "../globals.css";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { ThemeProvider } from "../contexts/ThemeProvider";
-import AppLayout from "../components/AppLayout";
+import '../globals.css';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import { ThemeProvider } from '../contexts/ThemeProvider';
+import AppLayout from '../components/AppLayout';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { setRequestLocale } from 'next-intl/server';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 const locales = ['en', 'zh'];
 
 export const metadata: Metadata = {
-  title: "Zeta's Neural Nexus - Sparking thoughts across the void",
-  description: "Welcome to Zeta's Neural Nexus - where thoughts spark and connect like synapses firing across neurons.",
+  title: 'Zeta / Notes from Hong Kong',
+  description: 'Personal notes on code, AI, Web3, design, and everything in between.',
   icons: {
-    icon: [
-      { url: '/favicon.ico' },
-    ],
+    icon: [{ url: '/favicon.ico' }],
   },
 };
 
 export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
+  return locales.map(locale => ({ locale }));
 }
 
 export default async function LocaleLayout({
@@ -48,9 +46,7 @@ export default async function LocaleLayout({
       <body className={inter.className} style={{ minHeight: '100vh', minWidth: '100%' }}>
         <NextIntlClientProvider messages={messages} locale={validLocale}>
           <ThemeProvider>
-            <AppLayout locale={validLocale}>
-              {children}
-            </AppLayout>
+            <AppLayout locale={validLocale}>{children}</AppLayout>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

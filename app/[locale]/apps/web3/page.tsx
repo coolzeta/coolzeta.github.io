@@ -2,56 +2,28 @@
 
 import DAppsList from '@/app/components/DAppsList';
 import { Box, Typography, Container } from '@mui/material';
-import { useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 
 export default function Web3Page() {
-  const t = useTranslations();
+  const locale = useLocale();
+  const isZh = locale === 'zh';
 
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        bgcolor: 'background.default',
-        position: 'relative',
-        '&::before': {
-          content: '""',
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background:
-            'radial-gradient(circle at 20% 30%, rgba(76, 175, 80, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(129, 199, 132, 0.1) 0%, transparent 50%)',
-          pointerEvents: 'none',
-          zIndex: 0,
-        },
-      }}
-    >
-      <Container maxWidth="lg" sx={{ py: 8, position: 'relative', zIndex: 1 }}>
-        <Box sx={{ textAlign: 'center', mb: 4 }}>
-          <Typography
-            variant="h2"
-            sx={{
-              fontWeight: 'bold',
-              background: 'linear-gradient(135deg, #4caf50 0%, #81c784 100%)',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              mb: 2,
-            }}
-          >
-            {t('web3.title')}
+    <Box className="subpage-shell lab-page">
+      <Container maxWidth="lg">
+        <Box className="subpage-hero">
+          <Box>
+            <Typography className="subpage-kicker">02 / PLAYGROUND</Typography>
+            <Typography component="h1">
+              {isZh ? '动手理解系统。' : 'Systems, made tangible.'}
+            </Typography>
+          </Box>
+          <Typography className="subpage-deck">
+            {isZh
+              ? '这里不是产品陈列柜，而是可以触摸、试错和拆解机制的实验桌。'
+              : 'Not a product showcase—a workbench for touching, testing, and taking systems apart.'}
           </Typography>
-          <Typography
-            variant="body1"
-            sx={{
-              color: 'text.secondary',
-              maxWidth: '600px',
-              mx: 'auto',
-            }}
-          >
-            {t('dapps.title')}
-          </Typography>
+          <Box className="subpage-count">02 EXPERIMENTS</Box>
         </Box>
         <DAppsList />
       </Container>

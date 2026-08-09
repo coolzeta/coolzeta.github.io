@@ -40,13 +40,7 @@ export default function AppLayout({ children, locale }: AppLayoutProps) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleBack = () => {
-    if (window.history.length > 1) {
-      router.back();
-    } else {
-      router.push(`/${locale}`);
-    }
-  };
+  const handleHome = () => router.push(`/${locale}`);
 
   const handleLanguageClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -79,20 +73,28 @@ export default function AppLayout({ children, locale }: AppLayoutProps) {
         color="transparent"
         elevation={scrolled ? 4 : 0}
         sx={{
-          bgcolor: scrolled ? 'rgba(18, 18, 18, 0.6)' : 'transparent', // More transparent (was 0.9, now 0.6)
-          backdropFilter: scrolled ? 'blur(10px)' : 'none',
+          bgcolor: scrolled ? 'rgba(8, 11, 9, 0.74)' : 'transparent',
+          backdropFilter: scrolled ? 'blur(18px)' : 'none',
           transition: 'all 0.3s ease-in-out',
-          borderBottom: scrolled ? '1px solid rgba(76, 175, 80, 0.2)' : 'none',
-          zIndex: (theme) => theme.zIndex.appBar,
-          boxShadow: 'none', // Remove default shadow
+          borderBottom: scrolled ? '1px solid rgba(184, 255, 97, 0.12)' : 'none',
+          zIndex: theme => theme.zIndex.appBar,
+          boxShadow: 'none',
         }}
       >
-        <Toolbar>
+        <Toolbar
+          sx={{
+            maxWidth: 1200,
+            minHeight: { xs: 58, sm: 64 },
+            width: '100%',
+            mx: 'auto',
+            px: { xs: 2, md: 3 },
+          }}
+        >
           {!isHomePage && (
             <IconButton
               edge="start"
               color="inherit"
-              onClick={handleBack}
+              onClick={handleHome}
               sx={{ mr: 2, color: 'primary.main' }}
               aria-label="go back"
             >
@@ -104,15 +106,14 @@ export default function AppLayout({ children, locale }: AppLayoutProps) {
             <Typography
               variant="h6"
               sx={{
-                mr: 3,
-                fontWeight: 'bold',
-                background: 'linear-gradient(135deg, #4caf50 0%, #81c784 100%)',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
+                mr: { xs: 1, sm: 3 },
+                fontWeight: 700,
+                color: '#b8ff61',
+                letterSpacing: '-0.05em',
+                fontFamily: 'monospace',
               }}
             >
-              Zeta
+              zeta/
             </Typography>
           )}
 
@@ -120,9 +121,15 @@ export default function AppLayout({ children, locale }: AppLayoutProps) {
             color="primary"
             onClick={() => router.push(`/${locale}/apps/blog`)}
             sx={{
-              mx: 1,
+              mx: { xs: 0, sm: 0.5 },
+              minWidth: { xs: 56, sm: 64 },
+              px: { xs: 1, sm: 1.5 },
+              fontSize: { xs: '.75rem', sm: '.875rem' },
+              color: 'rgba(238,244,232,.68)',
+              borderRadius: '99px',
               '&:hover': {
-                bgcolor: 'rgba(76, 175, 80, 0.1)',
+                bgcolor: 'rgba(184,255,97,.07)',
+                color: 'primary.main',
               },
             }}
           >
@@ -133,9 +140,15 @@ export default function AppLayout({ children, locale }: AppLayoutProps) {
             color="primary"
             onClick={() => router.push(`/${locale}/apps/web3`)}
             sx={{
-              mx: 1,
+              mx: { xs: 0, sm: 0.5 },
+              minWidth: { xs: 66, sm: 80 },
+              px: { xs: 1, sm: 1.5 },
+              fontSize: { xs: '.75rem', sm: '.875rem' },
+              color: 'rgba(238,244,232,.68)',
+              borderRadius: '99px',
               '&:hover': {
-                bgcolor: 'rgba(76, 175, 80, 0.1)',
+                bgcolor: 'rgba(184,255,97,.07)',
+                color: 'primary.main',
               },
             }}
           >
@@ -144,7 +157,19 @@ export default function AppLayout({ children, locale }: AppLayoutProps) {
 
           <Box sx={{ flexGrow: 1 }} />
 
-          <Button color="primary" startIcon={<LanguageIcon />} onClick={handleLanguageClick}>
+          <Button
+            color="primary"
+            startIcon={<LanguageIcon />}
+            onClick={handleLanguageClick}
+            sx={{
+              minWidth: 0,
+              px: { xs: 1, sm: 1.5 },
+              border: '1px solid rgba(184,255,97,.14)',
+              borderRadius: '99px',
+              fontSize: { xs: 0, sm: '.8rem' },
+              '& .MuiButton-startIcon': { mx: { xs: 0, sm: 0.5 } },
+            }}
+          >
             {t(`locale.${locale}`)}
           </Button>
           <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleLanguageClose}>

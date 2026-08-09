@@ -149,6 +149,30 @@
     },
     "footer": {
       "copyright": "© 2025 Zeta's Neural Nexus. All rights reserved."
+    },
+    "personal": {
+      "eyebrow": "构建好玩的东西中",
+      "hello": "Hi, I'm",
+      "name": "Zeta.",
+      "intro": "I turn odd ideas into small tools and interactive experiments. This is where I keep the things I am building, learning, and figuring out along the way.",
+      "read": "Read my notes",
+      "play": "Enter the playground",
+      "scroll": "Keep wandering",
+      "nowTitle": "Things in progress.",
+      "nowLead": "A few things I've been working on lately. Some are live; some are still rough.",
+      "nowLabel": "CURRENTLY BUILDING",
+      "nowText": "Small tools for creators, interactive explanations for complicated systems, and experiments that make learning feel more like play.",
+      "statusLive": "LIVE",
+      "statusGrowing": "GROWING",
+      "statusExperiment": "EXPERIMENT",
+      "prompterone": "A teleprompter that follows your voice, records with the camera, and can be controlled from another device.",
+      "mechanismLab": "Interactive lessons that take complicated onchain mechanisms apart and rebuild them as things you can touch.",
+      "soundcraft": "An electronic-music learning lab with real sound experiments—less collecting tutorials, more making noise.",
+      "notesTitle": "Recent notes.",
+      "allNotes": "View all",
+      "footerKicker": "THE INTERNET IS A SMALL PLACE",
+      "footerTitle": "Say hello sometime.",
+      "footerNote": "Made while figuring things out."
     }
   },
   "dapp": {

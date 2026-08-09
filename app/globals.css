@@ -286,76 +286,61 @@ img {
   will-change: transform;
 }
 
-.floating-project {
+.floating-interest {
   position: absolute;
   top: 0;
   left: 0;
-  width: clamp(170px, 18vw, 220px);
-  min-height: 116px;
-  padding: 1rem;
+  width: clamp(118px, 12vw, 148px);
+  min-height: 78px;
+  padding: 0.72rem 0.78rem 0.76rem;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   transform: translate(-50%, -50%);
   transform-style: preserve-3d;
   border: 1px solid color-mix(in srgb, var(--project-accent) 35%, transparent);
-  border-radius: 3px 18px 3px 3px;
+  border-radius: 3px 14px 3px 3px;
   background: linear-gradient(145deg, rgba(22, 31, 20, 0.93), rgba(8, 12, 9, 0.88));
-  box-shadow: 0 24px 55px rgba(0, 0, 0, 0.34);
-  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(12px);
   color: inherit;
-  text-decoration: none;
-  cursor: pointer;
   transition:
     border-color 220ms ease,
     box-shadow 220ms ease,
-    background 220ms ease;
+    background 220ms ease,
+    scale 220ms ease;
 }
 
-.floating-project:hover,
-.floating-project:focus-visible {
+.floating-interest:hover {
   border-color: color-mix(in srgb, var(--project-accent) 72%, transparent);
-  outline: none;
   background: linear-gradient(145deg, rgba(28, 41, 24, 0.97), rgba(9, 14, 10, 0.94));
+  scale: 1.04;
   box-shadow:
-    0 26px 65px rgba(0, 0, 0, 0.42),
-    0 0 26px color-mix(in srgb, var(--project-accent) 14%, transparent);
+    0 22px 48px rgba(0, 0, 0, 0.4),
+    0 0 22px color-mix(in srgb, var(--project-accent) 14%, transparent);
 }
 
-.project-card-top {
+.interest-card-top {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1.4rem;
+  margin-bottom: 0.7rem;
   color: color-mix(in srgb, var(--project-accent) 80%, white);
-  font: 0.52rem/1 monospace;
-  letter-spacing: 0.13em;
+  font: 0.42rem/1 monospace;
+  letter-spacing: 0.11em;
 }
 
-.floating-project strong.MuiTypography-root {
+.floating-interest strong.MuiTypography-root {
   color: var(--paper);
-  font-size: clamp(0.95rem, 1.5vw, 1.18rem);
-  letter-spacing: -0.035em;
+  font-size: clamp(0.72rem, 1vw, 0.88rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
 }
 
-.floating-project small.MuiTypography-root {
-  margin-top: 0.34rem;
+.floating-interest small.MuiTypography-root {
+  margin-top: 0.28rem;
   color: rgba(238, 244, 232, 0.38);
-  font: 0.52rem/1 monospace;
-  letter-spacing: 0.09em;
-}
-
-.project-progress {
-  height: 1px;
-  margin-top: auto;
-  background: rgba(238, 244, 232, 0.1);
-}
-
-.project-progress span {
-  display: block;
-  width: 68%;
-  height: 1px;
-  background: var(--project-accent);
-  box-shadow: 0 0 9px var(--project-accent);
-  animation: project-scan 2.8s ease-in-out infinite alternate;
+  font: 0.4rem/1.2 monospace;
+  letter-spacing: 0.08em;
 }
 
 .project-orbit-note {
@@ -1295,14 +1280,14 @@ img {
     width: 100%;
   }
   .hero-orbit {
-    margin: -1rem -9vw -2rem;
-    width: auto;
+    width: 100%;
+    margin: -1rem auto -2rem;
   }
   .project-orbit {
-    transform: rotateX(4deg) rotateY(-3deg) scale(0.74);
+    transform: rotateX(4deg) rotateY(-3deg) scale(0.78);
   }
-  .floating-project {
-    width: 178px;
+  .floating-interest {
+    width: 136px;
   }
   .project-orbit-note {
     display: none;

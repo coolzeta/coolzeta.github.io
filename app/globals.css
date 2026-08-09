@@ -220,13 +220,7 @@ img {
 }
 
 .project-plane-one {
-  animation: project-plane-spin 28s linear infinite;
-}
-
-.project-plane-two {
-  inset: 24%;
-  transform: rotateX(69deg) rotateZ(24deg) translateZ(55px);
-  animation: project-plane-spin-back 20s linear infinite;
+  transform: rotateX(64deg) rotateZ(-16deg);
 }
 
 .project-core {
@@ -1164,19 +1158,6 @@ img {
     transform: scale(0.82);
   }
 }
-@keyframes project-plane-spin {
-  to {
-    transform: rotateX(64deg) rotateZ(344deg);
-  }
-}
-@keyframes project-plane-spin-back {
-  from {
-    transform: rotateX(69deg) rotateZ(384deg) translateZ(55px);
-  }
-  to {
-    transform: rotateX(69deg) rotateZ(24deg) translateZ(55px);
-  }
-}
 @keyframes core-pulse {
   0% {
     transform: scale(0.88);
@@ -1188,14 +1169,6 @@ img {
   100% {
     transform: scale(1.18);
     opacity: 0;
-  }
-}
-@keyframes project-scan {
-  from {
-    width: 24%;
-  }
-  to {
-    width: 82%;
   }
 }
 @keyframes orbit-spin {

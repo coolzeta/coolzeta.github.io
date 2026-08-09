@@ -63,7 +63,7 @@ export default function ProjectOrbit({ locale }: ProjectOrbitProps) {
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const size = { width: orbit.clientWidth, height: orbit.clientHeight };
-    const orbitTilt = -8 * (Math.PI / 180);
+    const orbitTilt = -16 * (Math.PI / 180);
     const tiltCos = Math.cos(orbitTilt);
     const tiltSin = Math.sin(orbitTilt);
     let phase = 0;
@@ -72,7 +72,7 @@ export default function ProjectOrbit({ locale }: ProjectOrbitProps) {
 
     const positionPlanets = () => {
       const radiusX = size.width * 0.37;
-      const radiusY = size.height * 0.235;
+      const radiusY = size.height * 0.18;
       const depthRadius = Math.min(size.width, size.height) * 0.25;
 
       planetRefs.current.forEach((planet, index) => {
@@ -128,7 +128,6 @@ export default function ProjectOrbit({ locale }: ProjectOrbitProps) {
       aria-label={locale === 'zh' ? 'Zeta 最近感兴趣的方向' : "Zeta's current interests"}
     >
       <Box className="project-plane project-plane-one" />
-      <Box className="project-plane project-plane-two" />
       <Box className="project-core">
         <Box className="core-pulse" />
         <Typography>{locale === 'zh' ? '最近' : 'NOW'}</Typography>

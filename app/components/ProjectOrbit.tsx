@@ -7,27 +7,48 @@ interface ProjectOrbitProps {
   locale: 'zh' | 'en';
 }
 
-const projects = [
+const interests = [
   {
-    name: 'PrompterOne',
-    type: 'VOICE / TOOL',
-    state: 'LIVE',
+    name: { en: 'AI Agents', zh: 'AI 智能体' },
+    type: { en: 'AUTONOMY / TOOLS', zh: '自主 / 工具' },
+    state: { en: 'EXPLORING', zh: '探索中' },
     accent: '#b8ff61',
-    url: 'https://prompterone.app',
   },
   {
-    name: 'Mechanism Lab',
-    type: 'ONCHAIN / LEARN',
-    state: 'GROWING',
+    name: { en: 'Prediction Markets', zh: '预测市场' },
+    type: { en: 'SIGNALS / BELIEF', zh: '信号 / 概率' },
+    state: { en: 'WATCHING', zh: '关注中' },
     accent: '#7fdc9a',
-    url: 'https://chainlab.zeta.lol',
   },
   {
-    name: 'Soundcraft',
-    type: 'MUSIC / PLAY',
-    state: 'EXPERIMENT',
+    name: { en: 'Mechanism Design', zh: '机制设计' },
+    type: { en: 'INCENTIVES / SYSTEMS', zh: '激励 / 系统' },
+    state: { en: 'STUDYING', zh: '学习中' },
     accent: '#d9ff8c',
-    url: 'https://soundcraft-electronic-music-lab.zetazhang2001.chatgpt.site',
+  },
+  {
+    name: { en: 'Human–AI Interfaces', zh: '人机交互' },
+    type: { en: 'VOICE / INTERACTION', zh: '语音 / 交互' },
+    state: { en: 'BUILDING', zh: '制作中' },
+    accent: '#9eeec0',
+  },
+  {
+    name: { en: 'Onchain Coordination', zh: '链上协作' },
+    type: { en: 'GOVERNANCE / MARKETS', zh: '治理 / 市场' },
+    state: { en: 'THINKING', zh: '思考中' },
+    accent: '#79d9a5',
+  },
+  {
+    name: { en: 'Creative Coding', zh: '创意编程' },
+    type: { en: 'VISUAL / PLAY', zh: '视觉 / 玩耍' },
+    state: { en: 'MAKING', zh: '实验中' },
+    accent: '#c9ff77',
+  },
+  {
+    name: { en: 'Electronic Music', zh: '电子音乐' },
+    type: { en: 'SOUND / SYNTHESIS', zh: '声音 / 合成' },
+    state: { en: 'PLAYING', zh: '玩耍中' },
+    accent: '#a7df75',
   },
 ];
 
@@ -57,9 +78,10 @@ export default function ProjectOrbit({ locale }: ProjectOrbitProps) {
       planetRefs.current.forEach((planet, index) => {
         if (!planet) return;
 
-        const angle = phase + Math.PI / 2 + index * ((Math.PI * 2) / projects.length);
-        const orbitX = Math.cos(angle) * radiusX;
-        const orbitY = Math.sin(angle) * radiusY;
+        const angle = phase + Math.PI / 2 + index * ((Math.PI * 2) / interests.length);
+        const lane = index % 2 === 0 ? 1 : 0.78;
+        const orbitX = Math.cos(angle) * radiusX * lane;
+        const orbitY = Math.sin(angle) * radiusY * lane;
         const depth = Math.sin(angle);
         const x = orbitX * tiltCos - orbitY * tiltSin;
         const y = orbitX * tiltSin + orbitY * tiltCos;
@@ -103,21 +125,23 @@ export default function ProjectOrbit({ locale }: ProjectOrbitProps) {
     <Box
       ref={orbitRef}
       className="project-orbit"
-      aria-label={locale === 'zh' ? 'Zeta 最近正在制作的项目' : "Zeta's current projects"}
+      aria-label={locale === 'zh' ? 'Zeta 最近感兴趣的方向' : "Zeta's current interests"}
     >
       <Box className="project-plane project-plane-one" />
       <Box className="project-plane project-plane-two" />
       <Box className="project-core">
         <Box className="core-pulse" />
-        <Typography>NOW</Typography>
-        <Typography component="strong">BUILDING</Typography>
-        <Typography component="span">03 ACTIVE SIGNALS</Typography>
+        <Typography>{locale === 'zh' ? '最近' : 'NOW'}</Typography>
+        <Typography component="strong">{locale === 'zh' ? '好奇' : 'CURIOUS'}</Typography>
+        <Typography component="span">
+          {locale === 'zh' ? '07 个兴趣方向' : '07 OPEN THREADS'}
+        </Typography>
       </Box>
 
-      {projects.map((project, index) => (
+      {interests.map((interest, index) => (
         <Box
-          className={`project-planet project-planet-${index + 1}`}
-          key={project.name}
+          className={`project-planet interest-planet-${index + 1}`}
+          key={interest.name.en}
           ref={element => {
             planetRefs.current[index] = element as HTMLDivElement | null;
           }}
@@ -135,36 +159,27 @@ export default function ProjectOrbit({ locale }: ProjectOrbitProps) {
           }}
         >
           <Box
-            component="a"
-            href={project.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={locale === 'zh' ? `打开 ${project.name}` : `Open ${project.name}`}
-            className="floating-project"
+            component="article"
+            className="floating-interest"
             sx={
               {
-                '--project-accent': project.accent,
+                '--project-accent': interest.accent,
               } as React.CSSProperties
             }
           >
-            <Box className="project-card-top">
+            <Box className="interest-card-top">
               <span>{String(index + 1).padStart(2, '0')}</span>
-              <span>{project.state}</span>
+              <span>{interest.state[locale]}</span>
             </Box>
-            <Typography component="strong">{project.name}</Typography>
-            <Typography component="small">{project.type}</Typography>
-            <Box className="project-progress">
-              <span />
-            </Box>
+            <Typography component="strong">{interest.name[locale]}</Typography>
+            <Typography component="small">{interest.type[locale]}</Typography>
           </Box>
         </Box>
       ))}
 
       <Box className="project-orbit-note">
         <span>
-          {locale === 'zh'
-            ? '把好奇心做成可以使用的东西'
-            : 'TURNING CURIOSITY INTO THINGS YOU CAN USE'}
+          {locale === 'zh' ? '一些最近总会想到的东西' : 'A FEW THINGS I KEEP THINKING ABOUT'}
         </span>
       </Box>
     </Box>

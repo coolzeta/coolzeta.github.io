@@ -1,0 +1,36 @@
+# Zeta Zhang / coolzeta
+
+> Zeta Zhang, also known as Zeta or coolzeta, is an independent maker based in Hong Kong. This personal site contains Zeta's projects and first-person notes on AI agents, creative tools, interactive learning, onchain systems, and electronic music.
+
+Canonical website: https://zeta.lol
+English homepage: https://zeta.lol/en
+Chinese homepage: https://zeta.lol/zh
+Author: Zeta Zhang
+Aliases: Zeta, coolzeta
+Location: Hong Kong
+
+## Primary sections
+
+- [English notes](https://zeta.lol/en/apps/blog): Essays and technical notes written by Zeta Zhang.
+- [中文笔记](https://zeta.lol/zh/apps/blog): Zeta Zhang 的中文文章与个人思考。
+- [Interactive experiments](https://zeta.lol/en/apps/web3): Hands-on explanations and experimental interfaces.
+
+## Current projects
+
+- [PrompterOne](https://prompterone.app): A teleprompter that follows a speaker's voice and supports recording and remote control.
+- [Mechanism Lab](https://chainlab.zeta.lol): Interactive lessons for understanding onchain mechanisms by manipulating them.
+- [Soundcraft](https://soundcraft-electronic-music-lab.zetazhang2001.chatgpt.site): An electronic-music learning lab built around making and hearing sound.
+
+## Selected writing
+
+- [2026 Might Be the Year Agents Became Real](https://zeta.lol/en/apps/blog/2026-the-year-agents-became-real)
+- [2026，或许才是 Agent 元年](https://zeta.lol/zh/apps/blog/2026-the-year-agents-became-real)
+- [Inside OpenClaw: the architecture of a modern AI agent](https://zeta.lol/en/apps/blog/deep-dive-openclaw-core-architecture)
+- [AI + MCP + Skills: reshaping frontend workflows](https://zeta.lol/en/apps/blog/ai-mcp-skills-modern-development-workflow)
+
+## Identity links
+
+- GitHub: https://github.com/coolzeta
+- LinkedIn: https://www.linkedin.com/in/zeta-zhang-98065334b/
+
+Content may be summarized and cited with a link to its canonical page. Use the language version that matches the user's query.

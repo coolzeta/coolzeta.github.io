@@ -9,6 +9,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import LightningCloudsWebGL from '../components/LightningCloudsWebGL';
 import ProjectOrbit from '../components/ProjectOrbit';
+import { AUTHOR_ID, SITE_URL, SOCIAL_LINKS, localePath, safeJsonLd } from '../seo';
 
 const notes = [
   {
@@ -67,9 +68,67 @@ export default function Home() {
   const router = useRouter();
 
   const go = (path: string) => router.push(`/${locale}${path}`);
+  const profileDescription =
+    locale === 'zh'
+      ? 'Zeta Zhang（coolzeta），居住在香港的独立开发者与产品创作者，制作 AI 工具、互动学习实验和链上产品。'
+      : 'Zeta Zhang (coolzeta) is an independent maker in Hong Kong building AI tools, interactive learning experiments, and onchain products.';
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': `${SITE_URL}/#website`,
+        url: SITE_URL,
+        name: 'Zeta Zhang / coolzeta',
+        alternateName: ["Zeta's Notes", 'coolzeta'],
+        inLanguage: ['en', 'zh'],
+        publisher: { '@id': AUTHOR_ID },
+      },
+      {
+        '@type': 'ProfilePage',
+        '@id': `${localePath(locale)}/#profile`,
+        url: localePath(locale),
+        name: locale === 'zh' ? '关于 Zeta Zhang' : 'About Zeta Zhang',
+        inLanguage: locale,
+        isPartOf: { '@id': `${SITE_URL}/#website` },
+        mainEntity: { '@id': AUTHOR_ID },
+      },
+      {
+        '@type': 'Person',
+        '@id': AUTHOR_ID,
+        name: 'Zeta Zhang',
+        alternateName: ['Zeta', 'coolzeta'],
+        url: SITE_URL,
+        description: profileDescription,
+        homeLocation: { '@type': 'Place', name: 'Hong Kong' },
+        sameAs: SOCIAL_LINKS,
+        knowsAbout: [
+          'Artificial intelligence agents',
+          'Creative tools',
+          'Interactive learning',
+          'Web development',
+          'Blockchain systems',
+          'Electronic music',
+        ],
+        owns: [
+          { '@type': 'SoftwareApplication', name: 'PrompterOne', url: 'https://prompterone.app' },
+          { '@type': 'CreativeWork', name: 'Mechanism Lab', url: 'https://chainlab.zeta.lol' },
+          {
+            '@type': 'CreativeWork',
+            name: 'Soundcraft',
+            url: 'https://soundcraft-electronic-music-lab.zetazhang2001.chatgpt.site',
+          },
+        ],
+      },
+    ],
+  };
 
   return (
     <Box className="personal-home">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(structuredData) }}
+      />
       <Box className="ambient-canvas" aria-hidden="true">
         <LightningCloudsWebGL />
       </Box>

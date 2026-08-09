@@ -5,9 +5,9 @@ import { createTheme } from '@mui/material/styles';
 // 定义颜色
 export const colors = {
   primary: {
-    main: '#4CAF50', // 绿色
-    light: '#81C784', // 浅绿
-    dark: '#388E3C', // 深绿
+    main: '#B8FF61',
+    light: '#D5FFA1',
+    dark: '#7FDC9A',
   },
   secondary: {
     main: '#FFFFFF', // 白色
@@ -15,11 +15,11 @@ export const colors = {
     dark: '#BDBDBD', // 浅灰
   },
   background: {
-    default: '#000000', // 黑色
-    paper: '#121212', // 深灰
+    default: '#080B09',
+    paper: '#101510',
   },
   text: {
-    primary: '#FFFFFF', // 白色
+    primary: '#EEF4E8',
     secondary: 'rgba(255, 255, 255, 0.7)', // 半透明白
   },
   border: {
@@ -55,7 +55,7 @@ export const themeOptions = {
     },
   },
   typography: {
-    fontFamily: 'Inter, sans-serif',
+    fontFamily: 'Inter, "PingFang SC", "Microsoft YaHei", sans-serif',
     h1: {
       fontSize: '3.5rem',
       fontWeight: 700,
@@ -125,4 +125,4 @@ export function useAppTheme() {
 }
 
 // 导出颜色对象供 Tailwind 使用
-export default colors; 
+export default colors;

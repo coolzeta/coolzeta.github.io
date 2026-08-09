@@ -149,6 +149,30 @@
     },
     "footer": {
       "copyright": "© 2025 Zeta的博客。保留所有权利。"
+    },
+    "personal": {
+      "eyebrow": "构建好玩的东西中",
+      "hello": "Hi，我是",
+      "name": "Zeta。",
+      "intro": "把一些奇怪的想法做成真正能用的小工具和互动实验。这里放着我正在做的事、学到的东西，以及一路上的胡思乱想。",
+      "read": "读读我的笔记",
+      "play": "去游乐场看看",
+      "scroll": "继续漫游",
+      "nowTitle": "正在折腾的东西。",
+      "nowLead": "这里放的是我最近在做的几个东西。有的已经上线，有的还是半成品。",
+      "nowLabel": "正在制作",
+      "nowText": "给创作者的小工具、把复杂系统讲明白的互动实验，以及让学习更像玩耍的东西。",
+      "statusLive": "已上线",
+      "statusGrowing": "持续生长",
+      "statusExperiment": "实验中",
+      "prompterone": "一个会跟着你的声音滚动、能录制、也能被另一台设备遥控的提词器。",
+      "mechanismLab": "把复杂的链上机制拆开，再做成可以动手玩、真正理解的互动课程。",
+      "soundcraft": "一个带着真实发声实验的电子音乐学习实验室：少收藏教程，多做点声音。",
+      "notesTitle": "最近的笔记。",
+      "allNotes": "查看全部",
+      "footerKicker": "互联网其实很小",
+      "footerTitle": "有空来打个招呼。",
+      "footerNote": "一边琢磨，一边做出来。"
     }
   },
   "dapp": {

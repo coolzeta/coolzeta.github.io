@@ -3,408 +3,281 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
+const vertexShader = /* glsl */ `
+  uniform float uTime;
+  uniform float uOrbitPhase;
+  uniform vec2 uPointer;
+  uniform float uPointerStrength;
+  uniform float uAspect;
+  uniform float uTanHalfFov;
+
+  attribute float aSize;
+  attribute float aSeed;
+  attribute float aTone;
+
+  varying float vAlpha;
+  varying float vTone;
+  varying float vSparkle;
+
+  void main() {
+    vec3 p = position;
+    float t = uTime * (0.045 + aSeed * 0.018);
+
+    // A restrained curl field: particles keep their structure while the
+    // filaments appear to breathe and fold through one another.
+    float curlX = sin(p.y * 0.72 + t * 1.7 + aSeed * 9.0);
+    float curlY = cos(p.x * 0.58 - t * 1.25 + aSeed * 6.0);
+    float curlZ = sin((p.x + p.y) * 0.38 + t + aSeed * 12.0);
+    p += vec3(curlX, curlY, curlZ) * vec3(0.10, 0.07, 0.16);
+
+    // A small global tilt keeps the field feeling spatial and calm.
+    float yaw = uPointer.x * 0.15;
+    float pitch = -uPointer.y * 0.09;
+    mat2 rotateY = mat2(cos(yaw), -sin(yaw), sin(yaw), cos(yaw));
+    mat2 rotateX = mat2(cos(pitch), -sin(pitch), sin(pitch), cos(pitch));
+    p.xz = rotateY * p.xz;
+    p.yz = rotateX * p.yz;
+    p.xy += uPointer * (0.035 + aSeed * 0.035);
+
+    vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
+
+    // Calculate the gravity centre in view space so it lands exactly beneath
+    // the cursor regardless of viewport ratio, camera depth or object tilt.
+    float viewDepth = max(0.1, -mvPosition.z);
+    vec2 gravityCenter = vec2(
+      uPointer.x * viewDepth * uTanHalfFov * uAspect,
+      uPointer.y * viewDepth * uTanHalfFov
+    );
+    vec2 gravityDelta = mvPosition.xy - gravityCenter;
+    float gravityDistance = length(gravityDelta);
+    float gravityFalloff = 1.0 - smoothstep(0.8, 5.4, gravityDistance);
+    float orbitStrength = gravityFalloff * uPointerStrength;
+    float orbitAngle = uOrbitPhase * orbitStrength;
+
+    // Rotate around a tilted 3D axis rather than an axis perpendicular to the
+    // screen. Its projected path is an ellipse, with part of the movement
+    // travelling into depth instead of sweeping across the viewport.
+    vec3 orbitAxis = normalize(vec3(0.68, 0.30, 0.67));
+    vec3 orbitDelta = vec3(gravityDelta, 0.0);
+    float orbitCos = cos(orbitAngle);
+    float orbitSin = sin(orbitAngle);
+    vec3 rotatedDelta = orbitDelta * orbitCos
+      + cross(orbitAxis, orbitDelta) * orbitSin
+      + orbitAxis * dot(orbitAxis, orbitDelta) * (1.0 - orbitCos);
+    mvPosition.xy = gravityCenter + rotatedDelta.xy;
+    mvPosition.z += rotatedDelta.z * 0.72;
+
+    gl_Position = projectionMatrix * mvPosition;
+
+    float depthFade = smoothstep(11.0, 3.2, -mvPosition.z);
+    float edgeFade = 1.0 - smoothstep(3.0, 5.5, length(p.xy));
+    float pulse = 0.76 + 0.24 * sin(uTime * 0.32 + aSeed * 26.0);
+    float sparkleWave = sin(uTime * (0.38 + aSeed * 0.72) + aSeed * 113.0);
+    vSparkle = pow(max(0.0, sparkleWave), 72.0) * step(0.97, aSeed);
+    vAlpha = depthFade * edgeFade * pulse;
+    vTone = aTone;
+    gl_PointSize = aSize * (1.0 + vSparkle * 1.5) * (7.5 / max(2.0, -mvPosition.z));
+  }
+`;
+
+const fragmentShader = /* glsl */ `
+  varying float vAlpha;
+  varying float vTone;
+  varying float vSparkle;
+
+  void main() {
+    vec2 uv = gl_PointCoord - 0.5;
+    float distanceToCenter = length(uv);
+    if (distanceToCenter > 0.5) discard;
+
+    float core = 1.0 - smoothstep(0.0, 0.16, distanceToCenter);
+    float halo = 1.0 - smoothstep(0.08, 0.5, distanceToCenter);
+    float alpha = (core * 0.9 + halo * (0.24 + vSparkle * 0.5)) * vAlpha;
+
+    vec3 silver = vec3(0.80, 0.85, 0.80);
+    vec3 mint = vec3(0.63, 0.92, 0.52);
+    vec3 color = mix(silver, mint, vTone * 0.72);
+    color += vec3(0.24, 0.31, 0.20) * vSparkle;
+    gl_FragColor = vec4(color, alpha);
+  }
+`;
+
+function createParticleGeometry(count: number) {
+  const geometry = new THREE.BufferGeometry();
+  const positions = new Float32Array(count * 3);
+  const sizes = new Float32Array(count);
+  const seeds = new Float32Array(count);
+  const tones = new Float32Array(count);
+
+  for (let i = 0; i < count; i += 1) {
+    const i3 = i * 3;
+    const seed = Math.random();
+    const angle = Math.random() * Math.PI * 2;
+    const radius = Math.pow(Math.random(), 0.64) * 4.8;
+    const arm = i % 3;
+
+    // Three overlapping filaments create a cloud with a dense centre and
+    // sparse, almost smoke-like edges.
+    const twist = angle + radius * (0.47 + arm * 0.065);
+    const thickness = (Math.random() - 0.5) * (0.16 + radius * 0.075);
+    const armOffset = (arm - 1) * 0.31;
+
+    positions[i3] = Math.cos(twist) * radius * 1.18 + thickness;
+    positions[i3 + 1] =
+      Math.sin(twist) * radius * 0.52 + Math.sin(radius * 1.45 + arm) * 0.24 + armOffset;
+    positions[i3 + 2] =
+      (Math.random() - 0.5) * (0.48 + radius * 0.34) + Math.cos(twist * 1.4) * 0.26;
+
+    seeds[i] = seed;
+    const sizeClass = Math.random();
+    sizes[i] =
+      sizeClass < 0.72
+        ? 2.2 + Math.random() * 2.2
+        : sizeClass < 0.96
+          ? 4.8 + Math.random() * 4.2
+          : 10 + Math.random() * 7;
+    tones[i] = Math.pow(Math.random(), 2.7);
+  }
+
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
+  geometry.setAttribute('aSeed', new THREE.BufferAttribute(seeds, 1));
+  geometry.setAttribute('aTone', new THREE.BufferAttribute(tones, 1));
+  geometry.computeBoundingSphere();
+  return geometry;
+}
+
 export default function LightningCloudsWebGL() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!containerRef.current) return;
-
-    let isCleanedUp = false; // Flag to prevent race conditions
-
-    // Setup scene
-    const scene = new THREE.Scene();
-    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    const renderer = new THREE.WebGLRenderer({ 
-      alpha: true, 
-      antialias: false,
-      powerPreference: 'high-performance'
-    });
-    
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for performance
-    
     const container = containerRef.current;
+    if (!container) return;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isCompact = window.innerWidth < 768;
+    const particleCount = isCompact ? 1500 : window.innerWidth < 1200 ? 2900 : 4700;
+    const initialWidth = container.clientWidth || window.innerWidth;
+    const initialHeight = container.clientHeight || window.innerHeight;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(42, initialWidth / initialHeight, 0.1, 30);
+    camera.position.set(0, 0.05, isCompact ? 8.1 : 7.2);
+
+    const renderer = new THREE.WebGLRenderer({
+      alpha: true,
+      antialias: false,
+      powerPreference: 'high-performance',
+    });
+    renderer.setClearAlpha(0);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.65));
+    renderer.setSize(initialWidth, initialHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
     container.appendChild(renderer.domElement);
 
-    // Particle system - scale with screen width (increased)
-    const getParticleCount = () => {
-      const width = window.innerWidth;
-      if (width < 640) return 80;   // Mobile: 80 particles (was 50)
-      if (width < 1024) return 120; // Tablet: 120 particles (was 80)
-      return 250;                   // Desktop: 250 particles (was 150)
-    };
-    
-    const particleCount = getParticleCount();
-    const geometry = new THREE.BufferGeometry();
-    
-    // Attributes
-    const positions = new Float32Array(particleCount * 3);
-    const velocities = new Float32Array(particleCount * 2);
-    const brightness = new Float32Array(particleCount);
-    const targetBrightness = new Float32Array(particleCount);
-    const sizes = new Float32Array(particleCount);
-    const colors = new Float32Array(particleCount * 3);
-    const lifetimes = new Float32Array(particleCount); // Lifetime in seconds
-    const maxLifetimes = new Float32Array(particleCount); // Max lifetime for each particle
-
-    // Initialize particles
-    for (let i = 0; i < particleCount; i++) {
-      const i3 = i * 3;
-      const i2 = i * 2;
-
-      // Position (-1 to 1 normalized)
-      positions[i3] = (Math.random() - 0.5) * 2;
-      positions[i3 + 1] = (Math.random() - 0.5) * 2;
-      positions[i3 + 2] = 0;
-
-      // Velocity - faster base movement
-      velocities[i2] = (Math.random() - 0.5) * 0.002;
-      velocities[i2 + 1] = (Math.random() - 0.5) * 0.002;
-
-      // Brightness - lower base
-      brightness[i] = 0.15 + Math.random() * 0.15; // Start: 0.15-0.3
-      targetBrightness[i] = 0.15 + Math.random() * 0.15;
-
-      // Size - much larger
-      sizes[i] = 100 + Math.random() * 120; // 100-220 pixels
-
-      // Color (brighter green variations)
-      colors[i3] = (80 + Math.random() * 40) / 255; // More red
-      colors[i3 + 1] = (200 + Math.random() * 55) / 255; // Brighter green
-      colors[i3 + 2] = (80 + Math.random() * 40) / 255; // More blue
-
-      // Lifetime: 15-30 seconds (staggered initial lifetimes for smooth regeneration)
-      maxLifetimes[i] = 15 + Math.random() * 15;
-      lifetimes[i] = Math.random() * maxLifetimes[i]; // Start at random point in lifetime
-    }
-
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute('aBrightness', new THREE.BufferAttribute(brightness, 1));
-    geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
-    geometry.setAttribute('aColor', new THREE.BufferAttribute(colors, 3));
-
-    // Custom shader material
+    const geometry = createParticleGeometry(particleCount);
     const material = new THREE.ShaderMaterial({
       uniforms: {
-        uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
+        uTime: { value: 0 },
+        uOrbitPhase: { value: 0 },
+        uPointer: { value: new THREE.Vector2() },
+        uPointerStrength: { value: 0 },
+        uAspect: { value: initialWidth / initialHeight },
+        uTanHalfFov: { value: Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) },
       },
-      vertexShader: `
-        attribute float aBrightness;
-        attribute float aSize;
-        attribute vec3 aColor;
-        
-        varying float vBrightness;
-        varying vec3 vColor;
-        
-        uniform vec2 uResolution;
-        
-        void main() {
-          vBrightness = aBrightness;
-          vColor = aColor;
-          
-          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-          gl_Position = projectionMatrix * mvPosition;
-          
-          // Size in pixels
-          gl_PointSize = aSize * (uResolution.y / 1000.0);
-        }
-      `,
-      fragmentShader: `
-        varying float vBrightness;
-        varying vec3 vColor;
-        
-        void main() {
-          // Circular gradient
-          vec2 center = gl_PointCoord - vec2(0.5);
-          float dist = length(center);
-          
-          if (dist > 0.5) discard;
-          
-          // Softer gradient with more visible core
-          float alpha = pow(1.0 - dist * 2.0, 1.5) * vBrightness * 1.5; // Brighter
-          alpha = smoothstep(0.0, 1.0, alpha);
-          
-          gl_FragColor = vec4(vColor * 1.2, alpha); // Boost color brightness
-        }
-      `,
+      vertexShader,
+      fragmentShader,
       transparent: true,
       blending: THREE.AdditiveBlending,
-      depthWrite: false
+      depthWrite: false,
+      depthTest: true,
     });
 
-    const points = new THREE.Points(geometry, material);
-    scene.add(points);
+    const particles = new THREE.Points(geometry, material);
+    particles.rotation.set(-0.12, 0.08, isCompact ? -0.16 : -0.1);
+    particles.scale.setScalar(isCompact ? 0.88 : 1);
+    scene.add(particles);
 
-    // Animation state
-    let lastInteraction = 0;
-    const interactionThrottle = 100;
-    const interactionPos = new THREE.Vector2(0, 0);
-    
-    // Detect touch device - check multiple conditions for reliability
-    const isTouchDevice = (
-      'ontouchstart' in window || 
-      navigator.maxTouchPoints > 0 || 
-      (navigator as any).msMaxTouchPoints > 0
-    );
+    const targetPointer = new THREE.Vector2();
+    const currentPointer = new THREE.Vector2();
+    const clock = new THREE.Clock();
+    let animationFrame = 0;
+    let orbitPhase = 0;
+    let targetPointerStrength = 1;
+    let currentPointerStrength = 1;
 
-    // Mouse interaction (desktop only)
-    const handleMouseMove = (e: MouseEvent) => {
-      if (isTouchDevice) return; // Skip on touch devices
-      
-      const now = Date.now();
-      if (now - lastInteraction < interactionThrottle) return;
-      lastInteraction = now;
-
-      // Convert to normalized coordinates (-1 to 1)
-      interactionPos.x = (e.clientX / window.innerWidth) * 2 - 1;
-      interactionPos.y = -(e.clientY / window.innerHeight) * 2 + 1;
-
-      const radius = 0.15; // Interaction radius - reduced (was 0.25)
-      
-      for (let i = 0; i < particleCount; i++) {
-        const i3 = i * 3;
-        const i2 = i * 2;
-        const px = positions[i3];
-        const py = positions[i3 + 1];
-        
-        const dx = px - interactionPos.x;
-        const dy = py - interactionPos.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        
-        if (distance < radius && distance > 0.001) {
-          const intensity = 1 - (distance / radius);
-          
-          // Brighten particles
-          targetBrightness[i] = Math.max(targetBrightness[i], intensity * 0.35);
-          
-          // Repulsion force - much weaker
-          const repulsionStrength = 0.003 * intensity; // Reduced from 0.006 to 0.003
-          const dirX = dx / distance; // Normalized direction
-          const dirY = dy / distance;
-          
-          // Apply repulsion to velocity
-          velocities[i2] += dirX * repulsionStrength;
-          velocities[i2 + 1] += dirY * repulsionStrength;
-          
-          // Limit velocity with higher max speed
-          const speed = Math.sqrt(velocities[i2] * velocities[i2] + velocities[i2 + 1] * velocities[i2 + 1]);
-          const maxSpeed = 0.008;
-          if (speed > maxSpeed) {
-            velocities[i2] = (velocities[i2] / speed) * maxSpeed;
-            velocities[i2 + 1] = (velocities[i2 + 1] / speed) * maxSpeed;
-          }
-        }
-      }
+    const handlePointerMove = (event: PointerEvent) => {
+      if (event.pointerType === 'touch') return;
+      const bounds = container.getBoundingClientRect();
+      targetPointer.set(
+        ((event.clientX - bounds.left) / bounds.width) * 2 - 1,
+        -((event.clientY - bounds.top) / bounds.height) * 2 + 1
+      );
+      targetPointerStrength = 1;
     };
 
-    // Scroll interaction (mobile/tablet only)
-    const handleScroll = () => {
-      if (!isTouchDevice) return; // Skip on desktop
-      
-      const now = Date.now();
-      if (now - lastInteraction < interactionThrottle) return;
-      lastInteraction = now;
-
-      // Use scroll position (0 to 1, normalized by viewport height)
-      const scrollY = window.scrollY;
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollProgress = Math.min(scrollY / Math.max(maxScroll, 1), 1);
-
-      // Create a horizontal wave of repulsion based on scroll
-      const waveY = scrollProgress * 2 - 1; // Convert to -1 to 1 range
-
-      // Brighten and push particles based on scroll wave
-      for (let i = 0; i < particleCount; i++) {
-        const i3 = i * 3;
-        const i2 = i * 2;
-        const py = positions[i3 + 1]; // Y position (-1 to 1)
-        
-        // Distance from the scroll wave
-        const distanceFromWave = Math.abs(py - waveY);
-        
-        if (distanceFromWave < 0.25) { // Reduced from 0.4 to 0.25 (smaller range)
-          const intensity = 1 - (distanceFromWave / 0.25);
-          
-          // Brighten particles
-          targetBrightness[i] = Math.max(targetBrightness[i], intensity * 0.35);
-          
-          // Horizontal repulsion force - much weaker
-          const repulsionStrength = 0.002 * intensity; // Reduced from 0.004 to 0.002
-          const direction = (positions[i3] > 0) ? 1 : -1; // Push away from center
-          
-          velocities[i2] += direction * repulsionStrength;
-          
-          // Limit velocity with higher max speed
-          const speed = Math.sqrt(velocities[i2] * velocities[i2] + velocities[i2 + 1] * velocities[i2 + 1]);
-          const maxSpeed = 0.008;
-          if (speed > maxSpeed) {
-            velocities[i2] = (velocities[i2] / speed) * maxSpeed;
-            velocities[i2 + 1] = (velocities[i2 + 1] / speed) * maxSpeed;
-          }
-        }
-      }
+    const handlePointerLeave = () => {
+      targetPointer.set(0, 0);
+      targetPointerStrength = 1;
     };
 
-    // Add event listeners based on device type
-    if (!isTouchDevice) {
-      window.addEventListener('mousemove', handleMouseMove);
-      console.log('[LightningClouds] Mouse interaction enabled');
-    } else {
-      window.addEventListener('scroll', handleScroll, { passive: true });
-      console.log('[LightningClouds] Scroll interaction enabled');
-    }
+    const handleWindowBlur = () => {
+      targetPointer.set(0, 0);
+      targetPointerStrength = 1;
+    };
 
-    // Respawn particle at random position
-    function respawnParticle(i: number) {
-      const i3 = i * 3;
-      const i2 = i * 2;
+    const handleVisibilityChange = () => {
+      if (document.hidden) handleWindowBlur();
+    };
 
-      // Random position
-      positions[i3] = (Math.random() - 0.5) * 2;
-      positions[i3 + 1] = (Math.random() - 0.5) * 2;
+    const handleResize = () => {
+      const width = container.clientWidth || window.innerWidth;
+      const height = container.clientHeight || window.innerHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      material.uniforms.uAspect.value = camera.aspect;
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.65));
+      renderer.setSize(width, height);
+    };
 
-      // Reset velocity
-      velocities[i2] = (Math.random() - 0.5) * 0.002;
-      velocities[i2 + 1] = (Math.random() - 0.5) * 0.002;
+    const render = () => {
+      const delta = Math.min(clock.getDelta(), 0.05);
+      currentPointer.lerp(targetPointer, 0.085);
+      currentPointerStrength += (targetPointerStrength - currentPointerStrength) * 0.09;
+      orbitPhase += delta * 0.46 * currentPointerStrength;
+      material.uniforms.uPointer.value.copy(currentPointer);
+      material.uniforms.uPointerStrength.value = currentPointerStrength;
+      material.uniforms.uOrbitPhase.value = orbitPhase;
+      material.uniforms.uTime.value = clock.elapsedTime;
 
-      // Start dim
-      brightness[i] = 0.05 + Math.random() * 0.05; // 0.05-0.1 (very dim)
-      targetBrightness[i] = 0.05 + Math.random() * 0.05;
-
-      // Reset lifetime
-      maxLifetimes[i] = 15 + Math.random() * 15; // 15-30 seconds
-      lifetimes[i] = maxLifetimes[i];
-    }
-
-    // Animation loop
-    let lastFrameTime = Date.now();
-    let animationFrameId: number;
-    
-    function animate() {
-      if (isCleanedUp) return; // Stop animation if component is unmounted
-      
-      const now = Date.now();
-      const deltaTime = (now - lastFrameTime) / 1000; // Convert to seconds
-      lastFrameTime = now;
-
-      // Continuous random sparkles - more particles can be bright at once
-      // Each frame, randomly brighten 3-6 particles (increased from 1-3)
-      const sparkleCount = Math.floor(Math.random() * 4) + 3; // 3-6 particles per frame
-      for (let s = 0; s < sparkleCount; s++) {
-        if (Math.random() < 0.02) { // 2% chance per sparkle slot (increased from 1.5%)
-          const idx = Math.floor(Math.random() * particleCount);
-          // Only brighten if currently dim (to avoid always hitting the same bright ones)
-          if (targetBrightness[idx] < 0.25) {
-            targetBrightness[idx] = 0.25 + Math.random() * 0.2; // 0.25-0.45
-          }
-        }
+      if (!reducedMotion) {
+        particles.rotation.y = 0.08 + Math.sin(clock.elapsedTime * 0.055) * 0.035;
       }
-
-      const posAttr = geometry.attributes.position as THREE.BufferAttribute;
-      const brightAttr = geometry.attributes.aBrightness as THREE.BufferAttribute;
-
-      // Update particles
-      for (let i = 0; i < particleCount; i++) {
-        const i3 = i * 3;
-        const i2 = i * 2;
-
-        // Update lifetime
-        lifetimes[i] -= deltaTime;
-
-        // Check if lifetime expired
-        if (lifetimes[i] <= 0) {
-          respawnParticle(i);
-          continue; // Skip to next particle
-        }
-
-        // Apply velocity damping - less aggressive
-        velocities[i2] *= 0.99;
-        velocities[i2 + 1] *= 0.99;
-
-        // Move
-        positions[i3] += velocities[i2];
-        positions[i3 + 1] += velocities[i2 + 1];
-
-        // Also respawn if out of bounds (for particles pushed out by repulsion)
-        if (positions[i3] < -1.2 || positions[i3] > 1.2 || 
-            positions[i3 + 1] < -1.2 || positions[i3 + 1] > 1.2) {
-          respawnParticle(i);
-          continue; // Skip to next particle
-        }
-
-        // Brightness transition
-        const diff = targetBrightness[i] - brightness[i];
-        if (Math.abs(diff) > 0.001) {
-          brightness[i] += diff * 0.15;
-        }
-
-        // Moderate decay
-        targetBrightness[i] *= 0.995;
-      }
-
-      posAttr.needsUpdate = true;
-      brightAttr.needsUpdate = true;
 
       renderer.render(scene, camera);
-      animationFrameId = requestAnimationFrame(animate);
-    }
-
-    animate();
-    console.log('[LightningClouds] Component mounted and animation started');
-
-    // Resize handler
-    const handleResize = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-      material.uniforms.uResolution.value.set(width, height);
+      if (!reducedMotion) animationFrame = requestAnimationFrame(render);
     };
 
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    document.documentElement.addEventListener('pointerleave', handlePointerLeave);
+    window.addEventListener('blur', handleWindowBlur);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('resize', handleResize);
+    render();
 
-    // Cleanup
     return () => {
-      console.log('[LightningClouds] Cleaning up component');
-      isCleanedUp = true;
-      
-      // Cancel animation frame
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-      
-      // Remove event listeners
+      cancelAnimationFrame(animationFrame);
+      window.removeEventListener('pointermove', handlePointerMove);
+      document.documentElement.removeEventListener('pointerleave', handlePointerLeave);
+      window.removeEventListener('blur', handleWindowBlur);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('resize', handleResize);
-      if (!isTouchDevice) {
-        window.removeEventListener('mousemove', handleMouseMove);
-      } else {
-        window.removeEventListener('scroll', handleScroll);
-      }
-      
-      // Remove canvas element safely
-      if (container && renderer.domElement.parentNode === container) {
-        container.removeChild(renderer.domElement);
-      }
-      
-      // Dispose Three.js resources
       geometry.dispose();
       material.dispose();
       renderer.dispose();
+      renderer.domElement.remove();
     };
   }, []);
 
-  return (
-    <div 
-      ref={containerRef} 
-      style={{ 
-        position: 'absolute',
-        top: 0, 
-        left: 0, 
-        width: '100%', 
-        height: '100%',
-        pointerEvents: 'auto'
-      }} 
-    />
-  );
+  return <div ref={containerRef} className="particle-field" />;
 }

@@ -14,6 +14,11 @@ export default function DAppsList() {
   const router = useRouter();
 
   const openTool = (dapp: DApp) => {
+    if (dapp.external) {
+      window.location.assign(dapp.url);
+      return;
+    }
+
     router.push(dapp.localeAware === false ? dapp.url : `/${locale}${dapp.url}`);
   };
 

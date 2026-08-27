@@ -189,13 +189,28 @@
       "name": "Pattern Atelier",
       "description": "Draw one line and watch it bloom across celadon, brocade, and a garden window through traditional pattern composition."
     },
+    "rustPath": {
+      "name": "The Rust Path",
+      "description": "Learn Rust through 30 progressive lessons, hands-on ownership labs, and compiler-style feedback that turns tricky concepts into something you can see and try."
+    },
+    "prompterOne": {
+      "name": "Prompter One",
+      "description": "A voice-following teleprompter with camera recording and remote control, built for creators who want to stay natural on camera."
+    },
     "tags": {
       "Canvas": "Canvas",
       "Pixel Art": "Pixel Art",
       "Privacy": "On-device",
       "Cats": "Cats",
       "Pattern": "Pattern Design",
-      "Craft": "Traditional Craft"
+      "Craft": "Traditional Craft",
+      "Rust": "Rust",
+      "Learning": "Learning",
+      "Interactive": "Interactive",
+      "Compiler": "Compiler",
+      "Teleprompter": "Teleprompter",
+      "Voice": "Voice Follow",
+      "Recording": "Recording"
     }
   }
 }

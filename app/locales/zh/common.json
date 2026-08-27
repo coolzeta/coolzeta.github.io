@@ -189,13 +189,28 @@
       "name": "纹生万象",
       "description": "落下一组自由线条，让它以传统纹样构成方式在青瓷盘、织锦带和园林窗上生长。"
     },
+    "rustPath": {
+      "name": "锈径 · Rust 入门课程",
+      "description": "沿着 30 节渐进课程学习 Rust，用可交互的所有权实验和编译器式反馈，把难懂的概念变成能看见、能动手试的东西。"
+    },
+    "prompterOne": {
+      "name": "Prompter One",
+      "description": "一个会跟随语音滚动、支持相机录制和跨设备遥控的提词器，让创作者面对镜头时依然自然。"
+    },
     "tags": {
       "Canvas": "Canvas",
       "Pixel Art": "像素艺术",
       "Privacy": "本机处理",
       "Cats": "猫咪",
       "Pattern": "纹样设计",
-      "Craft": "传统工艺"
+      "Craft": "传统工艺",
+      "Rust": "Rust",
+      "Learning": "学习",
+      "Interactive": "交互式",
+      "Compiler": "编译器",
+      "Teleprompter": "提词器",
+      "Voice": "语音跟随",
+      "Recording": "录制"
     }
   }
 }

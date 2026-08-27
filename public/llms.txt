@@ -13,7 +13,7 @@ Location: Hong Kong
 
 - [English notes](https://zeta.lol/en/apps/blog): Essays and technical notes written by Zeta Zhang.
 - [中文笔记](https://zeta.lol/zh/apps/blog): Zeta Zhang 的中文文章与个人思考。
-- [Interactive experiments](https://zeta.lol/en/apps/web3): Hands-on explanations and experimental interfaces.
+- [Playground](https://zeta.lol/en/apps/playground): Independent tools and interactive experiments made by Zeta Zhang.
 
 ## Current projects
 

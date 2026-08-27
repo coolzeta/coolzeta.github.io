@@ -112,7 +112,7 @@ coolzeta.github.io/
 │   │   ├── page.tsx           # Landing page
 │   │   └── apps/
 │   │       ├── blog/          # Blog posts
-│   │       └── web3/          # DApp showcase
+│   │       └── playground/    # Independent tools
 │   ├── components/            # Reusable components
 │   │   ├── AppLayout.tsx      # Fixed header with scroll effects
 │   │   ├── Card3D.tsx         # 3D tilt card component
@@ -166,7 +166,7 @@ coolzeta.github.io/
 
 2. Post will automatically appear on the blog page
 
-### Adding a DApp
+### Adding a Tool
 
 1. Edit `app/config/dapps.ts`:
    ```typescript
@@ -177,7 +177,7 @@ coolzeta.github.io/
      status: 'live',
      tags: ['DeFi', 'NFT'],
      imageUrl: '/images/your-dapp.png',
-     url: '/apps/web3/your-dapp'
+     url: '/tools/your-tool'
    }
    ```
 

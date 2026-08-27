@@ -138,7 +138,7 @@ export default function AppLayout({ children, locale }: AppLayoutProps) {
 
           <Button
             color="primary"
-            onClick={() => router.push(`/${locale}/apps/web3`)}
+            onClick={() => router.push(`/${locale}/apps/playground`)}
             sx={{
               mx: { xs: 0, sm: 0.5 },
               minWidth: { xs: 66, sm: 80 },

@@ -26,7 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
       lastModified: new Date(),
     }),
-    localizedEntry('/apps/web3', {
+    localizedEntry('/apps/playground', {
       changeFrequency: 'monthly',
       priority: 0.7,
       lastModified: new Date(),

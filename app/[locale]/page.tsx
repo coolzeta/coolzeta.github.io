@@ -162,7 +162,7 @@ export default function Home() {
               >
                 {t('read')}
               </Button>
-              <Button variant="text" onClick={() => go('/apps/web3')}>
+              <Button variant="text" onClick={() => go('/apps/playground')}>
                 {t('play')}
               </Button>
             </Stack>

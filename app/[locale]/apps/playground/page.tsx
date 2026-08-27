@@ -5,7 +5,7 @@ import { dapps } from '@/app/config/dapps';
 import { Box, Typography, Container } from '@mui/material';
 import { useLocale } from 'next-intl';
 
-export default function Web3Page() {
+export default function PlaygroundPage() {
   const locale = useLocale();
   const isZh = locale === 'zh';
 

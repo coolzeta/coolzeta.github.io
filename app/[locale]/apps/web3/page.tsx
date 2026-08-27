@@ -23,7 +23,7 @@ export default function Web3Page() {
               ? '这里收着我做的独立小工具：有些解决问题，有些只负责让生活更有趣。'
               : 'A growing collection of independent tools—some practical, some playful, all built to be used.'}
           </Typography>
-          <Box className="subpage-count">03 TOOLS</Box>
+          <Box className="subpage-count">02 TOOLS</Box>
         </Box>
         <DAppsList />
       </Container>

@@ -31,16 +31,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
       lastModified: new Date(),
     }),
-    localizedEntry('/apps/web3/dapp-1', {
-      changeFrequency: 'monthly',
-      priority: 0.5,
-      lastModified: new Date(),
-    }),
-    localizedEntry('/apps/web3/dapp-2', {
-      changeFrequency: 'monthly',
-      priority: 0.4,
-      lastModified: new Date(),
-    }),
   ];
 
   const postsDirectory = path.join(process.cwd(), 'content/blog/en');
@@ -63,6 +53,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: SITE_URL, changeFrequency: 'weekly', priority: 0.8, lastModified: new Date() },
     {
       url: `${SITE_URL}/tools/cat-meme-lab/`,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+      lastModified: new Date(),
+    },
+    {
+      url: `${SITE_URL}/tools/pattern-atelier/`,
       changeFrequency: 'monthly',
       priority: 0.7,
       lastModified: new Date(),

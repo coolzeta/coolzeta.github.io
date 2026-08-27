@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+  <meta name="theme-color" content="#101817" />
+  <title>纹生万象｜落笔成器</title>
+  <link rel="stylesheet" href="/tools/pattern-atelier/style.css" />
+  <link rel="stylesheet" href="/tools/pattern-atelier/art.css" />
+  <link rel="stylesheet" href="/tools/pattern-atelier/maker.css" />
+</head>
+<body>
+  <main class="app">
+    <header><span class="header-spacer" aria-hidden="true"></span><div><b>纹生万象</b><small>盘上生花 · 锦上连枝 · 窗中借景</small></div><button id="resetAll">重来</button></header>
+    <section class="intro" id="intro">
+      <div class="hero-art"><img src="/tools/pattern-atelier/assets/pattern-atelier-hero-v3.webp" alt="青瓷盘、织锦带与木窗组成的器物陈列"/><span>一笔入器，万象成章</span></div>
+      <p class="eyebrow">取一线，生三器</p>
+      <h1>落一笔心意，<br /><em>让器物生出万象。</em></h1>
+      <p>以笔为引，以器为章。你落下的每一道线，会在盘心回旋、沿锦带绵延、向窗格四隅生长。起落无拘，疏密随心。</p>
+      <button class="primary" id="start"><span>入席 · 落笔成纹</span><i>→</i></button>
+    </section>
+    <section class="lab hidden" id="lab">
+      <div class="head"><div><p class="eyebrow" id="commission">第一件</p><h2 id="title">盘心团花</h2></div><span id="progress">1 / 3</span></div>
+      <div class="order"><span id="objectIcon">◯</span><div><small>这次画在</small><b id="objectName">青瓷盘心</b><p id="objectReason">盘面是圆的，纹样会自然向中心聚拢。</p></div></div>
+      <div class="rule"><b id="rule">六方旋转</b><span>随便起笔 · 想画几笔都行</span></div>
+      <div class="studio">
+        <div class="canvas-wrap">
+          <canvas id="canvas" aria-label="自由纹样画板"></canvas>
+          <div class="live">旋转重复 × <b id="copies">6</b></div>
+          <div class="draw-cue" id="drawCue">从任意位置落笔</div>
+        </div>
+        <div class="object-preview">
+          <div><span>上器效果</span><b>同步</b></div>
+          <canvas id="objectPreview"></canvas>
+          <strong id="previewName">青瓷盘心</strong>
+          <small>边画边看</small>
+        </div>
+      </div>
+      <div class="tools"><button id="undo" disabled>撤销</button><button id="redo" disabled>重做</button><button id="clear" disabled>清空</button><span id="strokeCount">0 笔</span></div>
+      <button class="submit" id="submit" disabled>先自由画一笔</button>
+      <p class="feedback" id="feedback">从哪里开始、在哪里停都可以。</p>
+    </section>
+    <section class="result hidden" id="result">
+      <p class="eyebrow">三器成章</p>
+      <h2>你落下的线，已有了归处。</h2>
+      <p>三件器物都保留了你刚才画下的全部笔画。点一下，可以放大细看。</p>
+      <div class="collection">
+        <button class="artifact active" data-artifact="0"><canvas id="artifact0"></canvas><b>青瓷盘</b><span>向心团花</span></button>
+        <button class="artifact" data-artifact="1"><canvas id="artifact1"></canvas><b>织锦带</b><span>连续边饰</span></button>
+        <button class="artifact" data-artifact="2"><canvas id="artifact2"></canvas><b>园林窗</b><span>四隅窗格</span></button>
+      </div>
+      <div class="detail"><canvas id="detailCanvas"></canvas><div><small id="detailRule">六方旋转</small><h3 id="detailName">青瓷盘 · 盘心团花</h3><p id="detailText">同一组笔画旋转六次，首尾相接，正好围住盘心。</p></div></div>
+      <div class="facts"><span>3 组纹样</span><span id="totalCopies">26 处重复</span><span>盘 · 锦 · 窗</span></div>
+      <button class="primary" id="again">重新画一套</button>
+      <small class="source">构成方法参考传统纹样中的单位纹样、二方连续和四方连续。页面中的器物与纹样为当代创作，并非文物复原。</small>
+    </section>
+  </main>
+  <script src="/tools/pattern-atelier/app.js"></script>
+</body>
+</html>

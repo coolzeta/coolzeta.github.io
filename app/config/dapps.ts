@@ -22,22 +22,13 @@ export const dapps: DApp[] = [
         localeAware: false
     },
     {
-        id: 'dapp-1',
-        nameKey: 'dapp.collateralizedStablecoin.name',
-        descriptionKey: 'dapp.collateralizedStablecoin.description',
-        imageUrl: '/covers/cover1.png',
-        url: '/apps/web3/dapp-1',
-        tags: ['Stablecoin', 'DeFi', 'CDP', 'Liquidation', 'Oracle'],
-        status: 'live'
-    },
-    {
-        id: 'dapp-2',
-        nameKey: 'dapp.cryptoPlantsVsZombies.name',
-        descriptionKey: 'dapp.cryptoPlantsVsZombies.description',
-        imageUrl: '/covers/cover2.png',
-        url: '/apps/web3/dapp-2',
-        tags: ['GameFi', 'NFT', 'Battle', 'P2E'],
-        status: 'development'
+        id: 'pattern-atelier',
+        nameKey: 'dapp.patternAtelier.name',
+        descriptionKey: 'dapp.patternAtelier.description',
+        imageUrl: '/tools/pattern-atelier/assets/pattern-atelier-hero-v3.webp',
+        url: '/tools/pattern-atelier/',
+        tags: ['Canvas', 'Pattern', 'Craft', 'Privacy'],
+        status: 'live',
+        localeAware: false
     }
-    // 您可以继续添加更多 DApp 配置
 ];

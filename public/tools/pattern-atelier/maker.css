@@ -1,0 +1,152 @@
+:root {
+  --app-safe-top: max(
+    52px,
+    var(--safe-area-inset-top, 0px),
+    env(safe-area-inset-top, 0px)
+  );
+  --app-safe-bottom: max(
+    16px,
+    var(--safe-area-inset-bottom, 0px),
+    env(safe-area-inset-bottom, 0px)
+  );
+}
+
+.app {
+  padding-bottom: var(--app-safe-bottom);
+}
+
+html {
+  touch-action: manipulation;
+  overflow-anchor: none;
+}
+
+body {
+  -webkit-touch-callout: none;
+  overscroll-behavior-y: contain;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+}
+
+header {
+  height: calc(62px + var(--app-safe-top));
+  padding: calc(var(--app-safe-top) + 10px) 22px 10px;
+}
+
+.primary:active,
+.submit:active,
+.tools button:active,
+.artifact:active,
+header button:active {
+  opacity: .74;
+}
+
+.header-spacer {
+  width: 34px;
+  height: 34px;
+}
+
+.studio {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.studio .canvas-wrap,
+.studio .object-preview {
+  width: 100%;
+}
+
+.draw-cue {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  width: max-content;
+  padding: 5px 9px;
+  border: 1px solid #e8e0ce3b;
+  border-radius: 99px;
+  background: #0e1715cc;
+  color: #b6b4a8;
+  font-size: 10px;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+
+.canvas-wrap.has-strokes .draw-cue {
+  opacity: 0;
+}
+
+.object-preview {
+  padding: 11px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #d7b86d4d;
+  border-radius: 4px 4px 19px 4px;
+  background: linear-gradient(145deg, #1a2823, #0b1211);
+  box-shadow: inset 0 0 24px #00000035;
+}
+
+.object-preview > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #8b978f;
+  font: 10px ui-monospace, monospace;
+}
+
+.object-preview > div b {
+  color: var(--gold);
+  font-size: 9px;
+  letter-spacing: .1em;
+}
+
+.object-preview canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  margin: 10px auto 7px;
+}
+
+.object-preview strong,
+.object-preview small {
+  display: block;
+  text-align: center;
+}
+
+.object-preview strong {
+  color: var(--paper);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.object-preview small {
+  margin-top: 3px;
+  color: #63756d;
+  font: 9px ui-monospace, monospace;
+}
+
+.tools {
+  grid-template-columns: repeat(3, 1fr) 58px;
+}
+
+.tools button:disabled {
+  opacity: .34;
+}
+
+@media (min-width: 560px) {
+  :root {
+    --app-safe-top: max(
+      0px,
+      var(--safe-area-inset-top, 0px),
+      env(safe-area-inset-top, 0px)
+    );
+  }
+}
+
+@media (max-width: 410px) {
+  .lab { padding-inline: 16px; }
+  .object-preview { padding: 10px 10px 13px; }
+}

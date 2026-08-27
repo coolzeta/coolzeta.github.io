@@ -181,32 +181,21 @@
       "beta": "测试版",
       "development": "开发中"
     },
-    "tags": {
-      "Stablecoin": "稳定币",
-      "DeFi": "去中心化金融",
-      "CDP": "抵押债仓",
-      "Liquidation": "清算",
-      "Oracle": "预言机",
-      "GameFi": "链游",
-      "NFT": "NFT",
-      "Battle": "对战",
-      "P2E": "边玩边赚",
-      "Canvas": "Canvas",
-      "Pixel Art": "像素艺术",
-      "Privacy": "本机处理",
-      "Cats": "猫咪"
-    },
-    "collateralizedStablecoin": {
-      "name": "抵押稳定币协议",
-      "description": "去中心化稳定币平台，用户可以通过存入抵押资产来铸造稳定币。体验核心DeFi机制，包括抵押、赎回和由预言机价格触发清算。探索超额抵押债务头寸的基础知识。"
-    },
-    "cryptoPlantsVsZombies": {
-      "name": "加密植物大战僵尸",
-      "description": "基于区块链的塔防游戏，灵感来源于植物大战僵尸，玩家收集和升级NFT植物来抵御僵尸入侵。通过游戏玩法赚取代币，并在市场上交易您的NFT植物。具有战略性游戏玩法、独特的NFT角色和玩赚机制。"
-    },
     "catMemeLab": {
       "name": "猫纹像素所",
       "description": "用三张猫咪照片提取毛色与花纹，在浏览器本地生成一套统一的十二格像素表情。"
+    },
+    "patternAtelier": {
+      "name": "纹生万象",
+      "description": "落下一组自由线条，让它以传统纹样构成方式在青瓷盘、织锦带和园林窗上生长。"
+    },
+    "tags": {
+      "Canvas": "Canvas",
+      "Pixel Art": "像素艺术",
+      "Privacy": "本机处理",
+      "Cats": "猫咪",
+      "Pattern": "纹样设计",
+      "Craft": "传统工艺"
     }
   }
 }

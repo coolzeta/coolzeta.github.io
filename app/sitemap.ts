@@ -61,6 +61,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     { url: SITE_URL, changeFrequency: 'weekly', priority: 0.8, lastModified: new Date() },
+    {
+      url: `${SITE_URL}/tools/cat-meme-lab/`,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+      lastModified: new Date(),
+    },
     ...entries,
     ...entries.map(entry => ({
       ...entry,

@@ -6,10 +6,21 @@ export interface DApp {
     url: string;
     tags: string[];
     status: 'live' | 'beta' | 'development';
+    localeAware?: boolean;
 }
 
 // 预设配置数组，您可以根据需要修改
 export const dapps: DApp[] = [
+    {
+        id: 'cat-meme-lab',
+        nameKey: 'dapp.catMemeLab.name',
+        descriptionKey: 'dapp.catMemeLab.description',
+        imageUrl: '/tools/cat-meme-lab/assets/pixel-cat-studio.webp',
+        url: '/tools/cat-meme-lab/',
+        tags: ['Canvas', 'Pixel Art', 'Privacy', 'Cats'],
+        status: 'live',
+        localeAware: false
+    },
     {
         id: 'dapp-1',
         nameKey: 'dapp.collateralizedStablecoin.name',

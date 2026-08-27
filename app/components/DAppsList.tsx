@@ -13,6 +13,10 @@ export default function DAppsList() {
   const t = useTranslations();
   const router = useRouter();
 
+  const openTool = (dapp: DApp) => {
+    router.push(dapp.localeAware === false ? dapp.url : `/${locale}${dapp.url}`);
+  };
+
   return (
     <Box className="lab-projects">
       {dapps.map((dapp: DApp, index: number) => (
@@ -22,15 +26,15 @@ export default function DAppsList() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: index * 0.1 }}
           className="lab-project"
-          onClick={() => router.push(`/${locale}${dapp.url}`)}
-          onKeyDown={event => event.key === 'Enter' && router.push(`/${locale}${dapp.url}`)}
+          onClick={() => openTool(dapp)}
+          onKeyDown={event => event.key === 'Enter' && openTool(dapp)}
           role="link"
           tabIndex={0}
         >
           <Box className="lab-project-media">
             <Image src={dapp.imageUrl} alt="" fill sizes="(max-width: 700px) 100vw, 50vw" />
             <Box className="lab-project-overlay" />
-            <span className="lab-project-index">EXP / {String(index + 1).padStart(2, '0')}</span>
+            <span className="lab-project-index">TOOL / {String(index + 1).padStart(2, '0')}</span>
           </Box>
           <Box className="lab-project-body">
             <Box className="lab-project-status">

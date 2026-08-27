@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+  <meta name="theme-color" content="#ff6978" />
+  <title>猫纹像素所｜三面取色，十二格成包</title>
+  <link rel="preload" href="/tools/cat-meme-lab/assets/pixel-cat-poses-v3.webp" as="image" />
+  <link rel="stylesheet" href="/tools/cat-meme-lab/style.css?v=0.9.1" />
+</head>
+<body>
+  <main class="app">
+    <section class="screen landing is-active" id="landing" aria-label="猫纹像素所首页">
+      <img class="landing-art" src="/tools/cat-meme-lab/assets/pixel-cat-studio.webp" alt="像素猫与贴纸组成的猫纹工作室" />
+      <div class="landing-shade" aria-hidden="true"></div>
+      <header class="brandbar">
+        <span class="brand-mark">CAT<br />PIX</span>
+        <div><b>猫纹像素所</b><small>三面取纹 · 十二格成包</small></div>
+      </header>
+      <div class="landing-copy">
+        <p class="kicker"><i></i> OFFLINE CAT LAB</p>
+        <h1>三张猫咪照片，<br /><em>做成专属表情。</em></h1>
+        <p class="micro">正面 · 头朝左 · 头朝右</p>
+        <button class="cta cta-dark" id="start" type="button"><span>开始取纹</span><i>→</i></button>
+        <button class="demo-link" id="demo" type="button">没有照片？先玩橘猫版</button>
+        <span class="privacy-pill">● 本机处理，不上传照片</span>
+      </div>
+    </section>
+
+    <section class="screen capture" id="capture" aria-label="上传猫咪三视图" aria-hidden="true">
+      <header class="pagebar">
+        <button class="icon-button" id="captureBack" type="button" aria-label="返回首页">←</button>
+        <div class="page-brand"><b>猫纹像素所</b><small>STEP 01 / 02</small></div>
+        <span class="count-badge" id="uploadCount">0 / 3</span>
+      </header>
+
+      <div class="capture-intro">
+        <p class="kicker"><i></i> TURN AROUND</p>
+        <h2>把猫转一圈</h2>
+        <p>传三面，点一下身体。侧面按头朝向拍。</p>
+        <label class="coat-hint" for="coatHint">
+          <span><b>纹样生成方式</b><small>优先保留原图里的真实色块</small></span>
+          <select id="coatHint" aria-label="选择纹样生成方式">
+            <option value="photo_texture">按照片纹样（推荐）</option>
+            <option value="auto">匹配常见猫型</option>
+            <option value="orange_tabby">橘猫</option>
+            <option value="brown_tabby">狸花猫</option>
+            <option value="silver_tabby">银灰虎斑</option>
+            <option value="cow">奶牛猫</option>
+            <option value="tuxedo">黑白礼服猫</option>
+            <option value="calico">三花猫</option>
+            <option value="tortoiseshell">玳瑁猫</option>
+            <option value="siamese">重点色猫</option>
+            <option value="solid_black">纯黑猫</option>
+            <option value="solid_white">纯白猫</option>
+            <option value="blue_gray">蓝灰猫</option>
+            <option value="solid_color">其他纯色猫</option>
+            <option value="spotted">点斑猫</option>
+          </select>
+        </label>
+      </div>
+
+      <img class="deco-sheet deco-upload" src="/tools/cat-meme-lab/assets/pixel-sticker-sheet.webp" alt="" aria-hidden="true" />
+
+      <div class="views">
+        <article class="view-card coral" data-view="front">
+          <input id="frontInput" type="file" accept="image/*" />
+          <label class="picker" for="frontInput">
+            <span class="view-index">01</span>
+            <span class="view-copy"><b>正面</b><small>看清脸和胸口</small></span>
+            <span class="add-icon">＋</span>
+          </label>
+          <div class="photo-stage hidden">
+            <canvas class="photo-canvas" aria-label="正面照片取色区域"></canvas>
+            <canvas class="mask-canvas" aria-hidden="true"></canvas>
+            <span class="focus-dot" aria-hidden="true"></span>
+            <label class="replace" for="frontInput">换一张</label>
+            <span class="tap-tip">点猫身</span>
+          </div>
+        </article>
+
+        <article class="view-card lime" data-view="left">
+          <input id="leftInput" type="file" accept="image/*" />
+          <label class="picker" for="leftInput">
+            <span class="view-index">02</span>
+            <span class="view-copy"><b>头朝左</b><small>全身和尾巴别出框</small></span>
+            <span class="add-icon">＋</span>
+          </label>
+          <div class="photo-stage hidden">
+            <canvas class="photo-canvas" aria-label="头朝左侧面照片取色区域"></canvas>
+            <canvas class="mask-canvas" aria-hidden="true"></canvas>
+            <span class="focus-dot" aria-hidden="true"></span>
+            <label class="replace" for="leftInput">换一张</label>
+            <span class="tap-tip">点猫身</span>
+          </div>
+        </article>
+
+        <article class="view-card blue" data-view="right">
+          <input id="rightInput" type="file" accept="image/*" />
+          <label class="picker" for="rightInput">
+            <span class="view-index">03</span>
+            <span class="view-copy"><b>头朝右</b><small>全身和尾巴别出框</small></span>
+            <span class="add-icon">＋</span>
+          </label>
+          <div class="photo-stage hidden">
+            <canvas class="photo-canvas" aria-label="头朝右侧面照片取色区域"></canvas>
+            <canvas class="mask-canvas" aria-hidden="true"></canvas>
+            <span class="focus-dot" aria-hidden="true"></span>
+            <label class="replace" for="rightInput">换一张</label>
+            <span class="tap-tip">点猫身</span>
+          </div>
+        </article>
+      </div>
+
+      <div class="capture-footer">
+        <button class="cta" id="analyze" type="button" disabled><span>还差 3 张</span><i>→</i></button>
+        <small>尽量用相近光线拍摄</small>
+      </div>
+    </section>
+
+    <section class="screen result" id="result" aria-label="像素表情包结果" aria-hidden="true">
+      <header class="pagebar result-bar">
+        <button class="icon-button" id="backToPhotos" type="button" aria-label="返回重新取样">←</button>
+        <div class="page-brand"><b>猫纹像素所</b><small>STEP 02 / 02</small></div>
+        <button class="icon-button" id="resetAll" type="button" aria-label="从头开始">↻</button>
+      </header>
+
+      <div class="result-hero">
+        <div>
+          <p class="kicker"><i></i> CAT PACK READY</p>
+          <h2>猫纹，<br />画好了。</h2>
+        </div>
+        <img class="deco-sheet deco-result" src="/tools/cat-meme-lab/assets/pixel-sticker-sheet.webp" alt="像素猫咪贴纸" />
+      </div>
+
+      <div class="profile">
+        <div class="swatches" id="swatches" aria-label="提取到的猫咪色板"></div>
+        <div><small>猫像来源</small><b id="patternType">正在判断</b><p>原照轮廓、色块与三面纹样统一绘制。</p></div>
+        <label class="pattern-picker" for="patternOverride">
+          <span>不像？换成常见猫型</span>
+          <select id="patternOverride" aria-label="校正常见猫咪外观">
+            <option value="photo_texture">按照片纹样</option>
+            <option value="orange_tabby">橘猫</option>
+            <option value="brown_tabby">狸花猫</option>
+            <option value="silver_tabby">银灰虎斑</option>
+            <option value="cow">奶牛猫</option>
+            <option value="tuxedo">黑白礼服猫</option>
+            <option value="calico">三花猫</option>
+            <option value="tortoiseshell">玳瑁猫</option>
+            <option value="siamese">重点色猫</option>
+            <option value="solid_black">纯黑猫</option>
+            <option value="solid_white">纯白猫</option>
+            <option value="blue_gray">蓝灰猫</option>
+            <option value="solid_color">其他纯色猫</option>
+            <option value="spotted">点斑猫</option>
+          </select>
+        </label>
+        <button class="retake" id="retakeColor" type="button">颜色不对？重圈</button>
+      </div>
+
+      <div class="meme-heading">
+        <div><small>TWELVE MOODS</small><h3>今日猫态</h3></div>
+        <button class="shuffle" id="shuffle" type="button">换一组 ↻</button>
+      </div>
+
+      <div class="stickers" id="stickers">
+        <figure><canvas class="sticker" aria-label="像素猫表情一"></canvas><figcaption></figcaption></figure>
+        <figure><canvas class="sticker" aria-label="像素猫表情二"></canvas><figcaption></figcaption></figure>
+        <figure><canvas class="sticker" aria-label="像素猫表情三"></canvas><figcaption></figcaption></figure>
+        <figure><canvas class="sticker" aria-label="像素猫表情四"></canvas><figcaption></figcaption></figure>
+        <figure><canvas class="sticker" aria-label="像素猫表情五"></canvas><figcaption></figcaption></figure>
+        <figure><canvas class="sticker" aria-label="像素猫表情六"></canvas><figcaption></figcaption></figure>
+        <figure><canvas class="sticker" aria-label="像素猫表情七"></canvas><figcaption></figcaption></figure>
+        <figure><canvas class="sticker" aria-label="像素猫表情八"></canvas><figcaption></figcaption></figure>
+        <figure><canvas class="sticker" aria-label="像素猫表情九"></canvas><figcaption></figcaption></figure>
+        <figure><canvas class="sticker" aria-label="像素猫表情十"></canvas><figcaption></figcaption></figure>
+        <figure><canvas class="sticker" aria-label="像素猫表情十一"></canvas><figcaption></figcaption></figure>
+        <figure><canvas class="sticker" aria-label="像素猫表情十二"></canvas><figcaption></figcaption></figure>
+      </div>
+
+      <nav class="pack-pages" aria-label="切换表情包分组">
+        <button id="previousPackPage" type="button" disabled>← 上六张</button>
+        <span id="packPageLabel">1 / 2</span>
+        <button id="nextPackPage" type="button">下六张 →</button>
+      </nav>
+
+      <canvas id="sheet" class="hidden" aria-hidden="true"></canvas>
+      <div class="actions">
+        <button class="cta cta-dark" id="save" type="button"><span>保存整组</span><i>↓</i></button>
+        <button class="cta cta-coral" id="post" type="button"><span>带图发笔记</span><i>↗</i></button>
+      </div>
+      <p class="status" id="status">照片仅在本机处理，成品只保留像素化猫像。</p>
+    </section>
+  </main>
+  <script src="/tools/cat-meme-lab/app.js?v=0.9.1"></script>
+</body>
+</html>

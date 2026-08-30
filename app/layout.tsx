@@ -5,7 +5,7 @@ import { AUTHOR_NAME, SITE_NAME, SITE_URL } from './seo';
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Zeta Zhang (coolzeta) — Independent Maker in Hong Kong',
+    default: 'Zeta Zhang — Notes, Tools & Experiments',
     template: `%s | ${AUTHOR_NAME}`,
   },
   description:
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     siteName: SITE_NAME,
-    title: 'Zeta Zhang (coolzeta) — Notes from Hong Kong',
+    title: 'Zeta Zhang — Notes, Tools & Experiments',
     description:
       'Personal notes, useful tools, and interactive experiments by Zeta Zhang in Hong Kong.',
     url: SITE_URL,
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Zeta Zhang (coolzeta) — Notes from Hong Kong',
+    title: 'Zeta Zhang — Notes, Tools & Experiments',
     description:
       'Personal notes, useful tools, and interactive experiments by Zeta Zhang in Hong Kong.',
     creator: '@coolzeta',

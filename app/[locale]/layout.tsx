@@ -24,9 +24,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const validLocale = locale === 'zh' ? 'zh' : 'en';
   const isZh = validLocale === 'zh';
-  const title = isZh
-    ? 'Zeta Zhang（coolzeta）— 香港独立开发者'
-    : 'Zeta Zhang (coolzeta) — Independent Maker in Hong Kong';
+  const title = isZh ? 'Zeta Zhang — 笔记、工具与实验' : 'Zeta Zhang — Notes, Tools & Experiments';
   const description = isZh
     ? 'Zeta Zhang（coolzeta）的个人网站：记录 AI、创作工具、链上机制与正在制作的互动实验。'
     : 'The personal website of Zeta Zhang (coolzeta): notes on AI, creative tools, onchain systems, and interactive experiments in progress.';

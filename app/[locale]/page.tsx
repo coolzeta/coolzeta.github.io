@@ -9,6 +9,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import LightningCloudsWebGL from '../components/LightningCloudsWebGL';
 import ProjectOrbit from '../components/ProjectOrbit';
+import ScrollLinkedArtifact from '../components/ScrollLinkedArtifact';
 import { AUTHOR_ID, SITE_URL, SOCIAL_LINKS, localePath, safeJsonLd } from '../seo';
 
 const notes = [
@@ -131,6 +132,9 @@ export default function Home() {
       />
       <Box className="ambient-canvas" aria-hidden="true">
         <LightningCloudsWebGL />
+      </Box>
+      <Box className="scroll-artifact-layer" aria-hidden="true">
+        <ScrollLinkedArtifact />
       </Box>
 
       <Container maxWidth="lg" className="personal-shell">

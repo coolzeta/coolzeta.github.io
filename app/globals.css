@@ -101,6 +101,29 @@ img {
     linear-gradient(90deg, rgba(3, 8, 4, 0.42), transparent 34% 70%, rgba(3, 8, 4, 0.3));
 }
 
+.scroll-artifact-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.58;
+  filter: saturate(0.82) contrast(1.04);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 90%, transparent 100%);
+}
+
+.scroll-artifact-canvas,
+.scroll-artifact-canvas > canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.scroll-artifact-canvas > canvas {
+  filter: drop-shadow(0 28px 60px rgba(0, 0, 0, 0.48));
+}
+
 .personal-shell {
   position: relative;
   z-index: 2;
@@ -1226,6 +1249,11 @@ img {
 }
 
 @media (max-width: 600px) {
+  .scroll-artifact-layer {
+    opacity: 0.38;
+    mask-image: linear-gradient(to bottom, transparent 0%, black 24%, black 92%, transparent 100%);
+  }
+
   .personal-hero {
     min-height: auto;
     gap: 1rem;

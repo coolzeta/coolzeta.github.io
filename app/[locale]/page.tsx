@@ -173,9 +173,9 @@ export default function Home() {
           </motion.div>
 
           <motion.div
-            className="hero-orbit"
-            initial={{ opacity: 0, scale: 0.88, rotateY: -14 }}
-            animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+            className="hero-interests"
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.1, delay: 0.15 }}
           >
             <ProjectOrbit locale={locale} />

@@ -5,7 +5,6 @@ import * as THREE from 'three';
 
 const vertexShader = /* glsl */ `
   uniform float uTime;
-  uniform float uOrbitPhase;
 
   attribute float aSize;
   attribute float aSeed;
@@ -27,27 +26,6 @@ const vertexShader = /* glsl */ `
     p += vec3(curlX, curlY, curlZ) * vec3(0.10, 0.07, 0.16);
 
     vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
-
-    // Keep the gravity centre and its tilted axis fixed in the first viewport.
-    // Only the particles travel around it; the orbital plane never drifts.
-    vec2 gravityCenter = vec2(0.0);
-    vec2 gravityDelta = mvPosition.xy - gravityCenter;
-    float gravityDistance = length(gravityDelta);
-    float gravityFalloff = 1.0 - smoothstep(0.8, 5.4, gravityDistance);
-    float orbitAngle = uOrbitPhase * gravityFalloff;
-
-    // Rotate around a tilted 3D axis rather than an axis perpendicular to the
-    // screen. Its projected path is an ellipse, with part of the movement
-    // travelling into depth instead of sweeping across the viewport.
-    vec3 orbitAxis = normalize(vec3(0.68, 0.30, 0.67));
-    vec3 orbitDelta = vec3(gravityDelta, 0.0);
-    float orbitCos = cos(orbitAngle);
-    float orbitSin = sin(orbitAngle);
-    vec3 rotatedDelta = orbitDelta * orbitCos
-      + cross(orbitAxis, orbitDelta) * orbitSin
-      + orbitAxis * dot(orbitAxis, orbitDelta) * (1.0 - orbitCos);
-    mvPosition.xy = gravityCenter + rotatedDelta.xy;
-    mvPosition.z += rotatedDelta.z * 0.72;
 
     gl_Position = projectionMatrix * mvPosition;
 
@@ -161,7 +139,6 @@ export default function LightningCloudsWebGL() {
     const material = new THREE.ShaderMaterial({
       uniforms: {
         uTime: { value: 0 },
-        uOrbitPhase: { value: 0 },
       },
       vertexShader,
       fragmentShader,
@@ -178,7 +155,6 @@ export default function LightningCloudsWebGL() {
 
     const clock = new THREE.Clock();
     let animationFrame = 0;
-    let orbitPhase = 0;
 
     const handleResize = () => {
       const width = container.clientWidth || window.innerWidth;
@@ -190,9 +166,7 @@ export default function LightningCloudsWebGL() {
     };
 
     const render = () => {
-      const delta = Math.min(clock.getDelta(), 0.05);
-      orbitPhase += delta * 0.46;
-      material.uniforms.uOrbitPhase.value = orbitPhase;
+      clock.getDelta();
       material.uniforms.uTime.value = clock.elapsedTime;
 
       renderer.render(scene, camera);

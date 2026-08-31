@@ -202,173 +202,146 @@ img {
   color: rgba(238, 244, 232, 0.75);
 }
 
-.hero-orbit {
+.hero-interests {
   min-width: 0;
-  perspective: 1300px;
 }
 
-.project-orbit {
+.interest-board {
   position: relative;
-  width: min(100%, 600px);
-  aspect-ratio: 1;
+  width: min(100%, 560px);
   margin: auto;
-  transform-style: preserve-3d;
-  transform: rotateX(7deg) rotateY(-7deg);
-  filter: drop-shadow(0 40px 60px rgba(0, 0, 0, 0.34));
+  padding: 0.5rem 0;
 }
 
-.project-plane {
-  position: absolute;
-  inset: 12%;
-  border: 1px solid rgba(184, 255, 97, 0.16);
-  transform-style: preserve-3d;
-  transform: rotateX(64deg) rotateZ(-16deg);
-  border-radius: 50%;
-  box-shadow: inset 0 0 70px rgba(184, 255, 97, 0.035);
-}
-
-.project-plane::before,
-.project-plane::after {
+.interest-board::before,
+.interest-board::after {
   content: '';
   position: absolute;
-  inset: 15%;
-  border: 1px dashed rgba(238, 244, 232, 0.11);
-  border-radius: 50%;
+  pointer-events: none;
 }
 
-.project-plane::after {
-  inset: 36%;
-  border-style: solid;
-  background: rgba(184, 255, 97, 0.018);
+.interest-board::before {
+  top: 2.65rem;
+  right: 8%;
+  left: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(184, 255, 97, 0.4), rgba(238, 244, 232, 0.07));
 }
 
-.project-plane-one {
-  transform: rotateX(64deg) rotateZ(-16deg);
+.interest-board::after {
+  top: 2.35rem;
+  right: 8%;
+  width: 1px;
+  height: calc(100% - 4.8rem);
+  background: linear-gradient(rgba(184, 255, 97, 0.3), transparent 80%);
 }
 
-.project-core {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: clamp(126px, 15vw, 176px);
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%) translateZ(42px);
+.interest-board-head {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 25%, #293d23 0%, #111710 54%, #080b09 100%);
-  border: 1px solid rgba(184, 255, 97, 0.35);
-  box-shadow:
-    0 0 75px rgba(184, 255, 97, 0.13),
-    inset -12px -18px 35px rgba(0, 0, 0, 0.35);
-  z-index: 3;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 1.35rem;
+  padding-right: 10%;
 }
 
-.core-pulse {
-  position: absolute;
-  inset: -11%;
-  border: 1px solid rgba(184, 255, 97, 0.2);
-  border-radius: 50%;
-  animation: core-pulse 3s ease-out infinite;
-}
-
-.project-core p.MuiTypography-root {
-  color: rgba(238, 244, 232, 0.46);
-  font: 0.58rem/1 monospace;
+.interest-board-head span.MuiTypography-root {
+  color: var(--mint);
+  font: 0.5rem/1 monospace;
   letter-spacing: 0.18em;
 }
 
-.project-core strong.MuiTypography-root {
-  margin: 0.4rem 0 0.6rem;
-  color: var(--acid);
-  font: 600 clamp(1.1rem, 2vw, 1.55rem) / 1 monospace;
-  letter-spacing: -0.04em;
+.interest-board-head > span {
+  color: rgba(238, 244, 232, 0.25);
+  font: 0.44rem/1 monospace;
+  letter-spacing: 0.12em;
 }
 
-.project-core span.MuiTypography-root {
-  color: rgba(238, 244, 232, 0.32);
-  font: 0.5rem/1 monospace;
-  letter-spacing: 0.1em;
-}
-
-.project-planet {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-
-.floating-interest {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: clamp(118px, 12vw, 148px);
-  min-height: 78px;
-  padding: 0.72rem 0.78rem 0.76rem;
+.interest-list {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  transform: translate(-50%, -50%);
-  transform-style: preserve-3d;
-  border: 1px solid color-mix(in srgb, var(--project-accent) 35%, transparent);
-  border-radius: 3px 14px 3px 3px;
-  background: linear-gradient(145deg, rgba(22, 31, 20, 0.93), rgba(8, 12, 9, 0.88));
-  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(12px);
-  color: inherit;
+}
+
+.interest-line {
+  position: relative;
+  width: calc(92% - var(--interest-offset));
+  min-height: 58px;
+  margin-left: var(--interest-offset);
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.7rem;
+  border-bottom: 1px solid rgba(238, 244, 232, 0.1);
   transition:
-    border-color 220ms ease,
-    box-shadow 220ms ease,
-    background 220ms ease,
-    scale 220ms ease;
+    transform 220ms ease,
+    border-color 220ms ease;
 }
 
-.floating-interest:hover {
-  border-color: color-mix(in srgb, var(--project-accent) 72%, transparent);
-  background: linear-gradient(145deg, rgba(28, 41, 24, 0.97), rgba(9, 14, 10, 0.94));
-  scale: 1.04;
-  box-shadow:
-    0 22px 48px rgba(0, 0, 0, 0.4),
-    0 0 22px color-mix(in srgb, var(--project-accent) 14%, transparent);
+.interest-line::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 4px;
+  height: 4px;
+  background: var(--interest-accent);
+  opacity: 0.52;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--interest-accent) 45%, transparent);
 }
 
-.interest-card-top {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.7rem;
-  color: color-mix(in srgb, var(--project-accent) 80%, white);
+.interest-line:hover {
+  transform: translateX(8px);
+  border-color: color-mix(in srgb, var(--interest-accent) 45%, transparent);
+}
+
+.interest-number {
+  color: color-mix(in srgb, var(--interest-accent) 72%, white);
   font: 0.42rem/1 monospace;
-  letter-spacing: 0.11em;
-}
-
-.floating-interest strong.MuiTypography-root {
-  color: var(--paper);
-  font-size: clamp(0.72rem, 1vw, 0.88rem);
-  line-height: 1.15;
-  letter-spacing: -0.025em;
-}
-
-.floating-interest small.MuiTypography-root {
-  margin-top: 0.28rem;
-  color: rgba(238, 244, 232, 0.38);
-  font: 0.4rem/1.2 monospace;
   letter-spacing: 0.08em;
 }
 
-.project-orbit-note {
-  position: absolute;
-  right: 3%;
-  bottom: 6%;
-  max-width: 13rem;
-  color: rgba(238, 244, 232, 0.32);
-  font: 0.56rem/1.55 monospace;
-  letter-spacing: 0.1em;
+.interest-line-copy {
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+}
+
+.interest-line-copy strong.MuiTypography-root {
+  color: rgba(238, 244, 232, 0.86);
+  font-size: clamp(0.8rem, 1.35vw, 1rem);
+  font-weight: 520;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+}
+
+.interest-line-copy small.MuiTypography-root {
+  overflow: hidden;
+  color: rgba(238, 244, 232, 0.27);
+  font: 0.34rem/1 monospace;
+  letter-spacing: 0.07em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.interest-state {
+  padding-right: 0.35rem;
+  color: color-mix(in srgb, var(--interest-accent) 65%, rgba(238, 244, 232, 0.3));
+  font: 0.36rem/1 monospace;
+  letter-spacing: 0.08em;
   text-align: right;
+}
+
+.interest-board-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+  padding-right: 8%;
+  color: rgba(238, 244, 232, 0.29);
+  font: 0.43rem/1.4 monospace;
+  letter-spacing: 0.12em;
 }
 
 .scroll-note {
@@ -1181,19 +1154,6 @@ img {
     transform: scale(0.82);
   }
 }
-@keyframes core-pulse {
-  0% {
-    transform: scale(0.88);
-    opacity: 0;
-  }
-  40% {
-    opacity: 0.7;
-  }
-  100% {
-    transform: scale(1.18);
-    opacity: 0;
-  }
-}
 @keyframes orbit-spin {
   to {
     transform: rotate(360deg);
@@ -1205,12 +1165,9 @@ img {
     grid-template-columns: 1fr;
     padding-top: 6rem;
   }
-  .hero-orbit {
+  .hero-interests {
     width: min(100%, 560px);
     margin: -2rem auto 0;
-  }
-  .project-orbit {
-    transform: rotateX(5deg) rotateY(-4deg) scale(0.92);
   }
   .scroll-note {
     display: none;
@@ -1280,17 +1237,29 @@ img {
   .hero-actions .MuiButton-root {
     width: 100%;
   }
-  .hero-orbit {
+  .hero-interests {
     width: 100%;
-    margin: -1rem auto -2rem;
+    margin: 1rem auto 0;
   }
-  .project-orbit {
-    transform: rotateX(4deg) rotateY(-3deg) scale(0.78);
+  .interest-board {
+    padding: 0.5rem 0;
   }
-  .floating-interest {
-    width: 136px;
+  .interest-board::before,
+  .interest-board::after {
+    right: 2%;
   }
-  .project-orbit-note {
+  .interest-board-head,
+  .interest-board-foot {
+    padding-right: 4%;
+  }
+  .interest-line {
+    width: 96%;
+    min-height: 54px;
+    margin-left: 0;
+    grid-template-columns: 1.5rem minmax(0, 1fr) auto;
+    gap: 0.45rem;
+  }
+  .interest-line-copy small.MuiTypography-root {
     display: none;
   }
   .notes-heading {

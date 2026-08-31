@@ -6,10 +6,6 @@ import * as THREE from 'three';
 const vertexShader = /* glsl */ `
   uniform float uTime;
   uniform float uOrbitPhase;
-  uniform vec2 uPointer;
-  uniform float uPointerStrength;
-  uniform float uAspect;
-  uniform float uTanHalfFov;
 
   attribute float aSize;
   attribute float aSeed;
@@ -30,29 +26,15 @@ const vertexShader = /* glsl */ `
     float curlZ = sin((p.x + p.y) * 0.38 + t + aSeed * 12.0);
     p += vec3(curlX, curlY, curlZ) * vec3(0.10, 0.07, 0.16);
 
-    // A small global tilt keeps the field feeling spatial and calm.
-    float yaw = uPointer.x * 0.15;
-    float pitch = -uPointer.y * 0.09;
-    mat2 rotateY = mat2(cos(yaw), -sin(yaw), sin(yaw), cos(yaw));
-    mat2 rotateX = mat2(cos(pitch), -sin(pitch), sin(pitch), cos(pitch));
-    p.xz = rotateY * p.xz;
-    p.yz = rotateX * p.yz;
-    p.xy += uPointer * (0.035 + aSeed * 0.035);
-
     vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
 
-    // Calculate the gravity centre in view space so it lands exactly beneath
-    // the cursor regardless of viewport ratio, camera depth or object tilt.
-    float viewDepth = max(0.1, -mvPosition.z);
-    vec2 gravityCenter = vec2(
-      uPointer.x * viewDepth * uTanHalfFov * uAspect,
-      uPointer.y * viewDepth * uTanHalfFov
-    );
+    // Keep the gravity centre and its tilted axis fixed in the first viewport.
+    // Only the particles travel around it; the orbital plane never drifts.
+    vec2 gravityCenter = vec2(0.0);
     vec2 gravityDelta = mvPosition.xy - gravityCenter;
     float gravityDistance = length(gravityDelta);
     float gravityFalloff = 1.0 - smoothstep(0.8, 5.4, gravityDistance);
-    float orbitStrength = gravityFalloff * uPointerStrength;
-    float orbitAngle = uOrbitPhase * orbitStrength;
+    float orbitAngle = uOrbitPhase * gravityFalloff;
 
     // Rotate around a tilted 3D axis rather than an axis perpendicular to the
     // screen. Its projected path is an ellipse, with part of the movement
@@ -180,10 +162,6 @@ export default function LightningCloudsWebGL() {
       uniforms: {
         uTime: { value: 0 },
         uOrbitPhase: { value: 0 },
-        uPointer: { value: new THREE.Vector2() },
-        uPointerStrength: { value: 0 },
-        uAspect: { value: initialWidth / initialHeight },
-        uTanHalfFov: { value: Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) },
       },
       vertexShader,
       fragmentShader,
@@ -198,79 +176,34 @@ export default function LightningCloudsWebGL() {
     particles.scale.setScalar(isCompact ? 0.88 : 1);
     scene.add(particles);
 
-    const targetPointer = new THREE.Vector2();
-    const currentPointer = new THREE.Vector2();
     const clock = new THREE.Clock();
     let animationFrame = 0;
     let orbitPhase = 0;
-    let targetPointerStrength = 1;
-    let currentPointerStrength = 1;
-
-    const handlePointerMove = (event: PointerEvent) => {
-      if (event.pointerType === 'touch') return;
-      const bounds = container.getBoundingClientRect();
-      targetPointer.set(
-        ((event.clientX - bounds.left) / bounds.width) * 2 - 1,
-        -((event.clientY - bounds.top) / bounds.height) * 2 + 1
-      );
-      targetPointerStrength = 1;
-    };
-
-    const handlePointerLeave = () => {
-      targetPointer.set(0, 0);
-      targetPointerStrength = 1;
-    };
-
-    const handleWindowBlur = () => {
-      targetPointer.set(0, 0);
-      targetPointerStrength = 1;
-    };
-
-    const handleVisibilityChange = () => {
-      if (document.hidden) handleWindowBlur();
-    };
 
     const handleResize = () => {
       const width = container.clientWidth || window.innerWidth;
       const height = container.clientHeight || window.innerHeight;
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
-      material.uniforms.uAspect.value = camera.aspect;
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.65));
       renderer.setSize(width, height);
     };
 
     const render = () => {
       const delta = Math.min(clock.getDelta(), 0.05);
-      currentPointer.lerp(targetPointer, 0.085);
-      currentPointerStrength += (targetPointerStrength - currentPointerStrength) * 0.09;
-      orbitPhase += delta * 0.46 * currentPointerStrength;
-      material.uniforms.uPointer.value.copy(currentPointer);
-      material.uniforms.uPointerStrength.value = currentPointerStrength;
+      orbitPhase += delta * 0.46;
       material.uniforms.uOrbitPhase.value = orbitPhase;
       material.uniforms.uTime.value = clock.elapsedTime;
-
-      if (!reducedMotion) {
-        particles.rotation.y = 0.08 + Math.sin(clock.elapsedTime * 0.055) * 0.035;
-      }
 
       renderer.render(scene, camera);
       if (!reducedMotion) animationFrame = requestAnimationFrame(render);
     };
 
-    window.addEventListener('pointermove', handlePointerMove, { passive: true });
-    document.documentElement.addEventListener('pointerleave', handlePointerLeave);
-    window.addEventListener('blur', handleWindowBlur);
-    document.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('resize', handleResize);
     render();
 
     return () => {
       cancelAnimationFrame(animationFrame);
-      window.removeEventListener('pointermove', handlePointerMove);
-      document.documentElement.removeEventListener('pointerleave', handlePointerLeave);
-      window.removeEventListener('blur', handleWindowBlur);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('resize', handleResize);
       geometry.dispose();
       material.dispose();

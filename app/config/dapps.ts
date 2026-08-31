@@ -37,11 +37,10 @@ export const dapps: DApp[] = [
     nameKey: 'dapp.rustPath.name',
     descriptionKey: 'dapp.rustPath.description',
     imageUrl: '/covers/rust-path.png',
-    url: 'https://rust-path-course.zetazhang2001.chatgpt.site',
+    url: '/tools/rust-path/',
     tags: ['Rust', 'Learning', 'Interactive', 'Compiler'],
     status: 'live',
     localeAware: false,
-    external: true,
   },
   {
     id: 'prompter-one',

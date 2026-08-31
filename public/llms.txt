@@ -18,6 +18,7 @@ Location: Hong Kong
 ## Current projects
 
 - [PrompterOne](https://prompterone.app): A teleprompter that follows a speaker's voice and supports recording and remote control.
+- [The Rust Path](https://zeta.lol/tools/rust-path/): A 31-lesson interactive Rust course built around learning with compiler feedback.
 - [Mechanism Lab](https://chainlab.zeta.lol): Interactive lessons for understanding onchain mechanisms by manipulating them.
 - [Soundcraft](https://soundcraft-electronic-music-lab.zetazhang2001.chatgpt.site): An electronic-music learning lab built around making and hearing sound.
 

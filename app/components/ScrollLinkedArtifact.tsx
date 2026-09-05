@@ -109,6 +109,9 @@ export default function ScrollLinkedArtifact() {
     let progress = window.scrollY;
     let target = progress;
     let disposed = false;
+    let maxScroll = 0;
+    let viewportWidth = 1;
+    let viewportHeight = 1;
     type Pose = {
       scroll: number;
       x: number;
@@ -125,18 +128,25 @@ export default function ScrollLinkedArtifact() {
 
     function measure() {
       if (!container || disposed) return;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      if (!width || !height) return;
+      viewportWidth = width;
+      viewportHeight = height;
       camera.aspect = width / Math.max(1, height);
       camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
+      // CSS owns the viewport-sized box. Resize only the drawing buffer so
+      // canvas intrinsic dimensions cannot feed back into document overflow.
+      renderer.setSize(width, height, false);
       const definitions = [
         { name: 'idea', angle: -0.4, solid: 0.8, spread: 0 },
         { name: 'make', angle: 0.55, solid: 1, spread: 0 },
         { name: 'notes', angle: -0.8, solid: 0.16, spread: 1 },
         { name: 'signature', angle: 0, solid: 1, spread: 0 },
       ];
-      const maxScroll = Math.max(1, document.documentElement.scrollHeight - height);
+      // Use the content's layout box, never scrollHeight (which includes
+      // transformed visual overflow and can grow as an animation moves).
+      maxScroll = Math.max(0, (home ? home.offsetTop + home.offsetHeight : height) - height);
       const anchors = definitions.flatMap((definition, index) => {
         const element = document.querySelector<HTMLElement>(
           '[data-story-anchor="' + definition.name + '"]'
@@ -193,7 +203,7 @@ export default function ScrollLinkedArtifact() {
       draw(0);
     }
     function updateScroll() {
-      target = window.scrollY;
+      target = THREE.MathUtils.clamp(window.scrollY, 0, maxScroll);
       if (reduced) draw(0);
     }
     function draw(time: number) {
@@ -219,16 +229,17 @@ export default function ScrollLinkedArtifact() {
       const x = mix(from.x, to.x);
       // Document coordinates keep the object physically attached to the slots in the page.
       const holdingHero = heroHoldEnd > 0 && progress <= heroHoldEnd;
+      const scroll = THREE.MathUtils.clamp(window.scrollY, 0, maxScroll);
       const y = holdingHero
-        ? stops[0].y - Math.min(window.scrollY, heroHoldStart)
-        : mix(from.y, to.y) - window.scrollY;
+        ? stops[0].y - Math.min(scroll, heroHoldStart)
+        : mix(from.y, to.y) - scroll;
       const size = mix(from.size, to.size);
       axis.position.set(
-        (x / window.innerWidth - 0.5) * worldHeight * camera.aspect,
-        (0.5 - y / window.innerHeight) * worldHeight,
+        (x / viewportWidth - 0.5) * worldHeight * camera.aspect,
+        (0.5 - y / viewportHeight) * worldHeight,
         0
       );
-      axis.scale.setScalar(((size / window.innerHeight) * worldHeight) / 2.8);
+      axis.scale.setScalar(((size / viewportHeight) * worldHeight) / 2.8);
       const spread = mix(from.spread, to.spread);
       const introduction =
         reduced || progress > 100 ? 1 : THREE.MathUtils.smoothstep(elapsed, 0, 0.7);
@@ -245,12 +256,16 @@ export default function ScrollLinkedArtifact() {
       if (home) {
         home.style.setProperty(
           '--hero-hold-offset',
-          `${heroHoldEnd > 0 ? THREE.MathUtils.clamp(window.scrollY - heroHoldStart, 0, 160) : 0}px`
+          `${heroHoldEnd > 0 ? THREE.MathUtils.clamp(scroll - heroHoldStart, 0, 160) : 0}px`
         );
         home.dataset.storyPhase = reduced ? 'idea' : phase;
         home.style.setProperty(
           '--story-progress',
-          String(reduced ? 0 : progress / Math.max(1, stops[stops.length - 1].scroll))
+          String(
+            reduced
+              ? 0
+              : THREE.MathUtils.clamp(progress / Math.max(1, stops[stops.length - 1].scroll), 0, 1)
+          )
         );
       }
       renderer.render(scene, camera);

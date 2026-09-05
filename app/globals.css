@@ -134,6 +134,10 @@ a {
   position: relative;
   z-index: 1;
 }
+.personal-home {
+  /* Bound decorative transforms without creating a nested scroll container. */
+  overflow: clip;
+}
 .personal-home::before {
   content: '';
   position: fixed;
@@ -373,6 +377,8 @@ a {
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  overflow: hidden;
+  contain: strict;
 }
 .scroll-artifact-canvas canvas {
   display: block;

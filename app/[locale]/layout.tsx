@@ -2,6 +2,7 @@ import '../globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from '../contexts/ThemeProvider';
+import StyleRegistry from '../contexts/StyleRegistry';
 import AppLayout from '../components/AppLayout';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
@@ -78,9 +79,11 @@ export default async function LocaleLayout({
     <html lang={validLocale} data-scroll-behavior="smooth">
       <body className={inter.className} style={{ minHeight: '100vh', minWidth: '100%' }}>
         <NextIntlClientProvider messages={messages} locale={validLocale}>
-          <ThemeProvider>
-            <AppLayout locale={validLocale}>{children}</AppLayout>
-          </ThemeProvider>
+          <StyleRegistry>
+            <ThemeProvider>
+              <AppLayout locale={validLocale}>{children}</AppLayout>
+            </ThemeProvider>
+          </StyleRegistry>
         </NextIntlClientProvider>
       </body>
     </html>

@@ -5,39 +5,31 @@ import { motion } from 'framer-motion';
 import { DApp, dapps } from '../config/dapps';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import ArrowOutwardRounded from '@mui/icons-material/ArrowOutwardRounded';
 
 export default function DAppsList() {
   const locale = useLocale();
   const t = useTranslations();
-  const router = useRouter();
-
-  const openTool = (dapp: DApp) => {
-    if (dapp.external) {
-      window.location.assign(dapp.url);
-      return;
-    }
-
-    router.push(dapp.localeAware === false ? dapp.url : `/${locale}${dapp.url}`);
-  };
 
   return (
     <Box className="lab-projects">
       {dapps.map((dapp: DApp, index: number) => (
-        <motion.article
+        <motion.a
           key={dapp.id}
-          initial={{ opacity: 0, y: 28 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: index * 0.1 }}
           className="lab-project"
-          onClick={() => openTool(dapp)}
-          onKeyDown={event => event.key === 'Enter' && openTool(dapp)}
-          role="link"
-          tabIndex={0}
+          href={dapp.external || dapp.localeAware === false ? dapp.url : `/${locale}${dapp.url}`}
         >
           <Box className="lab-project-media">
-            <Image src={dapp.imageUrl} alt="" fill sizes="(max-width: 700px) 100vw, 50vw" />
+            <Image
+              src={dapp.imageUrl}
+              alt=""
+              fill
+              sizes="(max-width: 600px) 100vw, 50vw"
+              loading={index === 0 ? 'eager' : 'lazy'}
+            />
             <Box className="lab-project-overlay" />
             <span className="lab-project-index">TOOL / {String(index + 1).padStart(2, '0')}</span>
           </Box>
@@ -56,7 +48,7 @@ export default function DAppsList() {
               <ArrowOutwardRounded />
             </Box>
           </Box>
-        </motion.article>
+        </motion.a>
       ))}
     </Box>
   );

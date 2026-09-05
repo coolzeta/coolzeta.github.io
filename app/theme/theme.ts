@@ -5,9 +5,9 @@ import { createTheme } from '@mui/material/styles';
 // 定义颜色
 export const colors = {
   primary: {
-    main: '#B8FF61',
-    light: '#D5FFA1',
-    dark: '#7FDC9A',
+    main: '#C1DC91',
+    light: '#D9E9BC',
+    dark: '#A0BA72',
   },
   secondary: {
     main: '#FFFFFF', // 白色
@@ -15,11 +15,11 @@ export const colors = {
     dark: '#BDBDBD', // 浅灰
   },
   background: {
-    default: '#080B09',
-    paper: '#101510',
+    default: '#141513',
+    paper: '#1C1E1A',
   },
   text: {
-    primary: '#EEF4E8',
+    primary: '#F0EEE7',
     secondary: 'rgba(255, 255, 255, 0.7)', // 半透明白
   },
   border: {
@@ -95,14 +95,14 @@ export const themeOptions = {
       styleOverrides: {
         root: {
           textTransform: 'none',
-          borderRadius: '8px',
+          borderRadius: '3px',
         },
         contained: {
-          background: `linear-gradient(45deg, ${colors.primary.main} 30%, ${colors.primary.light} 90%)`,
+          background: colors.primary.main,
           '&:hover': {
-            background: `linear-gradient(45deg, ${colors.primary.light} 30%, ${colors.primary.main} 90%)`,
+            background: colors.primary.light,
           },
-          boxShadow: '0 3px 5px 2px rgba(76, 175, 80, .3)',
+          boxShadow: 'none',
         },
       },
     },

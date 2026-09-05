@@ -6,10 +6,12 @@ import GitHub from '@mui/icons-material/GitHub';
 import LinkedIn from '@mui/icons-material/LinkedIn';
 import { motion } from 'framer-motion';
 import { useLocale, useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
-import LightningCloudsWebGL from '../components/LightningCloudsWebGL';
+import NextLink from 'next/link';
+import dynamic from 'next/dynamic';
 import ProjectOrbit from '../components/ProjectOrbit';
-import ScrollLinkedArtifact from '../components/ScrollLinkedArtifact';
+const ScrollLinkedArtifact = dynamic(() => import('../components/ScrollLinkedArtifact'), {
+  ssr: false,
+});
 import { AUTHOR_ID, SITE_URL, SOCIAL_LINKS, localePath, safeJsonLd } from '../seo';
 
 const notes = [
@@ -66,9 +68,6 @@ const socialLinks = [
 export default function Home() {
   const t = useTranslations('home.personal');
   const locale = useLocale() as 'zh' | 'en';
-  const router = useRouter();
-
-  const go = (path: string) => router.push(`/${locale}${path}`);
   const profileDescription =
     locale === 'zh'
       ? 'Zeta Zhang（coolzeta），居住在香港的独立开发者与产品创作者，制作 AI 工具、互动学习实验和链上产品。'
@@ -130,18 +129,11 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(structuredData) }}
       />
-      <Box className="ambient-canvas" aria-hidden="true">
-        <LightningCloudsWebGL />
-      </Box>
-      <Box className="scroll-artifact-layer" aria-hidden="true">
-        <ScrollLinkedArtifact />
-      </Box>
-
       <Container maxWidth="lg" className="personal-shell">
         <Box component="section" className="personal-hero">
           <motion.div
             className="hero-copy"
-            initial={{ opacity: 0, y: 24 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
@@ -151,9 +143,10 @@ export default function Home() {
             </Stack>
 
             <Typography component="h1" className="personal-title">
-              {t('hello')}
-              <br />
-              <Box component="span">{t('name')}</Box>
+              <Box component="small">{t('hello')}</Box>
+              <Box component="span">
+                Zeta<span className="name-period">.</span>
+              </Box>
             </Typography>
 
             <Typography className="personal-intro">{t('intro')}</Typography>
@@ -162,23 +155,36 @@ export default function Home() {
               <Button
                 variant="contained"
                 endIcon={<ArrowOutwardRounded />}
-                onClick={() => go('/apps/blog')}
+                component={NextLink}
+                href={`/${locale}/apps/blog`}
               >
                 {t('read')}
               </Button>
-              <Button variant="text" onClick={() => go('/apps/playground')}>
+              <Button variant="text" component={NextLink} href={`/${locale}/apps/playground`}>
                 {t('play')}
               </Button>
             </Stack>
           </motion.div>
 
           <motion.div
-            className="hero-interests"
-            initial={{ opacity: 0, y: 22 }}
+            className="hero-art"
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.1, delay: 0.15 }}
           >
-            <ProjectOrbit locale={locale} />
+            <Box className="artifact-stage" aria-hidden="true">
+              <span className="stage-cross stage-cross-top">+</span>
+              <span className="stage-cross stage-cross-bottom">+</span>
+              <span className="artifact-fallback">Z</span>
+              <ScrollLinkedArtifact />
+            </Box>
+            <Box className="artifact-caption">
+              <span>Z / 01</span>
+              <span>
+                {locale === 'zh' ? '换个角度，看点新东西。' : 'A different angle on things.'}
+              </span>
+              <span aria-hidden="true">↘</span>
+            </Box>
           </motion.div>
 
           <Box className="scroll-note" aria-hidden="true">
@@ -187,10 +193,14 @@ export default function Home() {
           </Box>
         </Box>
 
+        <Box component="section" className="hero-interests">
+          <ProjectOrbit locale={locale} />
+        </Box>
+
         <Box component="section" className="now-section">
           <Box className="section-index">01 / NOW</Box>
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-80px' }}
             className="now-grid"
@@ -217,7 +227,7 @@ export default function Home() {
                   status: t('statusGrowing'),
                   text: t('mechanismLab'),
                   tags: ['Interactive', 'Onchain', 'Learn by doing'],
-                  url: 'https://chainlab.zeta.lol/zh/',
+                  url: `https://chainlab.zeta.lol/${locale}/`,
                 },
                 {
                   index: '03',
@@ -269,24 +279,25 @@ export default function Home() {
                 {t('notesTitle')}
               </Typography>
             </Box>
-            <Button endIcon={<ArrowOutwardRounded />} onClick={() => go('/apps/blog')}>
+            <Button
+              endIcon={<ArrowOutwardRounded />}
+              component={NextLink}
+              href={`/${locale}/apps/blog`}
+            >
               {t('allNotes')}
             </Button>
           </Box>
 
           <Box className="notes-list">
             {notes.map((note, index) => (
-              <motion.article
+              <motion.a
                 key={note.slug}
-                initial={{ opacity: 0, y: 24 }}
+                initial={false}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ delay: index * 0.08 }}
                 className="note-row"
-                onClick={() => go(`/apps/blog/${note.slug}`)}
-                tabIndex={0}
-                role="link"
-                onKeyDown={event => event.key === 'Enter' && go(`/apps/blog/${note.slug}`)}
+                href={`/${locale}/apps/blog/${note.slug}`}
               >
                 <Box className="note-meta">
                   <span>{note.date}</span>
@@ -297,7 +308,7 @@ export default function Home() {
                   <Typography>{note.description[locale]}</Typography>
                 </Box>
                 <ArrowOutwardRounded className="note-arrow" />
-              </motion.article>
+              </motion.a>
             ))}
           </Box>
         </Box>

@@ -17,6 +17,7 @@ interface BlogPost {
   description: string;
   date: string;
   tags: string[];
+  image?: string;
 }
 
 interface BlogPageProps {
@@ -39,6 +40,7 @@ async function getBlogPosts(locale: string): Promise<BlogPost[]> {
             description: data.description,
             date: data.date,
             tags: data.tags,
+            image: data.image,
           };
         })
     );

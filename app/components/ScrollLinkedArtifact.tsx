@@ -2,256 +2,152 @@
 
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
-const ACID = new THREE.Color('#b8ff61');
-
-function mobiusPoint(angle: number, across: number, radius: number) {
-  const halfTwist = angle * 0.5;
-  const reach = radius + across * Math.cos(halfTwist);
-  return new THREE.Vector3(
-    reach * Math.cos(angle),
-    reach * Math.sin(angle),
-    across * Math.sin(halfTwist)
-  );
-}
-
-function createMobiusGeometry(segments: number, widthSegments: number) {
-  const positions: number[] = [];
-  const uvs: number[] = [];
-  const indices: number[] = [];
-  const radius = 1.12;
-  const width = 0.72;
-
-  for (let segment = 0; segment <= segments; segment += 1) {
-    const u = segment / segments;
-    const angle = u * Math.PI * 2;
-
-    for (let strip = 0; strip <= widthSegments; strip += 1) {
-      const v = strip / widthSegments;
-      const point = mobiusPoint(angle, (v - 0.5) * width, radius);
-      positions.push(point.x, point.y, point.z);
-      uvs.push(u, v);
-    }
-  }
-
-  const row = widthSegments + 1;
-  for (let segment = 0; segment < segments; segment += 1) {
-    for (let strip = 0; strip < widthSegments; strip += 1) {
-      const a = segment * row + strip;
-      const b = a + row;
-      indices.push(a, b, a + 1, b, b + 1, a + 1);
-    }
-  }
-
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-  geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
-  geometry.setIndex(indices);
-  geometry.computeVertexNormals();
-  geometry.center();
-  return geometry;
-}
-
-function createEdgeGeometry(segments: number) {
-  const points: THREE.Vector3[] = [];
-  const radius = 1.12;
-  const edge = 0.36;
-
-  // A Möbius strip has one continuous edge, completed over two turns.
-  for (let index = 0; index <= segments; index += 1) {
-    const angle = (index / segments) * Math.PI * 4;
-    points.push(mobiusPoint(angle, edge, radius));
-  }
-
-  return new THREE.BufferGeometry().setFromPoints(points);
-}
-
+/** A bevelled initial, lit as a physical object in a photographic studio. */
 export default function ScrollLinkedArtifact() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true,
+        powerPreference: 'low-power',
+      });
+    } catch {
+      return; // The typographic initial remains visible when WebGL is unavailable.
+    }
 
-    const compact = window.innerWidth < 720;
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const initialWidth = container.clientWidth || window.innerWidth;
-    const initialHeight = container.clientHeight || window.innerHeight;
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(32, initialWidth / initialHeight, 0.1, 30);
-    camera.position.set(0, 0, compact ? 8.4 : 6.8);
-
-    const renderer = new THREE.WebGLRenderer({
-      alpha: true,
-      antialias: true,
-      powerPreference: 'high-performance',
-    });
+    const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 30);
+    camera.position.set(0, 0, 7.8);
     renderer.setClearAlpha(0);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, compact ? 1.1 : 1.5));
-    renderer.setSize(initialWidth, initialHeight);
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.12;
+    renderer.toneMappingExposure = 1.25;
     container.appendChild(renderer.domElement);
 
-    const root = new THREE.Group();
-    const fixedAxis = new THREE.Group();
-    const sculpture = new THREE.Group();
-    fixedAxis.rotation.set(0.72, -0.18, -0.46);
-    fixedAxis.add(sculpture);
-    root.add(fixedAxis);
-    scene.add(root);
+    const room = new RoomEnvironment();
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    const environment = pmrem.fromScene(room, 0.025);
+    scene.environment = environment.texture;
+    room.dispose();
+    pmrem.dispose();
 
-    const ribbonGeometry = createMobiusGeometry(compact ? 120 : 190, compact ? 8 : 12);
-    const ribbonMaterial = new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color('#7d8d81'),
-      emissive: new THREE.Color('#122119'),
-      emissiveIntensity: 0.16,
-      metalness: 0.92,
-      roughness: 0.2,
-      clearcoat: 1,
-      clearcoatRoughness: 0.14,
-      iridescence: 0.62,
-      iridescenceIOR: 1.35,
-      iridescenceThicknessRange: [120, 360],
-      side: THREE.DoubleSide,
+    const outline = new THREE.Shape();
+    outline.moveTo(-1.05, 1.28);
+    outline.lineTo(1.05, 1.28);
+    outline.lineTo(1.05, 0.87);
+    outline.lineTo(-0.37, -0.8);
+    outline.lineTo(1.05, -0.8);
+    outline.lineTo(1.05, -1.28);
+    outline.lineTo(-1.05, -1.28);
+    outline.lineTo(-1.05, -0.87);
+    outline.lineTo(0.37, 0.8);
+    outline.lineTo(-1.05, 0.8);
+    outline.closePath();
+    const geometry = new THREE.ExtrudeGeometry(outline, {
+      depth: 0.52,
+      bevelEnabled: true,
+      bevelSegments: 8,
+      steps: 1,
+      bevelSize: 0.09,
+      bevelThickness: 0.09,
+      curveSegments: 16,
     });
-    const ribbon = new THREE.Mesh(ribbonGeometry, ribbonMaterial);
-    sculpture.add(ribbon);
-
-    const edgeGeometry = createEdgeGeometry(compact ? 240 : 380);
-    const edgeMaterial = new THREE.LineBasicMaterial({
-      color: ACID,
-      transparent: true,
-      opacity: 0.62,
-      blending: THREE.AdditiveBlending,
+    geometry.center();
+    const material = new THREE.MeshPhysicalMaterial({
+      color: '#c7c9c2',
+      metalness: 1,
+      roughness: 0.23,
+      clearcoat: 0.7,
+      clearcoatRoughness: 0.18,
+      envMapIntensity: 1.35,
     });
-    const edge = new THREE.Line(edgeGeometry, edgeMaterial);
-    sculpture.add(edge);
+    const initial = new THREE.Mesh(geometry, material);
+    const axis = new THREE.Group();
+    axis.rotation.set(0.15, 0, -0.19);
+    axis.add(initial);
+    scene.add(axis);
+    const light = new THREE.DirectionalLight('#edffd1', 3);
+    light.position.set(-3, 4, 5);
+    scene.add(light);
 
-    scene.add(
-      new THREE.HemisphereLight(new THREE.Color('#f2f7ee'), new THREE.Color('#020403'), 1.65)
-    );
-    const keyLight = new THREE.PointLight(new THREE.Color('#efffe5'), 19, 11, 1.45);
-    keyLight.position.set(2.8, 2.4, 3.5);
-    scene.add(keyLight);
-    const greenLight = new THREE.PointLight(ACID, 13, 9, 1.7);
-    greenLight.position.set(-2.6, -1.6, 1.2);
-    scene.add(greenLight);
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let reduced = motionPreference.matches;
+    let frame = 0;
+    let inView = true;
+    let previous = 0;
+    let elapsed = 0;
+    let progress = 0;
+    let target = 0;
 
-    const desktopPath = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(3.0, -0.72, -1.25),
-      new THREE.Vector3(2.25, 0.62, -0.8),
-      new THREE.Vector3(-2.35, 0.15, -0.45),
-      new THREE.Vector3(2.3, -0.12, -0.9),
-      new THREE.Vector3(-0.55, -0.05, 0.08),
-    ]);
-    const mobilePath = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(1.45, -2.05, -2.5),
-      new THREE.Vector3(1.1, 1.55, -2.25),
-      new THREE.Vector3(-1.15, -1.25, -2.05),
-      new THREE.Vector3(1.05, 1.05, -2.4),
-      new THREE.Vector3(-0.25, -0.65, -2.05),
-    ]);
-    const path = compact ? mobilePath : desktopPath;
-    const pathPosition = new THREE.Vector3();
-    const pointerTarget = new THREE.Vector2();
-    const pointerCurrent = new THREE.Vector2();
-    const clock = new THREE.Clock();
-    let targetProgress = 0;
-    let currentProgress = 0;
-    let scrollEnergy = 0;
-    let previousScrollY = window.scrollY;
-    let animationFrame = 0;
-    let framePending = false;
-    let visible = !document.hidden;
-
-    function requestRender() {
-      if (framePending || reducedMotion || !visible) return;
-      framePending = true;
-      animationFrame = requestAnimationFrame(render);
-    }
-
-    function updateScrollProgress() {
-      const scrollable = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      const nextScrollY = window.scrollY;
-      targetProgress = THREE.MathUtils.clamp(nextScrollY / scrollable, 0, 1);
-      scrollEnergy = Math.min(1, scrollEnergy + Math.abs(nextScrollY - previousScrollY) / 220);
-      previousScrollY = nextScrollY;
-      if (reducedMotion) render();
-    }
-
-    function handlePointerMove(event: PointerEvent) {
-      if (event.pointerType === 'touch') return;
-      pointerTarget.set(
-        event.clientX / window.innerWidth - 0.5,
-        event.clientY / window.innerHeight - 0.5
-      );
-    }
-
-    function handleResize() {
-      const width = containerRef.current?.clientWidth || window.innerWidth;
-      const height = containerRef.current?.clientHeight || window.innerHeight;
-      camera.aspect = width / height;
+    function measure() {
+      if (!container) return;
+      const { width, height } = container.getBoundingClientRect();
+      camera.aspect = width / Math.max(1, height);
       camera.updateProjectionMatrix();
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, compact ? 1.1 : 1.5));
       renderer.setSize(width, height);
-      updateScrollProgress();
+      updateScroll();
+      draw(0);
     }
-
-    function handleVisibility() {
-      visible = !document.hidden;
-      if (visible) {
-        clock.getDelta();
-        requestRender();
-      }
+    function updateScroll() {
+      const rect = container!.getBoundingClientRect();
+      target = THREE.MathUtils.clamp(-rect.top / window.innerHeight, 0, 1);
     }
-
-    function render() {
-      framePending = false;
-      if (!visible) return;
-
-      const delta = Math.min(clock.getDelta(), 0.05);
-      const smoothing = reducedMotion ? 1 : 1 - Math.pow(0.0008, delta);
-      currentProgress += (targetProgress - currentProgress) * smoothing;
-      pointerCurrent.lerp(pointerTarget, reducedMotion ? 1 : 0.035);
-      scrollEnergy = THREE.MathUtils.lerp(scrollEnergy, 0, Math.min(1, delta * 2.6));
-      path.getPointAt(currentProgress, pathPosition);
-
-      root.position.copy(pathPosition);
-      root.scale.setScalar(compact ? 0.84 : 0.98 + Math.sin(currentProgress * Math.PI) * 0.12);
-
-      // A single, unchanging diagonal axis keeps the motion calm.
-      sculpture.rotation.y = 0.35 + currentProgress * Math.PI * 1.05 + clock.elapsedTime * 0.025;
-      ribbonMaterial.emissiveIntensity = 0.16 + scrollEnergy * 0.3;
-      edgeMaterial.opacity = 0.56 + scrollEnergy * 0.25;
-      // Pointer movement only sweeps the highlight across the surface.
-      keyLight.position.x = 2.8 + pointerCurrent.x * 2.4;
-      keyLight.position.y = 2.4 - pointerCurrent.y * 1.8;
-
+    function draw(time: number) {
+      cancelAnimationFrame(frame);
+      const delta = previous && time ? Math.min((time - previous) / 1000, 0.05) : 0;
+      previous = time;
+      if (!reduced) elapsed += delta;
+      progress += (target - progress) * (1 - Math.exp(-delta * 5));
+      // Limited angular travel preserves the silhouette around one fixed axis.
+      initial.rotation.y = reduced
+        ? -0.4
+        : -0.4 + Math.sin(elapsed * 0.16) * 0.12 + progress * 0.65;
+      axis.position.y = reduced ? 0 : progress * 0.15;
       renderer.render(scene, camera);
-      requestRender();
+      if (!reduced && inView && !document.hidden) frame = requestAnimationFrame(draw);
     }
-
-    updateScrollProgress();
-    window.addEventListener('scroll', updateScrollProgress, { passive: true });
-    window.addEventListener('pointermove', handlePointerMove, { passive: true });
-    window.addEventListener('resize', handleResize);
-    document.addEventListener('visibilitychange', handleVisibility);
-    render();
+    function resume() {
+      previous = 0;
+      draw(0);
+    }
+    function onPreference() {
+      reduced = motionPreference.matches;
+      resume();
+    }
+    const resize = new ResizeObserver(measure);
+    resize.observe(container);
+    const visibility = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      if (inView) resume();
+      else cancelAnimationFrame(frame);
+    });
+    visibility.observe(container);
+    window.addEventListener('scroll', updateScroll, { passive: true });
+    document.addEventListener('visibilitychange', resume);
+    motionPreference.addEventListener('change', onPreference);
+    measure();
+    container.dataset.ready = 'true';
 
     return () => {
-      cancelAnimationFrame(animationFrame);
-      window.removeEventListener('scroll', updateScrollProgress);
-      window.removeEventListener('pointermove', handlePointerMove);
-      window.removeEventListener('resize', handleResize);
-      document.removeEventListener('visibilitychange', handleVisibility);
-      ribbonGeometry.dispose();
-      ribbonMaterial.dispose();
-      edgeGeometry.dispose();
-      edgeMaterial.dispose();
+      cancelAnimationFrame(frame);
+      resize.disconnect();
+      visibility.disconnect();
+      window.removeEventListener('scroll', updateScroll);
+      document.removeEventListener('visibilitychange', resume);
+      motionPreference.removeEventListener('change', onPreference);
+      geometry.dispose();
+      material.dispose();
+      environment.dispose();
       renderer.dispose();
       renderer.domElement.remove();
+      delete container.dataset.ready;
     };
   }, []);
 

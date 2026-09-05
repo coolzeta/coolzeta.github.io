@@ -9,9 +9,7 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
         color: 'text.primary',
       }}
     >
-      <Box component="main" sx={{ width: '100%' }}>
-        {children}
-      </Box>
+      <Box sx={{ width: '100%' }}>{children}</Box>
     </Box>
   );
 }

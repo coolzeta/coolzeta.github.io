@@ -1,192 +1,90 @@
 'use client';
 
-import {
-  Box,
-  IconButton,
-  Toolbar,
-  AppBar,
-  Typography,
-  Button,
-  Menu,
-  MenuItem,
-} from '@mui/material';
-import { Home as HomeIcon, Language as LanguageIcon } from '@mui/icons-material';
-import { useRouter, usePathname } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { Box, Button, Menu, MenuItem } from '@mui/material';
+import NextLink from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { MotionConfig } from 'framer-motion';
 
-interface AppLayoutProps {
+export default function AppLayout({
+  children,
+  locale,
+}: {
   children: React.ReactNode;
   locale: string;
-}
-
-export default function AppLayout({ children, locale }: AppLayoutProps) {
-  const router = useRouter();
+}) {
   const pathname = usePathname();
+  const router = useRouter();
   const t = useTranslations();
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [scrolled, setScrolled] = useState(false);
-  const isHomePage =
-    pathname === `/${locale}` || pathname === '/' || pathname === `/en` || pathname === `/zh`;
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const offset = window.scrollY;
-      setScrolled(offset > 50);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const handleHome = () => router.push(`/${locale}`);
-
-  const handleLanguageClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleLanguageClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleLanguageSwitch = (newLocale: string) => {
-    const currentPath = pathname;
-    let newPath;
-
-    if (currentPath === '/') {
-      newPath = `/${newLocale}`;
-    } else if (currentPath.startsWith('/en') || currentPath.startsWith('/zh')) {
-      newPath = currentPath.replace(/^\/(en|zh)/, `/${newLocale}`);
-    } else {
-      newPath = `/${newLocale}`;
-    }
-
-    router.replace(newPath);
-    handleLanguageClose();
+  const [anchor, setAnchor] = useState<HTMLElement | null>(null);
+  const home = pathname === '/' + locale;
+  const switchLanguage = (language: string) => {
+    router.replace(pathname.replace(/^\/(en|zh)(?=\/|$)/, '/' + language));
+    setAnchor(null);
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <AppBar
-        position="fixed"
-        color="transparent"
-        elevation={scrolled ? 4 : 0}
-        sx={{
-          bgcolor: scrolled ? 'rgba(8, 11, 9, 0.74)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(18px)' : 'none',
-          transition: 'all 0.3s ease-in-out',
-          borderBottom: scrolled ? '1px solid rgba(184, 255, 97, 0.12)' : 'none',
-          zIndex: theme => theme.zIndex.appBar,
-          boxShadow: 'none',
-        }}
-      >
-        <Toolbar
-          sx={{
-            maxWidth: 1200,
-            minHeight: { xs: 58, sm: 64 },
-            width: '100%',
-            mx: 'auto',
-            px: { xs: 2, md: 3 },
-          }}
-        >
-          {!isHomePage && (
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleHome}
-              sx={{ mr: 2, color: 'primary.main' }}
-              aria-label="go back"
+    <MotionConfig reducedMotion="user">
+      <Box className="site-layout">
+        <a href="#main-content" className="skip-link">
+          {locale === 'zh' ? '跳到正文' : 'Skip to content'}
+        </a>
+        <header className="site-header">
+          <nav className="site-nav" aria-label={locale === 'zh' ? '主导航' : 'Main navigation'}>
+            <NextLink
+              href={'/' + locale}
+              className="wordmark"
+              aria-label={locale === 'zh' ? 'Zeta 首页' : 'Zeta home'}
             >
-              <HomeIcon />
-            </IconButton>
-          )}
-
-          {isHomePage && (
-            <Typography
-              variant="h6"
-              sx={{
-                mr: { xs: 1, sm: 3 },
-                fontWeight: 700,
-                color: '#b8ff61',
-                letterSpacing: '-0.05em',
-                fontFamily: 'monospace',
-              }}
+              zeta<span>✳</span>
+            </NextLink>
+            <div className="nav-links">
+              <NextLink
+                href={'/' + locale + '/apps/blog'}
+                aria-current={pathname.includes('/apps/blog') ? 'page' : undefined}
+              >
+                {t('nav.blog')}
+              </NextLink>
+              <NextLink
+                href={'/' + locale + '/apps/playground'}
+                aria-current={pathname.includes('/apps/playground') ? 'page' : undefined}
+              >
+                {t('nav.playground')}
+              </NextLink>
+            </div>
+            <Button
+              className="language-button"
+              onClick={event => setAnchor(event.currentTarget)}
+              aria-haspopup="menu"
+              aria-expanded={Boolean(anchor)}
+              aria-label={locale === 'zh' ? '切换语言' : 'Change language'}
             >
-              zeta/
-            </Typography>
-          )}
-
-          <Button
-            color="primary"
-            onClick={() => router.push(`/${locale}/apps/blog`)}
-            sx={{
-              mx: { xs: 0, sm: 0.5 },
-              minWidth: { xs: 56, sm: 64 },
-              px: { xs: 1, sm: 1.5 },
-              fontSize: { xs: '.75rem', sm: '.875rem' },
-              color: 'rgba(238,244,232,.68)',
-              borderRadius: '99px',
-              '&:hover': {
-                bgcolor: 'rgba(184,255,97,.07)',
-                color: 'primary.main',
-              },
-            }}
-          >
-            {t('nav.blog')}
-          </Button>
-
-          <Button
-            color="primary"
-            onClick={() => router.push(`/${locale}/apps/playground`)}
-            sx={{
-              mx: { xs: 0, sm: 0.5 },
-              minWidth: { xs: 66, sm: 80 },
-              px: { xs: 1, sm: 1.5 },
-              fontSize: { xs: '.75rem', sm: '.875rem' },
-              color: 'rgba(238,244,232,.68)',
-              borderRadius: '99px',
-              '&:hover': {
-                bgcolor: 'rgba(184,255,97,.07)',
-                color: 'primary.main',
-              },
-            }}
-          >
-            {t('nav.playground')}
-          </Button>
-
-          <Box sx={{ flexGrow: 1 }} />
-
-          <Button
-            color="primary"
-            startIcon={<LanguageIcon />}
-            onClick={handleLanguageClick}
-            sx={{
-              minWidth: 0,
-              px: { xs: 1, sm: 1.5 },
-              border: '1px solid rgba(184,255,97,.14)',
-              borderRadius: '99px',
-              fontSize: { xs: 0, sm: '.8rem' },
-              '& .MuiButton-startIcon': { mx: { xs: 0, sm: 0.5 } },
-            }}
-          >
-            {t(`locale.${locale}`)}
-          </Button>
-          <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleLanguageClose}>
-            <MenuItem onClick={() => handleLanguageSwitch('en')} selected={locale === 'en'}>
-              {t('locale.en')}
-            </MenuItem>
-            <MenuItem onClick={() => handleLanguageSwitch('zh')} selected={locale === 'zh'}>
-              {t('locale.zh')}
-            </MenuItem>
-          </Menu>
-        </Toolbar>
-      </AppBar>
-
-      {/* Toolbar spacer to prevent content from being hidden under fixed header */}
-      <Toolbar />
-
-      <Box sx={{ flexGrow: 1 }}>{children}</Box>
-    </Box>
+              {locale === 'zh' ? '中文' : 'EN'} <span aria-hidden="true">⌄</span>
+            </Button>
+            <Menu anchorEl={anchor} open={Boolean(anchor)} onClose={() => setAnchor(null)}>
+              <MenuItem onClick={() => switchLanguage('en')} selected={locale === 'en'}>
+                English
+              </MenuItem>
+              <MenuItem onClick={() => switchLanguage('zh')} selected={locale === 'zh'}>
+                中文
+              </MenuItem>
+            </Menu>
+          </nav>
+        </header>
+        <main id="main-content">{children}</main>
+        {!home && (
+          <footer className="inner-footer">
+            <NextLink className="wordmark" href={'/' + locale}>
+              zeta<span>↗</span>
+            </NextLink>
+            <span>© {new Date().getFullYear()} Zeta Zhang</span>
+            <a href="https://github.com/coolzeta" target="_blank" rel="noopener noreferrer">
+              GitHub ↗
+            </a>
+          </footer>
+        )}
+      </Box>
+    </MotionConfig>
   );
 }

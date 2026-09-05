@@ -11,6 +11,7 @@ interface BlogPost {
   description: string;
   date: string;
   tags: string[];
+  image?: string;
 }
 
 interface BlogGridProps {
@@ -24,19 +25,26 @@ export default function BlogGrid({ posts, locale }: BlogGridProps) {
       {posts.map((post, index) => (
         <motion.article
           key={post.slug}
-          initial={{ opacity: 0, y: 28 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: Math.min(index * 0.07, 0.35) }}
           className={`journal-card ${index === 0 ? 'journal-card-featured' : ''}`}
         >
           <NextLink href={`/${locale}/apps/blog/${post.slug}`}>
             <Box className="journal-image-wrap">
-              <Box
-                component="img"
-                src={`/images/blog/${post.slug}/cover.png`}
-                alt=""
-                className="journal-image"
-              />
+              {post.image ? (
+                <Box
+                  component="img"
+                  src={post.image}
+                  alt=""
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  className="journal-image"
+                />
+              ) : (
+                <span className="journal-cover-type" aria-hidden="true">
+                  Notes<span>by Zeta.</span>
+                </span>
+              )}
               <Box className="journal-image-shade" />
               <Box className="journal-number">{String(index + 1).padStart(2, '0')}</Box>
             </Box>

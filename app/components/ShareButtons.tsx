@@ -2,7 +2,7 @@
 
 import { Box, Button, Snackbar, Alert, Typography } from '@mui/material';
 import { Twitter, LinkedIn, ContentCopy, Share as ShareIcon } from '@mui/icons-material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ShareButtonsProps {
   title: string;
@@ -11,6 +11,10 @@ interface ShareButtonsProps {
 
 export default function ShareButtons({ title, url }: ShareButtonsProps) {
   const [snackbar, setSnackbar] = useState({ open: false, message: '' });
+  const [canShare, setCanShare] = useState(false);
+  useEffect(() => {
+    setCanShare(typeof navigator.share === 'function');
+  }, []);
 
   const handleShare = async (platform: string) => {
     const shareUrl = `${window.location.origin}${url}`;
@@ -50,7 +54,7 @@ export default function ShareButtons({ title, url }: ShareButtonsProps) {
           <Button startIcon={<LinkedIn />} onClick={() => handleShare('linkedin')}>
             LinkedIn
           </Button>
-          {typeof navigator !== 'undefined' && 'share' in navigator && (
+          {canShare && (
             <Button startIcon={<ShareIcon />} onClick={() => handleShare('native')}>
               Share
             </Button>

@@ -75,7 +75,7 @@ export default async function LocaleLayout({
   const messages = await getMessages({ locale: validLocale });
 
   return (
-    <html lang={validLocale}>
+    <html lang={validLocale} data-scroll-behavior="smooth">
       <body className={inter.className} style={{ minHeight: '100vh', minWidth: '100%' }}>
         <NextIntlClientProvider messages={messages} locale={validLocale}>
           <ThemeProvider>

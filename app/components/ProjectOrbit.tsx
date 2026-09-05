@@ -66,7 +66,7 @@ export default function ProjectOrbit({ locale }: ProjectOrbitProps) {
         <Typography component="span">
           {locale === 'zh' ? '兴趣索引 / 近期' : 'INTEREST INDEX / RECENT'}
         </Typography>
-        <span aria-hidden="true">07—26</span>
+        <span aria-hidden="true">↘</span>
       </Box>
 
       <Box className="interest-list">
@@ -85,16 +85,9 @@ export default function ProjectOrbit({ locale }: ProjectOrbitProps) {
             <span className="interest-number">{String(index + 1).padStart(2, '0')}</span>
             <Box className="interest-line-copy">
               <Typography component="strong">{interest.name[locale]}</Typography>
-              <Typography component="small">{interest.type[locale]}</Typography>
             </Box>
-            <span className="interest-state">{interest.state[locale]}</span>
           </Box>
         ))}
-      </Box>
-
-      <Box className="interest-board-foot">
-        <span>{locale === 'zh' ? '脑子里正在想的事' : 'THINGS ON MY MIND'}</span>
-        <span aria-hidden="true">↘</span>
       </Box>
     </Box>
   );

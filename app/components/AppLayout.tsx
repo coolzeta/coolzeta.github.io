@@ -37,7 +37,7 @@ export default function AppLayout({
               className="wordmark"
               aria-label={locale === 'zh' ? 'Zeta 首页' : 'Zeta home'}
             >
-              zeta<span>✳</span>
+              zeta
             </NextLink>
             <div className="nav-links">
               <NextLink
@@ -76,11 +76,11 @@ export default function AppLayout({
         {!home && (
           <footer className="inner-footer">
             <NextLink className="wordmark" href={'/' + locale}>
-              zeta<span>↗</span>
+              zeta
             </NextLink>
             <span>© {new Date().getFullYear()} Zeta Zhang</span>
             <a href="https://github.com/coolzeta" target="_blank" rel="noopener noreferrer">
-              GitHub ↗
+              GitHub
             </a>
           </footer>
         )}

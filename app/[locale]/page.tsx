@@ -176,14 +176,12 @@ export default function Home() {
               <span className="stage-cross stage-cross-top">+</span>
               <span className="stage-cross stage-cross-bottom">+</span>
               <span className="artifact-fallback">Z</span>
-              <ScrollLinkedArtifact />
             </Box>
             <Box className="artifact-caption">
               <span>Z / 01</span>
               <span>
                 {locale === 'zh' ? '换个角度，看点新东西。' : 'A different angle on things.'}
               </span>
-              <span aria-hidden="true">↘</span>
             </Box>
           </motion.div>
 
@@ -336,6 +334,7 @@ export default function Home() {
           </Typography>
         </Box>
       </Container>
+      <ScrollLinkedArtifact />
     </Box>
   );
 }

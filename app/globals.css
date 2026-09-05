@@ -132,6 +132,7 @@ a {
 }
 .personal-shell {
   position: relative;
+  z-index: 1;
 }
 .personal-hero {
   min-height: 650px;
@@ -238,8 +239,9 @@ a {
   z-index: -1;
 }
 .scroll-artifact-canvas {
-  position: absolute;
+  position: fixed;
   inset: 0;
+  z-index: 0;
   pointer-events: none;
 }
 .scroll-artifact-canvas canvas {
@@ -268,7 +270,7 @@ a {
   font: italic 260px/1 var(--serif);
   color: #c2c5b6;
 }
-.artifact-stage:has([data-ready='true']) .artifact-fallback {
+.personal-home:has([data-ready='true']) .artifact-fallback {
   display: none;
 }
 .artifact-caption {

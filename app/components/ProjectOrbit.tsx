@@ -66,7 +66,6 @@ export default function ProjectOrbit({ locale }: ProjectOrbitProps) {
         <Typography component="span">
           {locale === 'zh' ? '兴趣索引 / 近期' : 'INTEREST INDEX / RECENT'}
         </Typography>
-        <span aria-hidden="true">↘</span>
       </Box>
 
       <Box className="interest-list">

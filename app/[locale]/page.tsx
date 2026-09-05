@@ -172,15 +172,17 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.1, delay: 0.15 }}
           >
-            <Box className="artifact-stage" aria-hidden="true">
+            <Box className="artifact-stage" data-story-anchor="idea" aria-hidden="true">
               <span className="stage-cross stage-cross-top">+</span>
               <span className="stage-cross stage-cross-bottom">+</span>
               <span className="artifact-fallback">Z</span>
             </Box>
             <Box className="artifact-caption">
-              <span>Z / 01</span>
+              <span>01 / {locale === 'zh' ? '想法' : 'IDEA'}</span>
               <span>
-                {locale === 'zh' ? '换个角度，看点新东西。' : 'A different angle on things.'}
+                {locale === 'zh'
+                  ? '先有一个想法，然后动手试试。'
+                  : 'An idea, then a first attempt.'}
               </span>
             </Box>
           </motion.div>
@@ -196,7 +198,7 @@ export default function Home() {
         </Box>
 
         <Box component="section" className="now-section">
-          <Box className="section-index">01 / NOW</Box>
+          <Box className="section-index">02 / {locale === 'zh' ? '做出来' : 'MAKE'}</Box>
           <motion.div
             initial={false}
             whileInView={{ opacity: 1, y: 0 }}
@@ -208,6 +210,10 @@ export default function Home() {
                 {t('nowTitle')}
               </Typography>
               <Typography className="now-lead">{t('nowLead')}</Typography>
+              <Box className="story-dock story-build" data-story-anchor="make" aria-hidden="true">
+                <span className="dock-rule" />
+                <span className="dock-label">Z / 02</span>
+              </Box>
             </Box>
             <Box className="project-stack">
               {[
@@ -272,7 +278,7 @@ export default function Home() {
         <Box component="section" className="notes-section">
           <Box className="notes-heading">
             <Box>
-              <Box className="section-index">02 / NOTES</Box>
+              <Box className="section-index">03 / {locale === 'zh' ? '记下来' : 'NOTES'}</Box>
               <Typography component="h2" className="section-title">
                 {t('notesTitle')}
               </Typography>
@@ -286,33 +292,45 @@ export default function Home() {
             </Button>
           </Box>
 
-          <Box className="notes-list">
-            {notes.map((note, index) => (
-              <motion.a
-                key={note.slug}
-                initial={false}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ delay: index * 0.08 }}
-                className="note-row"
-                href={`/${locale}/apps/blog/${note.slug}`}
-              >
-                <Box className="note-meta">
-                  <span>{note.date}</span>
-                  <span>{note.tag}</span>
-                </Box>
-                <Box>
-                  <Typography component="h3">{note.title[locale]}</Typography>
-                  <Typography>{note.description[locale]}</Typography>
-                </Box>
-                <ArrowOutwardRounded className="note-arrow" />
-              </motion.a>
-            ))}
+          <Box className="notes-with-story">
+            <Box className="story-dock story-notes" data-story-anchor="notes" aria-hidden="true">
+              <span className="dock-rule" />
+              <span className="dock-label">Z / 03</span>
+            </Box>
+            <Box className="notes-list">
+              {notes.map((note, index) => (
+                <motion.a
+                  key={note.slug}
+                  initial={false}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ delay: index * 0.08 }}
+                  className="note-row"
+                  href={`/${locale}/apps/blog/${note.slug}`}
+                >
+                  <Box className="note-meta">
+                    <span>{note.date}</span>
+                    <span>{note.tag}</span>
+                  </Box>
+                  <Box>
+                    <Typography component="h3">{note.title[locale]}</Typography>
+                    <Typography>{note.description[locale]}</Typography>
+                  </Box>
+                  <ArrowOutwardRounded className="note-arrow" />
+                </motion.a>
+              ))}
+            </Box>
           </Box>
         </Box>
 
         <Box component="footer" className="personal-footer">
           <Box>
+            <Box className="footer-signature" aria-hidden="true">
+              <span className="story-close" data-story-anchor="signature">
+                <span className="signature-fallback">Z</span>
+              </span>
+              <span>eta.</span>
+            </Box>
             <Typography className="footer-kicker">{t('footerKicker')}</Typography>
             <Typography component="h2">{t('footerTitle')}</Typography>
           </Box>

@@ -120,6 +120,8 @@ export default function ScrollLinkedArtifact() {
       phase: string;
     };
     let stops: Pose[] = [];
+    let heroHoldStart = 0;
+    let heroHoldEnd = 0;
 
     function measure() {
       if (!container || disposed) return;
@@ -141,7 +143,11 @@ export default function ScrollLinkedArtifact() {
         );
         if (!element) return [];
         const rect = element.getBoundingClientRect();
-        const centerY = rect.top + window.scrollY + rect.height / 2;
+        const holdOffset =
+          definition.name === 'idea' && width <= 600
+            ? parseFloat(home?.style.getPropertyValue('--hero-hold-offset') || '0')
+            : 0;
+        const centerY = rect.top + window.scrollY + rect.height / 2 - holdOffset;
         return [
           {
             scroll: index === 0 ? 0 : Math.min(maxScroll, Math.max(0, centerY - height * 0.53)),
@@ -158,11 +164,21 @@ export default function ScrollLinkedArtifact() {
           },
         ];
       });
+      // On phones, first let the initial reach the middle of the screen, then
+      // give it a short reading pause. No wheel/touch interception is needed.
+      const mobile = width <= 600 && !reduced;
+      heroHoldStart = mobile && anchors[0] ? Math.max(0, anchors[0].y - height * 0.5) : 0;
+      heroHoldEnd = mobile ? heroHoldStart + 160 : 0;
       // Arrive before the section text enters the viewport, then stay attached while it is read.
       stops = anchors.flatMap((anchor, index) => {
-        if (index === 0 || index === anchors.length - 1) return [anchor];
+        if (index === 0) {
+          return mobile
+            ? [anchor, { ...anchor, scroll: heroHoldEnd, y: anchor.y + 160 }]
+            : [anchor];
+        }
+        if (index === anchors.length - 1) return [anchor];
         const arrival = Math.max(
-          anchors[index - 1].scroll + (index === 1 ? 1 : height * 0.14 + 1),
+          index === 1 ? heroHoldEnd + 1 : anchors[index - 1].scroll + height * 0.14 + 1,
           anchor.scroll - height * 0.65
         );
         return [
@@ -202,7 +218,10 @@ export default function ScrollLinkedArtifact() {
         2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z;
       const x = mix(from.x, to.x);
       // Document coordinates keep the object physically attached to the slots in the page.
-      const y = mix(from.y, to.y) - window.scrollY;
+      const holdingHero = heroHoldEnd > 0 && progress <= heroHoldEnd;
+      const y = holdingHero
+        ? stops[0].y - Math.min(window.scrollY, heroHoldStart)
+        : mix(from.y, to.y) - window.scrollY;
       const size = mix(from.size, to.size);
       axis.position.set(
         (x / window.innerWidth - 0.5) * worldHeight * camera.aspect,
@@ -212,7 +231,7 @@ export default function ScrollLinkedArtifact() {
       axis.scale.setScalar(((size / window.innerHeight) * worldHeight) / 2.8);
       const spread = mix(from.spread, to.spread);
       const introduction =
-        reduced || progress > 100 ? 1 : THREE.MathUtils.smoothstep(elapsed, 0.3, 2.2);
+        reduced || progress > 100 ? 1 : THREE.MathUtils.smoothstep(elapsed, 0, 0.7);
       material.opacity = reduced ? 1 : mix(from.solid, to.solid) * introduction;
       material.depthWrite = material.opacity > 0.95;
       contourMaterial.opacity = reduced ? 0 : (1 - material.opacity) * 0.75 + spread * 0.1;
@@ -224,6 +243,10 @@ export default function ScrollLinkedArtifact() {
         mix(from.angle, to.angle) + (reduced ? 0 : Math.sin(elapsed * 0.24) * 0.12 * (1 - closing));
       const phase = ease < 0.5 ? from.phase : to.phase;
       if (home) {
+        home.style.setProperty(
+          '--hero-hold-offset',
+          `${heroHoldEnd > 0 ? THREE.MathUtils.clamp(window.scrollY - heroHoldStart, 0, 160) : 0}px`
+        );
         home.dataset.storyPhase = reduced ? 'idea' : phase;
         home.style.setProperty(
           '--story-progress',
@@ -239,7 +262,7 @@ export default function ScrollLinkedArtifact() {
     }
     function onPreference() {
       reduced = motionPreference.matches;
-      resume();
+      measure();
     }
     const resize = new ResizeObserver(measure);
     resize.observe(container);
@@ -272,6 +295,7 @@ export default function ScrollLinkedArtifact() {
       if (home) {
         delete home.dataset.storyPhase;
         home.style.removeProperty('--story-progress');
+        home.style.removeProperty('--hero-hold-offset');
       }
     };
   }, []);

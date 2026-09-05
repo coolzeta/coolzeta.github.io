@@ -1175,9 +1175,15 @@ a {
   }
   .hero-art {
     margin-top: 18px;
+    /* Scroll room for the mobile initial's pause before the next chapter. */
+    padding-bottom: 160px;
   }
   .artifact-stage {
     height: 280px;
+  }
+  .hero-art .artifact-stage,
+  .hero-art .artifact-caption {
+    transform: translateY(var(--hero-hold-offset, 0px));
   }
   .artifact-caption {
     font-size: 9px;

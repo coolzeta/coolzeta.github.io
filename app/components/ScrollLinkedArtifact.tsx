@@ -4,8 +4,8 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 const ACID = new THREE.Color('#b8ff61');
-const MINT = new THREE.Color('#7fdc9a');
-const PAPER = new THREE.Color('#eef4e8');
+const MINT = new THREE.Color('#79d9a5');
+const PAPER = new THREE.Color('#e8eee3');
 
 function seededRandom(seed: number) {
   const value = Math.sin(seed * 9283.31) * 43758.5453;
@@ -23,9 +23,10 @@ export default function ScrollLinkedArtifact() {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const initialWidth = container.clientWidth || window.innerWidth;
     const initialHeight = container.clientHeight || window.innerHeight;
+
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(36, initialWidth / initialHeight, 0.1, 40);
-    camera.position.set(0, 0, compact ? 8.6 : 7.2);
+    const camera = new THREE.PerspectiveCamera(34, initialWidth / initialHeight, 0.1, 40);
+    camera.position.set(0, 0, compact ? 9.3 : 7.8);
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
@@ -33,16 +34,12 @@ export default function ScrollLinkedArtifact() {
       powerPreference: 'high-performance',
     });
     renderer.setClearAlpha(0);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, compact ? 1.15 : 1.5));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, compact ? 1.1 : 1.45));
     renderer.setSize(initialWidth, initialHeight);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.08;
+    renderer.toneMappingExposure = 1.18;
     container.appendChild(renderer.domElement);
-
-    const artifact = new THREE.Group();
-    artifact.rotation.set(-0.28, 0.45, -0.14);
-    scene.add(artifact);
 
     const resources: Array<THREE.BufferGeometry | THREE.Material> = [];
     const keep = <T extends THREE.BufferGeometry | THREE.Material>(resource: T) => {
@@ -50,223 +47,257 @@ export default function ScrollLinkedArtifact() {
       return resource;
     };
 
-    const shellMaterial = keep(
+    // The sculpture travels through the page, while its tilted axis remains
+    // fixed. Only the assembly inside that axis turns.
+    const root = new THREE.Group();
+    const axisFrame = new THREE.Group();
+    axisFrame.rotation.set(0.34, 0.08, -0.54);
+    const rotor = new THREE.Group();
+    root.add(axisFrame);
+    axisFrame.add(rotor);
+    scene.add(root);
+
+    const metalMaterial = keep(
       new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color('#182317'),
-        metalness: 0.72,
-        roughness: 0.34,
-        clearcoat: 0.55,
-        clearcoatRoughness: 0.3,
-        emissive: new THREE.Color('#203719'),
-        emissiveIntensity: 0.32,
+        color: new THREE.Color('#111a13'),
+        metalness: 0.86,
+        roughness: 0.28,
+        clearcoat: 0.62,
+        clearcoatRoughness: 0.22,
+        emissive: new THREE.Color('#162619'),
+        emissiveIntensity: 0.28,
       })
     );
-    const acidMaterial = keep(
+    const glassMaterial = keep(
+      new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color('#55705a'),
+        metalness: 0.12,
+        roughness: 0.16,
+        clearcoat: 1,
+        transparent: true,
+        opacity: 0.24,
+        depthWrite: false,
+        side: THREE.DoubleSide,
+      })
+    );
+    const glowMaterial = keep(
       new THREE.MeshStandardMaterial({
         color: ACID,
         emissive: ACID,
-        emissiveIntensity: 1.4,
-        metalness: 0.38,
-        roughness: 0.25,
+        emissiveIntensity: 1.35,
+        metalness: 0.3,
+        roughness: 0.22,
       })
     );
-    const lineMaterial = keep(
-      new THREE.MeshBasicMaterial({
+    const edgeMaterial = keep(
+      new THREE.LineBasicMaterial({
         color: MINT,
         transparent: true,
-        opacity: 0.42,
-        wireframe: true,
+        opacity: 0.48,
       })
     );
-
-    const coreGeometry = keep(new THREE.IcosahedronGeometry(compact ? 0.72 : 0.9, 2));
-    const core = new THREE.Mesh(coreGeometry, shellMaterial);
-    artifact.add(core);
-
-    const innerGeometry = keep(new THREE.IcosahedronGeometry(compact ? 0.45 : 0.57, 1));
-    const inner = new THREE.Mesh(innerGeometry, acidMaterial);
-    inner.scale.set(0.78, 1.08, 0.78);
-    artifact.add(inner);
-
-    const cageGeometry = keep(new THREE.IcosahedronGeometry(compact ? 0.9 : 1.14, 1));
-    const cage = new THREE.Mesh(cageGeometry, lineMaterial);
-    cage.rotation.set(0.3, 0.2, 0.1);
-    artifact.add(cage);
-
-    const ringMaterial = keep(
+    const paleMaterial = keep(
       new THREE.MeshStandardMaterial({
         color: PAPER,
         emissive: MINT,
-        emissiveIntensity: 0.46,
-        metalness: 0.76,
-        roughness: 0.25,
-        transparent: true,
-        opacity: 0.66,
+        emissiveIntensity: 0.18,
+        metalness: 0.78,
+        roughness: 0.34,
       })
     );
-    const ringGeometry = keep(new THREE.TorusGeometry(compact ? 1.08 : 1.38, 0.018, 8, 112));
-    const ringOne = new THREE.Mesh(ringGeometry, ringMaterial);
-    ringOne.rotation.set(Math.PI * 0.5, 0.14, -0.34);
-    artifact.add(ringOne);
 
-    const ringTwo = new THREE.Mesh(ringGeometry, ringMaterial);
-    ringTwo.scale.setScalar(0.78);
-    ringTwo.rotation.set(1.08, -0.62, 0.52);
-    artifact.add(ringTwo);
+    const outerGeometry = keep(new THREE.OctahedronGeometry(compact ? 0.86 : 1.02, 1));
+    const outer = new THREE.Mesh(outerGeometry, glassMaterial);
+    outer.scale.set(0.82, 1.15, 0.82);
+    rotor.add(outer);
 
-    const antennaMaterial = keep(
-      new THREE.MeshStandardMaterial({
-        color: new THREE.Color('#9fb69b'),
-        metalness: 0.85,
-        roughness: 0.28,
-      })
+    const edgeGeometry = keep(new THREE.EdgesGeometry(outerGeometry, 12));
+    const edges = new THREE.LineSegments(edgeGeometry, edgeMaterial);
+    edges.scale.copy(outer.scale);
+    rotor.add(edges);
+
+    const coreGeometry = keep(new THREE.OctahedronGeometry(compact ? 0.43 : 0.52, 0));
+    const core = new THREE.Mesh(coreGeometry, glowMaterial);
+    core.scale.set(0.72, 1.28, 0.72);
+    rotor.add(core);
+
+    const collarGeometry = keep(
+      new THREE.CylinderGeometry(compact ? 0.5 : 0.62, compact ? 0.5 : 0.62, 0.14, 6)
     );
-    const mastGeometry = keep(new THREE.CylinderGeometry(0.018, 0.026, 1.1, 8));
-    const mast = new THREE.Mesh(mastGeometry, antennaMaterial);
-    mast.position.set(0, compact ? 0.98 : 1.23, 0);
-    artifact.add(mast);
+    const topCollar = new THREE.Mesh(collarGeometry, metalMaterial);
+    topCollar.position.y = compact ? 0.72 : 0.86;
+    rotor.add(topCollar);
+    const bottomCollar = topCollar.clone();
+    bottomCollar.position.y *= -1;
+    rotor.add(bottomCollar);
 
-    const beaconGeometry = keep(new THREE.SphereGeometry(0.09, 12, 12));
-    const beacon = new THREE.Mesh(beaconGeometry, acidMaterial);
-    beacon.position.set(0, compact ? 1.54 : 1.78, 0);
-    artifact.add(beacon);
-
-    const shardGeometry = keep(new THREE.TetrahedronGeometry(compact ? 0.055 : 0.07, 0));
-    const shardMaterial = keep(
-      new THREE.MeshStandardMaterial({
-        color: new THREE.Color('#a7bba4'),
-        emissive: MINT,
-        emissiveIntensity: 0.16,
-        metalness: 0.6,
-        roughness: 0.42,
-      })
+    const panelGeometry = keep(
+      new THREE.BoxGeometry(compact ? 0.84 : 1.05, compact ? 0.35 : 0.42, 0.075)
     );
-    const shardCount = compact ? 26 : 48;
-    const shards = new THREE.InstancedMesh(shardGeometry, shardMaterial, shardCount);
+    const leftPanel = new THREE.Mesh(panelGeometry, metalMaterial);
+    leftPanel.position.set(compact ? -0.95 : -1.16, 0.12, 0);
+    leftPanel.rotation.z = 0.1;
+    rotor.add(leftPanel);
+    const rightPanel = leftPanel.clone();
+    rightPanel.position.set(compact ? 0.95 : 1.16, -0.12, 0);
+    rightPanel.rotation.z = -0.1;
+    rotor.add(rightPanel);
+
+    const panelEdgeGeometry = keep(new THREE.BoxGeometry(compact ? 0.72 : 0.9, 0.022, 0.088));
+    const leftSignal = new THREE.Mesh(panelEdgeGeometry, glowMaterial);
+    leftSignal.position.set(compact ? -0.95 : -1.16, 0.12, 0.06);
+    leftSignal.rotation.z = 0.1;
+    rotor.add(leftSignal);
+    const rightSignal = leftSignal.clone();
+    rightSignal.position.set(compact ? 0.95 : 1.16, -0.12, 0.06);
+    rightSignal.rotation.z = -0.1;
+    rotor.add(rightSignal);
+
+    // This guide is deliberately outside the rotor so the visual axis does
+    // not turn with the sculpture.
+    const axisGeometry = keep(new THREE.CylinderGeometry(0.012, 0.012, compact ? 3.2 : 3.8, 8));
+    const axisGuide = new THREE.Mesh(axisGeometry, paleMaterial);
+    axisFrame.add(axisGuide);
+
+    const capGeometry = keep(new THREE.SphereGeometry(0.055, 10, 10));
+    const topCap = new THREE.Mesh(capGeometry, glowMaterial);
+    topCap.position.y = compact ? 1.6 : 1.9;
+    axisFrame.add(topCap);
+    const bottomCap = topCap.clone();
+    bottomCap.position.y *= -1;
+    axisFrame.add(bottomCap);
+
+    const moteGeometry = keep(new THREE.BoxGeometry(0.035, 0.12, 0.035));
+    const moteCount = compact ? 12 : 20;
+    const motes = new THREE.InstancedMesh(moteGeometry, paleMaterial, moteCount);
     const matrix = new THREE.Matrix4();
     const quaternion = new THREE.Quaternion();
     const scale = new THREE.Vector3();
     const position = new THREE.Vector3();
 
-    for (let index = 0; index < shardCount; index += 1) {
-      const angle = seededRandom(index + 1) * Math.PI * 2;
-      const radius = 1.65 + seededRandom(index + 12) * 1.45;
+    for (let index = 0; index < moteCount; index += 1) {
+      const turn = seededRandom(index + 1) * Math.PI * 2;
+      const radius = 1.55 + seededRandom(index + 15) * 0.85;
       position.set(
-        Math.cos(angle) * radius,
-        (seededRandom(index + 27) - 0.5) * 1.3,
-        Math.sin(angle) * radius * 0.62
+        Math.cos(turn) * radius,
+        (seededRandom(index + 31) - 0.5) * 2.2,
+        Math.sin(turn) * radius * 0.56
       );
       quaternion.setFromEuler(
-        new THREE.Euler(
-          seededRandom(index + 31) * Math.PI,
-          seededRandom(index + 46) * Math.PI,
-          seededRandom(index + 57) * Math.PI
-        )
+        new THREE.Euler(seededRandom(index + 42) * 0.7, turn, seededRandom(index + 63) * Math.PI)
       );
-      const shardScale = 0.55 + seededRandom(index + 72) * 1.55;
-      scale.setScalar(shardScale);
+      scale.setScalar(0.65 + seededRandom(index + 78) * 1.25);
       matrix.compose(position, quaternion, scale);
-      shards.setMatrixAt(index, matrix);
+      motes.setMatrixAt(index, matrix);
     }
-    shards.instanceMatrix.needsUpdate = true;
-    artifact.add(shards);
+    motes.instanceMatrix.needsUpdate = true;
+    rotor.add(motes);
 
     scene.add(
-      new THREE.HemisphereLight(new THREE.Color('#c9ffd0'), new THREE.Color('#020503'), 1.7)
+      new THREE.HemisphereLight(new THREE.Color('#d8ffe1'), new THREE.Color('#020403'), 1.5)
     );
-    const keyLight = new THREE.PointLight(ACID, 18, 12, 1.4);
-    keyLight.position.set(2.8, 2.2, 3.4);
+    const keyLight = new THREE.PointLight(ACID, 20, 12, 1.45);
+    keyLight.position.set(2.6, 2.4, 3.6);
     scene.add(keyLight);
-    const rimLight = new THREE.PointLight(MINT, 9, 10, 1.8);
-    rimLight.position.set(-3.4, -1.6, 1.2);
+    const rimLight = new THREE.PointLight(MINT, 12, 11, 1.7);
+    rimLight.position.set(-3.1, -1.8, 1.4);
     scene.add(rimLight);
 
     const desktopPath = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(2.95, -1.15, -1.5),
-      new THREE.Vector3(2.15, 0.65, -0.7),
-      new THREE.Vector3(-2.35, -0.45, -0.2),
-      new THREE.Vector3(2.15, 0.3, -1),
-      new THREE.Vector3(-0.6, -0.15, 0.15),
+      new THREE.Vector3(3.0, -0.82, -1.7),
+      new THREE.Vector3(2.35, 0.72, -1.1),
+      new THREE.Vector3(-2.55, 0.28, -0.65),
+      new THREE.Vector3(2.45, -0.18, -1.15),
+      new THREE.Vector3(-0.7, -0.05, 0.05),
     ]);
     const mobilePath = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(1.55, -2.15, -2.8),
-      new THREE.Vector3(1.25, 1.55, -2.4),
-      new THREE.Vector3(-1.3, -1.5, -2.2),
-      new THREE.Vector3(1.35, 1.25, -2.7),
-      new THREE.Vector3(-0.35, -0.9, -2.2),
+      new THREE.Vector3(1.45, -2.2, -2.7),
+      new THREE.Vector3(1.15, 1.65, -2.4),
+      new THREE.Vector3(-1.25, -1.4, -2.25),
+      new THREE.Vector3(1.2, 1.15, -2.65),
+      new THREE.Vector3(-0.3, -0.72, -2.2),
     ]);
     const path = compact ? mobilePath : desktopPath;
+    const pathPosition = new THREE.Vector3();
     const pointerTarget = new THREE.Vector2();
     const pointerCurrent = new THREE.Vector2();
-    const pathPosition = new THREE.Vector3();
     const clock = new THREE.Clock();
     let targetProgress = 0;
     let currentProgress = 0;
+    let scrollEnergy = 0;
+    let previousScrollY = window.scrollY;
     let animationFrame = 0;
     let visible = !document.hidden;
     let framePending = false;
 
-    const requestRender = () => {
+    function requestRender() {
       if (framePending || reducedMotion || !visible) return;
       framePending = true;
       animationFrame = requestAnimationFrame(render);
-    };
+    }
 
-    const updateScrollProgress = () => {
+    function updateScrollProgress() {
       const scrollable = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      targetProgress = THREE.MathUtils.clamp(window.scrollY / scrollable, 0, 1);
-    };
+      const nextScrollY = window.scrollY;
+      targetProgress = THREE.MathUtils.clamp(nextScrollY / scrollable, 0, 1);
+      scrollEnergy = Math.min(1, scrollEnergy + Math.abs(nextScrollY - previousScrollY) / 180);
+      previousScrollY = nextScrollY;
+      if (reducedMotion) render();
+    }
 
-    const handlePointerMove = (event: PointerEvent) => {
+    function handlePointerMove(event: PointerEvent) {
       if (event.pointerType === 'touch') return;
       pointerTarget.set(
         event.clientX / window.innerWidth - 0.5,
         event.clientY / window.innerHeight - 0.5
       );
-    };
+    }
 
-    const handlePointerLeave = () => pointerTarget.set(0, 0);
+    function handlePointerLeave() {
+      pointerTarget.set(0, 0);
+    }
 
-    const handleResize = () => {
-      const width = container.clientWidth || window.innerWidth;
-      const height = container.clientHeight || window.innerHeight;
+    function handleResize() {
+      const width = containerRef.current?.clientWidth || window.innerWidth;
+      const height = containerRef.current?.clientHeight || window.innerHeight;
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, compact ? 1.15 : 1.5));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, compact ? 1.1 : 1.45));
       renderer.setSize(width, height);
       updateScrollProgress();
-    };
+    }
 
-    const handleVisibility = () => {
+    function handleVisibility() {
       visible = !document.hidden;
       if (visible) {
         clock.getDelta();
         requestRender();
       }
-    };
+    }
 
     function render() {
       framePending = false;
       if (!visible) return;
+
       const delta = Math.min(clock.getDelta(), 0.05);
-      currentProgress += (targetProgress - currentProgress) * (reducedMotion ? 1 : 0.055);
-      pointerCurrent.lerp(pointerTarget, reducedMotion ? 1 : 0.045);
+      const smoothing = reducedMotion ? 1 : 1 - Math.pow(0.0008, delta);
+      currentProgress += (targetProgress - currentProgress) * smoothing;
+      pointerCurrent.lerp(pointerTarget, reducedMotion ? 1 : 0.035);
+      scrollEnergy = THREE.MathUtils.lerp(scrollEnergy, 0, Math.min(1, delta * 2.8));
       path.getPointAt(currentProgress, pathPosition);
 
-      artifact.position.copy(pathPosition);
-      artifact.position.x += pointerCurrent.x * (compact ? 0.18 : 0.42);
-      artifact.position.y -= pointerCurrent.y * (compact ? 0.12 : 0.26);
-      artifact.rotation.x = -0.28 + currentProgress * Math.PI * 1.65 - pointerCurrent.y * 0.16;
-      artifact.rotation.y = 0.45 + currentProgress * Math.PI * 4.6 + pointerCurrent.x * 0.24;
-      artifact.rotation.z = -0.14 + Math.sin(currentProgress * Math.PI * 3) * 0.42;
+      root.position.copy(pathPosition);
+      const baseScale = compact ? 0.7 : 0.8 + Math.sin(currentProgress * Math.PI) * 0.14;
+      root.scale.setScalar(baseScale);
 
-      const breathing = reducedMotion ? 1 : 1 + Math.sin(clock.elapsedTime * 0.7) * 0.018;
-      const scrollScale = compact ? 0.72 : 0.82 + Math.sin(currentProgress * Math.PI) * 0.16;
-      artifact.scale.setScalar(scrollScale * breathing);
-      ringOne.rotation.z += delta * 0.12;
-      ringTwo.rotation.z -= delta * 0.09;
-      shards.rotation.y += delta * 0.045;
-      beacon.scale.setScalar(1 + Math.max(0, Math.sin(clock.elapsedTime * 1.8)) * 0.35);
+      // One calm rotation around one fixed, visible axis.
+      rotor.rotation.y = 0.28 + currentProgress * Math.PI * 1.45 + clock.elapsedTime * 0.045;
+      core.scale.y = 1.28 + (reducedMotion ? 0 : Math.sin(clock.elapsedTime * 0.72) * 0.045);
+      glowMaterial.emissiveIntensity = 1.35 + scrollEnergy * 0.9;
+
+      // The pointer changes the light, not the sculpture's position or axis.
+      keyLight.position.x = 2.6 + pointerCurrent.x * 2.2;
+      keyLight.position.y = 2.4 - pointerCurrent.y * 1.6;
 
       renderer.render(scene, camera);
       requestRender();

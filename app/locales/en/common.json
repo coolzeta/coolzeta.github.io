@@ -217,6 +217,10 @@
       "Teleprompter": "Teleprompter",
       "Voice": "Voice Follow",
       "Recording": "Recording"
+    },
+    "wastelandCats": {
+      "name": "Wasteland Cat Convoy",
+      "description": "Build a cat-driven combat vehicle, buy attributes and Buffs, and fight down an endless highway. Extract every five stages; face a Boss every ten."
     }
   }
 }

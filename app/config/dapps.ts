@@ -13,6 +13,16 @@ export interface DApp {
 // 预设配置数组，您可以根据需要修改
 export const dapps: DApp[] = [
   {
+    id: 'wasteland-cats',
+    nameKey: 'dapp.wastelandCats.name',
+    descriptionKey: 'dapp.wastelandCats.description',
+    imageUrl: '/covers/wasteland-cats.png',
+    url: '/tools/wasteland-cats/',
+    tags: ['Game', 'Roguelike', 'Vehicles', 'Cats'],
+    status: 'beta',
+    localeAware: false,
+  },
+  {
     id: 'cat-meme-lab',
     nameKey: 'dapp.catMemeLab.name',
     descriptionKey: 'dapp.catMemeLab.description',

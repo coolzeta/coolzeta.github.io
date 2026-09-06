@@ -75,6 +75,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
       lastModified: new Date(),
     },
+    {
+      url: `${SITE_URL}/tools/wasteland-cats/`,
+      changeFrequency: 'weekly',
+      priority: 0.7,
+      lastModified: new Date(),
+    },
     ...entries,
     ...entries.map(entry => ({
       ...entry,

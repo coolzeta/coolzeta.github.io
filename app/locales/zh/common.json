@@ -217,6 +217,10 @@
       "Teleprompter": "提词器",
       "Voice": "语音跟随",
       "Recording": "录制"
+    },
+    "wastelandCats": {
+      "name": "废土喵车队",
+      "description": "拼装猫咪战车，购买属性与 Buff 构筑，沿无尽公路迎战怪潮。每五关可撤离，每十关挑战 Boss。"
     }
   }
 }

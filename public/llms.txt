@@ -36,3 +36,5 @@ Location: Hong Kong
 - LinkedIn: https://www.linkedin.com/in/zeta-zhang-98065334b/
 
 Content may be summarized and cited with a link to its canonical page. Use the language version that matches the user's query.
+
+- [Wasteland Cat Convoy](https://zeta.lol/tools/wasteland-cats/): A browser vehicle roguelike with modular loadouts, in-run attribute and Buff purchases, and endless highway stages.

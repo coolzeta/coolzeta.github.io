@@ -43,6 +43,16 @@ export const dapps: DApp[] = [
     localeAware: false,
   },
   {
+    id: 'classical-guitar',
+    nameKey: 'dapp.classicalGuitar.name',
+    descriptionKey: 'dapp.classicalGuitar.description',
+    imageUrl: '/covers/classical-guitar.svg',
+    url: '/tools/classical-guitar/',
+    tags: ['Guitar', 'Learning', 'Interactive', 'Music'],
+    status: 'live',
+    localeAware: false,
+  },
+  {
     id: 'prompter-one',
     nameKey: 'dapp.prompterOne.name',
     descriptionKey: 'dapp.prompterOne.description',

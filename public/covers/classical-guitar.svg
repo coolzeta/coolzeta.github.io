@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title description">
+  <title id="title">弦上起步</title>
+  <desc id="description">古典吉他指板、琴弦与乐谱构成的课程封面</desc>
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fffaf0"/>
+      <stop offset="1" stop-color="#e8d8c0"/>
+    </linearGradient>
+    <radialGradient id="wood" cx="45%" cy="42%" r="60%">
+      <stop offset="0" stop-color="#b56f42"/>
+      <stop offset="1" stop-color="#6a3823"/>
+    </radialGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="24" stdDeviation="22" flood-color="#3c2418" flood-opacity=".22"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#paper)"/>
+  <path d="M0 108h1600M0 792h1600" stroke="#8b4f2d" stroke-opacity=".16" stroke-width="2"/>
+  <g opacity=".1" stroke="#62351f" stroke-width="2">
+    <path d="M0 180h1600M0 250h1600M0 320h1600M0 390h1600M0 460h1600"/>
+  </g>
+  <g transform="translate(1050 450) rotate(-8)" filter="url(#shadow)">
+    <path d="M-20-235c-98-72-211 1-168 112 18 47 7 81-28 121-73 84-16 213 95 201 72-8 103-55 121-114 18 59 49 106 121 114 111 12 168-117 95-201-35-40-46-74-28-121 43-111-70-184-168-112-12 9-28 9-40 0Z" fill="url(#wood)"/>
+    <circle r="86" fill="#2f1d16" stroke="#e8c88e" stroke-width="17"/>
+    <circle r="57" fill="#17100d"/>
+    <rect x="-34" y="-500" width="68" height="345" rx="8" fill="#57311f"/>
+    <path d="M-58-600h116l24 100H-82Z" fill="#482719"/>
+    <g stroke="#f0dfbd" stroke-width="3" opacity=".9">
+      <path d="M-22-565v715M-13-565v715M-4-565v715M5-565v715M14-565v715M23-565v715"/>
+    </g>
+    <g stroke="#d6bb92" stroke-width="3" opacity=".65">
+      <path d="M-34-450h68M-34-405h68M-34-365h68M-34-329h68M-34-296h68M-34-266h68M-34-239h68M-34-214h68M-34-190h68"/>
+    </g>
+  </g>
+  <g fill="#282119">
+    <text x="120" y="245" font-family="'Songti SC','Noto Serif SC',serif" font-size="46" letter-spacing="10">古典吉他 · 零基础课程</text>
+    <text x="112" y="410" font-family="'Songti SC','Noto Serif SC',serif" font-size="128" font-weight="700">弦上起步</text>
+    <text x="120" y="505" font-family="system-ui,sans-serif" font-size="36" fill="#746a5d">32 节连贯课程 · 识谱 · 指板 · 听辨 · 练习</text>
+  </g>
+  <g transform="translate(120 625)" fill="none" stroke="#8b4f2d" stroke-width="8">
+    <path d="M0 0h600" opacity=".25"/>
+    <path d="M0 34h600" opacity=".25"/>
+    <path d="M0 68h600" opacity=".25"/>
+    <path d="M0 102h600" opacity=".25"/>
+    <path d="M0 136h600" opacity=".25"/>
+    <ellipse cx="115" cy="102" rx="23" ry="17" fill="#8b4f2d" transform="rotate(-14 115 102)"/>
+    <path d="M138 98v-100"/>
+    <ellipse cx="280" cy="68" rx="23" ry="17" fill="#8b4f2d" transform="rotate(-14 280 68)"/>
+    <path d="M303 64v-100"/>
+    <ellipse cx="445" cy="34" rx="23" ry="17" fill="#8b4f2d" transform="rotate(-14 445 34)"/>
+    <path d="M468 30v-100"/>
+  </g>
+</svg>

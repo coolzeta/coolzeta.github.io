@@ -193,6 +193,10 @@
       "name": "锈径 · Rust 入门课程",
       "description": "沿着 30 节渐进课程学习 Rust，用可交互的所有权实验和编译器式反馈，把难懂的概念变成能看见、能动手试的东西。"
     },
+    "classicalGuitar": {
+      "name": "弦上起步 · 古典吉他入门",
+      "description": "从认识六根弦开始，沿着 32 节连贯课程学会识谱、练习与完成第一首古典吉他独奏。"
+    },
     "prompterOne": {
       "name": "Prompter One",
       "description": "一个会跟随语音滚动、支持相机录制和跨设备遥控的提词器，让创作者面对镜头时依然自然。"
@@ -208,6 +212,8 @@
       "Learning": "学习",
       "Interactive": "交互式",
       "Compiler": "编译器",
+      "Guitar": "吉他",
+      "Music": "音乐",
       "Teleprompter": "提词器",
       "Voice": "语音跟随",
       "Recording": "录制"

@@ -1,8 +1,12 @@
 {
   "name": "boss-arena",
-  "version": "2026-09-09-pressure-return",
-  "pck_sha256": "aa66e039e4bcffaed1d90fd8f9fe16975e7fdcac6f5dd256eded853875d74ff4",
+  "version": "arena-lifecycle-v1",
   "bosses": 4,
+  "attacks": 16,
+  "movingBosses": 4,
+  "deathAnimations": 4,
+  "signatureFXFrames": 148,
   "touch": true,
-  "combat": "Fast authored attacks; hook sweep restored; weakness minigames disabled"
+  "pck": "arena-lifecycle-v1.pck",
+  "pck_sha256": "33fd2f52898c3a47c7857b9e8760822425b4b0519bd0af30691363a0dd5813ab"
 }

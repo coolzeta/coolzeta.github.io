@@ -1,7 +1,13 @@
 {
   "name": "boss-arena",
-  "version": "2026-09-09-touch",
-  "pck_sha256": "6a99ca13aad0f80a56afd12cf05b9fbfae63930d708f37531fa702a742f106f8",
+  "version": "2026-09-09-identity",
+  "pck_sha256": "70f8e9b4dc568ca118bb127253003ee5ac1cb4b1a69261cbe8226d5f3dd3eaf7",
   "bosses": 4,
-  "touch": true
+  "touch": true,
+  "mechanics": [
+    "scrap-counterplay",
+    "sewer-valves",
+    "magnetic-shields",
+    "burrowing-pursuit"
+  ]
 }

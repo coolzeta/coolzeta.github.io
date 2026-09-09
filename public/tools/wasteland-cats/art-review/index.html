@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh">
+  <meta charset="utf-8" /><title>武器原生像素审稿</title
+  ><style>
+    body {
+      background: #1a2528;
+      color: #ede2c6;
+      font: 16px system-ui;
+      margin: 32px;
+    }
+    h1 {
+      font-size: 25px;
+    }
+    header {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    button,
+    select {
+      font: inherit;
+      padding: 8px;
+      background: #d8b456;
+      border: 0;
+    }
+    main {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    canvas {
+      width: 384px; max-width:100%;
+      image-rendering: pixelated;
+      background: #354144;
+    }
+    p {
+      line-height: 1.7;
+      color: #b8c5bf;
+    }
+    img {
+      image-rendering: pixelated;
+    }
+    small {
+      color: #d4b46d;
+    }
+  @media(max-width:700px){main{grid-template-columns:1fr}header{flex-wrap:wrap}body{margin:18px}}</style>
+  <header>
+    <h1>电锯 / 火炮 / 撞角 · 原生像素稿</h1>
+    <button id="play">暂停动画</button
+    ><select id="dir">
+      <option value="2">3/4 正面</option>
+      <option value="0">侧面</option>
+      <option value="4">正面</option>
+      <option value="10">3/4 背面</option>
+    </select>
+  </header>
+  <p>
+    电锯：仅锯齿旋转，支架与护罩固定。火炮：炮管与炮闩一起后坐，底座固定。撞角：完整刚性结构，没有待机扭动。
+  </p>
+  <main></main>
+  <p>
+    上方最多以 2 倍显示原生像素；下方为单独构图的 64px
+    菜单图标。三件先作为风格基准，其他武器与 UI 图标仍待逐件重绘。
+  </p>
+  <script>
+    let running = true,
+      dir = 2,
+      start = performance.now(),
+      held = 0;
+    document.querySelector("#play").onclick = (e) => {
+      running = !running;
+      if (!running) held = performance.now() - start;
+      else start = performance.now() - held;
+      e.target.textContent = running ? "暂停动画" : "播放动画";
+    };
+    document.querySelector("#dir").onchange = (e) => (dir = +e.target.value);
+    const base = "./assets/",
+      images = {};
+    function load(key) {
+      if (!images[key]) {
+        let i = new Image();
+        i.src = base + key + ".png";
+        images[key] = i;
+      }
+      return images[key];
+    }
+    for (let d = 0; d < 16; d++)
+      for (let k of ["cannon", "ram", "arm", "blade"])
+        for (let f = 0; f < (k === "cannon" ? 6 : k === "blade" ? 4 : 1); f++)
+          load(`${k}/${d}-${f}`);
+    for (let [kind, title] of [
+      ["saw", "外伸圆锯"],
+      ["cannon", "短管车载炮"],
+      ["ram", "固定破障铲"],
+    ]) {
+      let el = document.createElement("section");
+      el.innerHTML = `<h2>${title}</h2><canvas width="384" height="256"></canvas><img src="${base + kind}-icon.png" width="64" height="64">`;
+      document.querySelector("main").append(el);
+      let c = el.querySelector("canvas"),
+        ctx = c.getContext("2d");
+      ctx.imageSmoothingEnabled = false;
+      function tick(t) {
+        let age = (running ? t - start : held) / 1000;
+        ctx.clearRect(0, 0, 384, 256);
+        const draw = (k, f, x = 0, y = 0) => {
+          let im = load(`${k}/${dir}-${f}`);
+          if (im.complete) ctx.drawImage(im, x * 2, y * 2, 384, 256);
+        };
+        if (kind === "saw") {
+          let yaw = (dir * Math.PI) / 8;
+          draw("arm",0,-Math.cos(yaw)*30,-Math.sin(yaw)*30*.48);
+          draw(
+            "blade",
+            Math.floor(age * 16) % 4,
+            Math.cos(yaw) * 31,
+            Math.sin(yaw) * 31 * 0.48,
+          );
+        } else
+          draw(
+            kind,
+            kind === "cannon" && age % 1.2 < 0.25
+              ? Math.min(5, Math.floor((age % 1.2) * 24))
+              : 0,
+          );
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+  </script>
+</html>

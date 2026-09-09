@@ -1,5 +1,11 @@
 {
-  "version": "pixel-campaign-1",
+  "version": "pixel-weapons-2",
+  "redrawnWeaponFamilies": [
+    "saw",
+    "cannon",
+    "ram"
+  ],
+  "weaponArtFrames": 192,
   "url": "https://zeta.lol/tools/wasteland-cats/",
   "enemyTypes": 28,
   "enemyFrames": 1120,
@@ -9,10 +15,10 @@
     "index.apple-touch-icon.png": "01d4f63e525941e06ce74f5187dad030d20a8d52a07ce365ae4e94af97a3b1f5",
     "index.audio.position.worklet.js": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
     "index.audio.worklet.js": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
-    "index.html": "334805d50084262cbc73cb30f9d506bcf069944dd3e80f8c8315cc11eb316f87",
+    "index.html": "2d3cded90dc42cca8809f1b995565583365c84d88485b8868f0f09a253f9c49e",
     "index.icon.png": "ad3c35ad0facf487c618204bd98db543034fc95224eadc7f08c7a9ff38d5b3b5",
     "index.js": "68586d6daafc93c6e697b3fb258976874aa7459b8931165ebb1dc3c9614cc42c",
-    "index.pck": "2ba7c40baabcdfc7ecc53af84cbc5ae457bd1422c8bf7be1ad43b17ef32023be",
+    "index.pck": "9616c9822a1c6bca98d3f11a2edb8ea114cb44c39b272db938ab846a1d38efbb",
     "index.png": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e",
     "index.wasm": "35116f68540ac41acf7d71ea457added91b5e960a9cca3e2acc72918eaf01277"
   }

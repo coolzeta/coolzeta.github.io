@@ -1,0 +1,7 @@
+{
+  "name": "boss-arena",
+  "version": "2026-09-09-touch",
+  "pck_sha256": "6a99ca13aad0f80a56afd12cf05b9fbfae63930d708f37531fa702a742f106f8",
+  "bosses": 4,
+  "touch": true
+}

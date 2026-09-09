@@ -81,6 +81,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
       lastModified: new Date(),
     },
+    {
+      url: `${SITE_URL}/tools/boss-arena/`,
+      changeFrequency: 'weekly',
+      priority: 0.7,
+      lastModified: new Date(),
+    },
     ...entries,
     ...entries.map(entry => ({
       ...entry,

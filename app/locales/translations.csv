@@ -136,3 +136,6 @@ dapp.tags.Recording,"Recording","录制"
 
 dapp.wastelandCats.name,"Wasteland Cat Convoy","废土喵车队"
 dapp.wastelandCats.description,"Build a cat-driven combat vehicle, buy attributes and Buffs, and choose a region and survive escalating enemy waves. Extract every five stages; face a Boss every ten.","拼装猫咪战车，购买属性与 Buff 构筑，选择远征地图，迎战逐关增强的怪潮。每五关可撤离，每十关挑战 Boss。"
+
+dapp.bossArena.name,Wasteland Boss Arena,废土 Boss 竞技场
+dapp.bossArena.description,Challenge four bosses with touch controls and three difficulty levels.,使用虚拟摇杆挑战四个 Boss，支持三档难度。

@@ -13,6 +13,16 @@ export interface DApp {
 // 预设配置数组，您可以根据需要修改
 export const dapps: DApp[] = [
   {
+    id: 'boss-arena',
+    nameKey: 'dapp.bossArena.name',
+    descriptionKey: 'dapp.bossArena.description',
+    imageUrl: '/covers/wasteland-cats.png',
+    url: '/tools/boss-arena/',
+    tags: ['Game', 'Boss Battle', 'Pixel Art', 'Touch'],
+    status: 'beta',
+    localeAware: false,
+  },
+  {
     id: 'wasteland-cats',
     nameKey: 'dapp.wastelandCats.name',
     descriptionKey: 'dapp.wastelandCats.description',

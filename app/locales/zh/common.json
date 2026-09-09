@@ -221,6 +221,10 @@
     "wastelandCats": {
       "name": "废土喵车队",
       "description": "拼装猫咪战车，购买属性与 Buff 构筑，选择远征地图，迎战逐关增强的怪潮。每五关可撤离，每十关挑战 Boss。"
+    },
+    "bossArena": {
+      "name": "废土 Boss 竞技场",
+      "description": "使用虚拟摇杆挑战四个 Boss，支持三档难度。"
     }
   }
 }

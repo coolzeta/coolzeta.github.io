@@ -1,12 +1,12 @@
 {
   "name": "boss-arena",
-  "version": "arena-lifecycle-v1",
+  "version": "arena-ui-v1",
   "bosses": 4,
   "attacks": 16,
   "movingBosses": 4,
   "deathAnimations": 4,
   "signatureFXFrames": 148,
   "touch": true,
-  "pck": "arena-lifecycle-v1.pck",
-  "pck_sha256": "33fd2f52898c3a47c7857b9e8760822425b4b0519bd0af30691363a0dd5813ab"
+  "pck": "arena-ui-v1.pck",
+  "pck_sha256": "b25f7e96d138a49b6102a4d3e04b75a5aa31c64d88668e66688f67ef48923889"
 }

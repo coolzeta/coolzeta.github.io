@@ -1,13 +1,8 @@
 {
   "name": "boss-arena",
-  "version": "2026-09-09-identity",
-  "pck_sha256": "70f8e9b4dc568ca118bb127253003ee5ac1cb4b1a69261cbe8226d5f3dd3eaf7",
+  "version": "2026-09-09-pressure-return",
+  "pck_sha256": "aa66e039e4bcffaed1d90fd8f9fe16975e7fdcac6f5dd256eded853875d74ff4",
   "bosses": 4,
   "touch": true,
-  "mechanics": [
-    "scrap-counterplay",
-    "sewer-valves",
-    "magnetic-shields",
-    "burrowing-pursuit"
-  ]
+  "combat": "Fast authored attacks; hook sweep restored; weakness minigames disabled"
 }

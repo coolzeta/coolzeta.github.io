@@ -1,17 +1,17 @@
 {
   "url": "https://zeta.lol/tools/wasteland-cats/pixel/",
-  "version": "pixel-predators-2",
+  "version": "pixel-predators-3",
   "main_scene": "res://scenes/pixel_preview.tscn",
-  "enemy_frames": 75,
+  "enemy_frames": 120,
   "collection_frames": 10,
   "sha256": {
     "index.apple-touch-icon.png": "01d4f63e525941e06ce74f5187dad030d20a8d52a07ce365ae4e94af97a3b1f5",
     "index.audio.position.worklet.js": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
     "index.audio.worklet.js": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
-    "index.html": "47817f1da79cb817c3d26f7816d6a167db85a9fdb207c1ee365eef9e271aff29",
+    "index.html": "f90bbd02237eca0223c765a57732a74818e3757a7ee163e3ef13e1788ae498be",
     "index.icon.png": "ad3c35ad0facf487c618204bd98db543034fc95224eadc7f08c7a9ff38d5b3b5",
     "index.js": "68586d6daafc93c6e697b3fb258976874aa7459b8931165ebb1dc3c9614cc42c",
-    "index.pck": "98a7aa1d127766c4b36e2b8e684afe4088c90ec8d3f2097e3874c1b6a5074e8e",
+    "index.pck": "9f2b350b27e2eab6f0fc3cbb878bf99a6d6b8f09986f01c554a883d890d45729",
     "index.png": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e",
     "index.wasm": "35116f68540ac41acf7d71ea457added91b5e960a9cca3e2acc72918eaf01277"
   }

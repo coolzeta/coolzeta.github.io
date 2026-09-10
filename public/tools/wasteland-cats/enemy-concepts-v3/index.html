@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#171b1d">
+  <title>废土喵车队 · 小怪重制 V3 审核</title>
+  <style>
+    :root{color-scheme:dark;--bg:#171b1d;--panel:#22282a;--ink:#eee4cf;--muted:#aaa392;--gold:#e3b852;--rust:#b4623e}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif}
+    main{width:min(1100px,100%);margin:auto;padding:calc(22px + env(safe-area-inset-top)) 16px calc(56px + env(safe-area-inset-bottom))}
+    h1{font-size:clamp(26px,7vw,48px);line-height:1.05;margin:0 0 12px;color:#f3ca68;letter-spacing:.02em}h2{font-size:22px;margin:38px 0 8px}p{margin:0 0 16px;color:var(--muted)}
+    .tag{display:inline-block;color:#171b1d;background:var(--gold);font-weight:800;padding:3px 9px;margin-bottom:14px;clip-path:polygon(5px 0,100% 0,calc(100% - 5px) 100%,0 100%)}
+    .hero{width:100%;height:auto;display:block;background:#aaa19a}.pixel-board{width:100%;height:auto;display:block;image-rendering:pixelated;background:#171b1d}
+    .rules{border-left:4px solid var(--rust);padding:4px 0 4px 14px;margin:20px 0;color:#d5ccb9}.rules b{color:var(--ink)}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px;margin-top:18px}.card{min-width:0}.sprite{width:100%;aspect-ratio:1;background:var(--panel);object-fit:contain;image-rendering:pixelated}.card h3{font-size:16px;margin:7px 0 1px;color:var(--gold)}.card p{font-size:13px;line-height:1.45;margin:0}
+    footer{margin-top:42px;padding-top:18px;border-top:1px solid #4b4b43;color:#8f8b7e;font-size:13px}
+    @media(min-width:760px){main{padding-inline:28px}.grid{grid-template-columns:repeat(3,1fr);gap:28px 18px}}
+  </style>
+</head>
+<body><main>
+  <span class="tag">只供造型审核 · 未接入游戏</span>
+  <h1>小怪重制 V3</h1>
+  <p>这轮先审核造型语言。确认后才会制作移动、攻击、受击与死亡动画，以及剩余阵容。</p>
+  <div class="rules"><b>统一约束：</b>左向 3/4 侧视；机械植入必须承担攻击或移动功能；六种身体结构和战斗读法互不重复；适度怪物感，不堆血肉、尖刺和无意义闪光。</div>
+
+  <h2>概念方向</h2>
+  <p>原画用于比例、材质和轮廓参考，不直接缩放成游戏素材。</p>
+  <img class="hero" src="concept-lineup.png" alt="六种怪物概念阵容">
+
+  <h2>游戏尺寸像素初版</h2>
+  <p>以下是 128×128 坐标绘制的静态基准姿势，用来判断缩小后是否仍能一眼分辨。</p>
+  <img class="pixel-board" src="pixel-drafts-review.png" alt="六种怪物像素初版总览">
+
+  <div class="grid">
+    <article class="card"><img class="sprite" src="sprites/scrap_maw.png" alt="废铁裂颚"><h3>废铁裂颚</h3><p>冲锋近战。液压下颚负责咬合，活塞前腿负责爆发冲刺。</p></article>
+    <article class="card"><img class="sprite" src="sprites/pipeback.png" alt="管背鼓囊"><h3>管背鼓囊</h3><p>中距喷吐。喉囊先膨胀，背部压力阀泄压后才发射。</p></article>
+    <article class="card"><img class="sprite" src="sprites/rivet_creeper.png" alt="铆钉爬虫"><h3>铆钉爬虫</h3><p>重型推进。多足贴地爬行，双铆钉颚连续敲击车体。</p></article>
+    <article class="card"><img class="sprite" src="sprites/coil_mite.png" alt="线圈螨"><h3>线圈螨</h3><p>迅捷骚扰。弹簧腿急停变向，背部线圈蓄能后短距放电。</p></article>
+    <article class="card"><img class="sprite" src="sprites/dune_bobbit.png" alt="沙丘博比特虫"><h3>沙丘博比特虫</h3><p>地下伏击。三枚钻颚分层闭合，身体留在地下形成拉扯感。</p></article>
+    <article class="card"><img class="sprite" src="sprites/ember_bat.png" alt="余烬蝠"><h3>余烬蝠</h3><p>俯冲猎手。胸囊发光提示俯冲，单侧涡轮改变飞行轨迹。</p></article>
+  </div>
+  <footer>审核重点：整体方向、单只轮廓、怪物感强弱、机械与生物融合方式。此页没有替换当前线上游戏素材。</footer>
+</main></body></html>

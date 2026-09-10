@@ -1,16 +1,29 @@
 {
-  "version": "wasteland-ui-v1",
-  "pck": "wasteland-ui-v1.pck",
-  "pck_sha256": "496fbfc82c8d29b127d7c7acf49e7a2f4bbd34eb194a72744b1690b21ecf51cc",
-  "screenshots": 42,
+  "version": "minion-rebuild-v2",
+  "executable": "wasteland-minions-v2",
+  "redrawnWeaponFamilies": [
+    "saw",
+    "cannon",
+    "ram"
+  ],
+  "weaponArtFrames": 368,
+  "url": "https://zeta.lol/tools/wasteland-cats/",
+  "enemyTypes": 28,
+  "summonedSpecies": 4,
+  "enemyFrames": 1251,
+  "bossPhaseVariants": 4,
+  "salvageIcons": 28,
+  "vehicleFrames": 1536,
+  "pixelAssets": 213,
   "sha256": {
-    "wasteland-ui-v1.audio.worklet.js": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
-    "wasteland-ui-v1.icon.png": "ad3c35ad0facf487c618204bd98db543034fc95224eadc7f08c7a9ff38d5b3b5",
-    "wasteland-ui-v1.js": "68586d6daafc93c6e697b3fb258976874aa7459b8931165ebb1dc3c9614cc42c",
-    "wasteland-ui-v1.pck": "496fbfc82c8d29b127d7c7acf49e7a2f4bbd34eb194a72744b1690b21ecf51cc",
-    "wasteland-ui-v1.audio.position.worklet.js": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
-    "wasteland-ui-v1.png": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e",
-    "wasteland-ui-v1.wasm": "35116f68540ac41acf7d71ea457added91b5e960a9cca3e2acc72918eaf01277",
-    "wasteland-ui-v1.apple-touch-icon.png": "01d4f63e525941e06ce74f5187dad030d20a8d52a07ce365ae4e94af97a3b1f5"
+    "wasteland-minions-v2.apple-touch-icon.png": "01d4f63e525941e06ce74f5187dad030d20a8d52a07ce365ae4e94af97a3b1f5",
+    "wasteland-minions-v2.audio.position.worklet.js": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
+    "wasteland-minions-v2.audio.worklet.js": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
+    "wasteland-minions-v2.icon.png": "ad3c35ad0facf487c618204bd98db543034fc95224eadc7f08c7a9ff38d5b3b5",
+    "wasteland-minions-v2.js": "68586d6daafc93c6e697b3fb258976874aa7459b8931165ebb1dc3c9614cc42c",
+    "wasteland-minions-v2.pck": "10003cde888e6e2f15dc2dd7de6da9e39c8c42657785e48123b66b70edd3329a",
+    "wasteland-minions-v2.png": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e",
+    "wasteland-minions-v2.wasm": "35116f68540ac41acf7d71ea457added91b5e960a9cca3e2acc72918eaf01277",
+    "index.html": "8cda640182e785d910fde48eac32d3e35b5d408d9c318d6ef3e7f9f3ed7fbace"
   }
 }

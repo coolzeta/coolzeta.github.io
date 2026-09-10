@@ -11,7 +11,7 @@
     main{width:min(1100px,100%);margin:auto;padding:calc(22px + env(safe-area-inset-top)) 16px calc(56px + env(safe-area-inset-bottom))}
     h1{font-size:clamp(26px,7vw,48px);line-height:1.05;margin:0 0 12px;color:#f3ca68;letter-spacing:.02em}h2{font-size:22px;margin:38px 0 8px}p{margin:0 0 16px;color:var(--muted)}
     .tag{display:inline-block;color:#171b1d;background:var(--gold);font-weight:800;padding:3px 9px;margin-bottom:14px;clip-path:polygon(5px 0,100% 0,calc(100% - 5px) 100%,0 100%)}
-    .hero{width:100%;height:auto;display:block;background:#aaa19a}.pixel-board{width:100%;height:auto;display:block;image-rendering:pixelated;background:#171b1d}
+    .hero{width:100%;height:auto;display:block;background:#aaa19a}.pixel-board{width:100%;height:auto;display:block;image-rendering:pixelated;background:radial-gradient(circle,#343a3b,#171b1d 68%)}
     .rules{border-left:4px solid var(--rust);padding:4px 0 4px 14px;margin:20px 0;color:#d5ccb9}.rules b{color:var(--ink)}
     .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px;margin-top:18px}.card{min-width:0}.sprite{width:100%;aspect-ratio:1;background:var(--panel);object-fit:contain;image-rendering:pixelated}.card h3{font-size:16px;margin:7px 0 1px;color:var(--gold)}.card p{font-size:13px;line-height:1.45;margin:0}
     footer{margin-top:42px;padding-top:18px;border-top:1px solid #4b4b43;color:#8f8b7e;font-size:13px}
@@ -28,17 +28,9 @@
   <p>原画用于比例、材质和轮廓参考，不直接缩放成游戏素材。</p>
   <img class="hero" src="concept-lineup.png" alt="六种怪物概念阵容">
 
-  <h2>游戏尺寸像素初版</h2>
-  <p>以下是 128×128 坐标绘制的静态基准姿势，用来判断缩小后是否仍能一眼分辨。</p>
-  <img class="pixel-board" src="pixel-drafts-review.png" alt="六种怪物像素初版总览">
-
-  <div class="grid">
-    <article class="card"><img class="sprite" src="sprites/scrap_maw.png" alt="废铁裂颚"><h3>废铁裂颚</h3><p>冲锋近战。液压下颚负责咬合，活塞前腿负责爆发冲刺。</p></article>
-    <article class="card"><img class="sprite" src="sprites/pipeback.png" alt="管背鼓囊"><h3>管背鼓囊</h3><p>中距喷吐。喉囊先膨胀，背部压力阀泄压后才发射。</p></article>
-    <article class="card"><img class="sprite" src="sprites/rivet_creeper.png" alt="铆钉爬虫"><h3>铆钉爬虫</h3><p>重型推进。多足贴地爬行，双铆钉颚连续敲击车体。</p></article>
-    <article class="card"><img class="sprite" src="sprites/coil_mite.png" alt="线圈螨"><h3>线圈螨</h3><p>迅捷骚扰。弹簧腿急停变向，背部线圈蓄能后短距放电。</p></article>
-    <article class="card"><img class="sprite" src="sprites/dune_bobbit.png" alt="沙丘博比特虫"><h3>沙丘博比特虫</h3><p>地下伏击。三枚钻颚分层闭合，身体留在地下形成拉扯感。</p></article>
-    <article class="card"><img class="sprite" src="sprites/ember_bat.png" alt="余烬蝠"><h3>余烬蝠</h3><p>俯冲猎手。胸囊发光提示俯冲，单侧涡轮改变飞行轨迹。</p></article>
-  </div>
-  <footer>审核重点：整体方向、单只轮廓、怪物感强弱、机械与生物融合方式。此页没有替换当前线上游戏素材。</footer>
+  <h2>像素质量标杆：废铁裂颚</h2>
+  <p>旧的六张几何稿已撤下。现在只审核这一只的像素画法；通过后才会做可动画的坐标重绘和其他怪物。</p>
+  <img class="pixel-board" src="scrap-maw-pixel-benchmark-v3.png" alt="废铁裂颚高完成度像素视觉稿">
+  <div class="rules"><b>本轮只判断：</b>像素密度是否合适、3/4 视角是否正确、毛皮与金属是否有层次、整体凶狠程度是否符合游戏。</div>
+  <footer>这是一张像素视觉标杆，还不是可直接接入游戏的动画素材。当前线上游戏素材没有被替换。</footer>
 </main></body></html>

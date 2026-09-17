@@ -1,5 +1,5 @@
 const BASE='/tools/plant-motion-review/';
-const REV='motion-v30';
+const REV='motion-v31';
 const state={data:null,plantIndex:0,direction:0,frame:0,playing:true,speed:1,image:null,last:0,elapsed:0};
 const $=id=>document.getElementById(id);
 const canvases=[$('gameCanvas'),$('zoomCanvas')];
@@ -12,7 +12,7 @@ function renderDirections(){const row=$('directionRow');row.innerHTML='';const a
 function renderTimeline(){const line=$('timeline');line.innerHTML='';state.data.frameLabels.forEach((label,index)=>{const item=document.createElement('button');item.type='button';item.className='frame-step'+(index===state.frame?' active':'');item.innerHTML=`<b>${index+1}</b><span>${label}</span>`;item.onclick=()=>{state.playing=false;state.frame=index;state.elapsed=0;syncPlayback();draw()};line.append(item)});}
 function renderMeta(){const plant=currentPlant(),label=state.data.frameLabels[state.frame]+' · '+(state.frame+1)+'/6';$('plantId').textContent=plant.id.toUpperCase();$('plantName').textContent=plant.name;$('gameFrameLabel').textContent=label;$('zoomFrameLabel').textContent=label;$('motionText').textContent=plant.motionZh;$('payloadText').textContent=plant.bodyPayloadZh.length?`身体自带：${plant.bodyPayloadZh.join('、')}。释放时允许从身体上消失；飞行过程由游戏弹体表现。`:'本体不携带弹体。外部弹体、元素与命中特效均由游戏运行时单独表现。';renderTimeline();}
 function drawOne(canvas,scale){const ctx=canvas.getContext('2d'),dpr=Number(canvas.dataset.dpr||1),w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);if(!state.image||!state.image.complete)return;const sourceW=state.data.frameSize[0],sourceH=state.data.frameSize[1];const dw=sourceW*scale*dpr,dh=sourceH*scale*dpr;ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(state.image,state.frame*sourceW,state.direction*sourceH,sourceW,sourceH,(w-dw)/2,(h-dh)/2+10*dpr,dw,dh);}
-function draw(){drawOne(canvases[0],.58);drawOne(canvases[1],1.05);renderMeta();}
+function draw(){if(!state.data)return;drawOne(canvases[0],.58);drawOne(canvases[1],1.05);renderMeta();}
 function syncPlayback(){$('playIcon').textContent=state.playing?'Ⅱ':'▶';$('playText').textContent=state.playing?'暂停':'播放';}
 function tick(now){if(!state.last)state.last=now;const dt=Math.min(100,now-state.last);state.last=now;if(state.playing&&state.data){state.elapsed+=dt*state.speed;const duration=currentPlant().timingMs[state.frame];if(state.elapsed>=duration){state.elapsed-=duration;state.frame=(state.frame+1)%6;draw();}}requestAnimationFrame(tick);}
 $('playButton').onclick=()=>{state.playing=!state.playing;syncPlayback()};$('restartButton').onclick=()=>{state.playing=true;state.frame=0;state.elapsed=0;syncPlayback();draw()};$('stepButton').onclick=()=>{state.playing=false;state.frame=(state.frame+1)%6;state.elapsed=0;syncPlayback();draw()};$('speedSelect').onchange=e=>state.speed=Number(e.target.value);window.addEventListener('resize',()=>{canvases.forEach(setupCanvas);draw()});

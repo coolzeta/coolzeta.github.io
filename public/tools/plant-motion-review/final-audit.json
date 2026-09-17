@@ -1,0 +1,482 @@
+{
+  "audit": "garden_route_motion_v8 attack sixth-round final full semantic audit",
+  "audited_at": "2026-09-17",
+  "scope": {
+    "plants": 30,
+    "directions_per_plant": 8,
+    "directions": 240,
+    "idle_frames_per_direction": 8,
+    "frames_per_attack": 6,
+    "attack_frames": 1440
+  },
+  "direction_map": {
+    "0": "E",
+    "1": "SE",
+    "2": "S",
+    "3": "SW",
+    "4": "W",
+    "5": "NW",
+    "6": "N",
+    "7": "NE"
+  },
+  "decision_rule": "All 1440 current attack PNGs were visually reviewed in per-plant sheets against all eight same-direction idle frames, adjacent directions and mirror directions. Graft 1/3 were additionally reviewed frame by frame at enlarged resolution and verified as exact mirrors. A direction fails for identity/organ/structure/palette drift, incorrect face visibility or action axis, invalid multi-peak timing, forbidden external effects, transparency/crop/guide damage, or unstable base contact. Any failure requires regenerating the whole six-frame source group.",
+  "global_checks": {
+    "inventory": "pass: 1440 attack PNGs, 1920 idle PNGs and 240 attack manifests present",
+    "structural_checker": "pass: tools/check_route_motion_v8.py",
+    "visual_coverage": "pass: all 240 directions and all 1440 attack frames reviewed against idle, adjacent and mirror directions",
+    "identity_consistency": "pass: organ counts, leaf/petal counts and colors, silhouette, proportions, expressions and head/body structure remain coherent",
+    "direction_semantics": "pass: N and rear diagonals do not expose invalid frontal faces; S remains centered; horizontal and diagonal action axes match labels",
+    "single_peak_logic": "pass: each direction shows one anticipation-release-recovery cycle without a second attack peak",
+    "transparent_holes_and_body_completeness": "pass: no erroneous holes, missing body parts or alpha damage found",
+    "canvas_edges": "pass: zero nontransparent outer-edge pixels in all 1440 attack frames",
+    "guide_grid_background_residue": "pass: no blue/magenta/orange guides, grid lines or opaque source background found",
+    "external_effects": "pass: no forbidden projectile or water/fire/wind/electric/spore/beam/sound effect found",
+    "body_payload_release": "pass",
+    "base_registration": "pass: no unstable base contact or disguised anchor correction found",
+    "pixel_and_semantic_mirrors": "pass: mirror pairs preserve both pixel structure and direction semantics"
+  },
+  "summary": {
+    "passed_directions": 240,
+    "failed_directions": 0,
+    "critical_issues": 0,
+    "high_issues": 0,
+    "medium_issues": 0,
+    "low_issues": 0,
+    "failed_direction_list": []
+  },
+  "direction_audit": {
+    "capacitor": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "chestnut": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "chili": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "dandelion": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "dew": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "echo": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "electric": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "frost": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "furnace": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "gourd": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "graft": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "leaf": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "lure": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "mender": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "mirror": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "pea": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "pine": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "pollen": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "pumpkin": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "relay": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "resin": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "rubber": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "splitter": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "spore": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "spring": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "sunflower": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "thorn": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "vacuum": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "vine": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    },
+    "wind": {
+      "pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fail": []
+    }
+  },
+  "focus_review": [
+    {
+      "plant": "graft",
+      "direction": 1,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "result": "pass",
+      "evidence": "All six frames retain three leaves with stable colors and positions (upper dark green, left yellow-green, right red), a narrow light-brown neck/trunk, one right-facing side eye and paired forked root-feet. Attack f0 bbox is 82x83 versus idle f0 88x84. Frames 1-2 compress, frame 3 is the sole SE forward peak at 99x75, and frames 4-5 recover with a stable root baseline."
+    },
+    {
+      "plant": "graft",
+      "direction": 3,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "result": "pass",
+      "evidence": "Exact horizontal pixel mirror of direction 1 in every frame. The three leaves, narrow light-brown neck/trunk, one left-facing side eye and paired forked root-feet remain intact. Attack f0 bbox is 82x83 versus idle f0 88x84; frame 3 is the sole SW forward peak and frames 4-5 recover."
+    }
+  ],
+  "resolved_previous_issues": [
+    {
+      "plant": "graft",
+      "directions": [
+        1,
+        3
+      ],
+      "previous_issue_type": "identity_body_structure_and_proportion_drift",
+      "result": "pass",
+      "evidence": "The regenerated source now matches idle identity and topology throughout all six frames: three stable leaves, narrow light-brown neck/trunk, one-eye side profile and paired forked roots. Direction 3 is an exact horizontal mirror of direction 1; both use one forward peak at frame 3."
+    }
+  ],
+  "issues": []
+}

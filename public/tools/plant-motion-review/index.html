@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#1f3022" />
+  <title>小猫守花园 · 植物动画审核</title>
+  <meta name="description" content="30 种植物、八方向、六帧攻击动画的独立轻量审核页。" />
+  <link rel="stylesheet" href="/tools/plant-motion-review/styles.css" />
+</head>
+<body>
+  <main class="shell">
+    <header class="masthead">
+      <div>
+        <p class="eyebrow">GARDEN MOTION REVIEW · V29</p>
+        <h1>植物攻击动画审核</h1>
+        <p class="subtitle">只加载动画图集，不包含 Godot、WASM、关卡或游戏逻辑。</p>
+      </div>
+      <div class="summary" aria-label="资源概要">
+        <span><b>30</b> 株植物</span><span><b>8</b> 个方向</span><span><b>6</b> 帧动作</span>
+      </div>
+    </header>
+
+    <section class="workspace">
+      <aside class="catalog-panel">
+        <div class="panel-heading">
+          <div><small>PLANT CATALOG</small><h2>选择植物</h2></div>
+          <span id="plantCount">01 / 30</span>
+        </div>
+        <div id="plantList" class="plant-list" aria-label="植物列表"></div>
+      </aside>
+
+      <section class="review-panel">
+        <div class="review-heading">
+          <div>
+            <small id="plantId">PEA</small>
+            <h2 id="plantName">弹荚芽</h2>
+          </div>
+          <div class="status"><i></i><span>素材已接入</span></div>
+        </div>
+
+        <div class="stage-grid">
+          <article class="stage-card game-size">
+            <header><span>游戏尺寸</span><strong id="gameFrameLabel">释放 · 4/6</strong></header>
+            <div class="canvas-wrap"><canvas id="gameCanvas"></canvas></div>
+          </article>
+          <article class="stage-card zoom-size">
+            <header><span>放大检查</span><strong id="zoomFrameLabel">释放 · 4/6</strong></header>
+            <div class="canvas-wrap"><canvas id="zoomCanvas"></canvas></div>
+          </article>
+        </div>
+
+        <div class="direction-row" id="directionRow" aria-label="方向选择"></div>
+
+        <div class="timeline-panel">
+          <div class="transport">
+            <button id="playButton" class="primary-button" type="button"><span id="playIcon">Ⅱ</span><b id="playText">暂停</b></button>
+            <button id="restartButton" type="button">↺ 重播</button>
+            <button id="stepButton" type="button">逐帧 →</button>
+            <label>速度
+              <select id="speedSelect"><option value="0.65">0.65×</option><option value="1" selected>1×</option><option value="1.35">1.35×</option><option value="1.75">1.75×</option></select>
+            </label>
+          </div>
+          <div class="timeline" id="timeline"></div>
+        </div>
+
+        <div class="notes-grid">
+          <article><small>BODY MOTION</small><h3>本体动作</h3><p id="motionText"></p></article>
+          <article><small>PAYLOAD RULE</small><h3>弹体分离</h3><p id="payloadText"></p></article>
+        </div>
+      </section>
+    </section>
+  </main>
+  <script src="/tools/plant-motion-review/app.js"></script>
+</body>
+</html>
